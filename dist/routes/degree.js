@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const degree_1 = require("../controllers/degree");
+//import validateToken from "./validate-token";
+const router = (0, express_1.Router)();
+router.get('/', degree_1.getDegrees);
+router.get('/:id', degree_1.getDegreeById);
+router.post('/', degree_1.newDegree);
+router.put('/:id', degree_1.updateDegree);
+router.delete('/:id', degree_1.deleteDegree);
+exports.default = router;

@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAspirant = exports.deleteAspirant = exports.newAspirant = exports.getAspirantById = exports.getAspirants = void 0;
-const aspirant_1 = require("../models/aspirant");
+const aspirant_1 = require("../models/aspirantsModels/aspirant");
 //Metodo Listar
 const getAspirants = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista

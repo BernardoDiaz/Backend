@@ -7,13 +7,13 @@ import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
 //MODELOS DE BD
-import { aspirant } from './aspirant';
-import { user } from './user';
+import { aspirant } from './aspirantsModels/aspirant';
+import { user } from './usersModels/user';
 import { seccion } from './seccion';
 import { degree } from './degree';
 import { level } from './level';
-import { consultation } from './consultation';
-import { interview } from './interview';
+import { consultation } from './aspirantsModels/consultation';
+import { interview } from './aspirantsModels/interview';
 
 
 class Server {

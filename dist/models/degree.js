@@ -29,7 +29,7 @@ exports.degree = connection_1.default.define('degree', {
     year: {
         type: sequelize_1.DataTypes.DATE,
         allowNull: false,
-        defaultValue: connection_1.default.fn('NOW')
+        defaultValue: connection_1.default.literal('YEAR(CURRENT_DATE())')
     }
 });
 seccion_1.seccion.hasMany(exports.degree, {

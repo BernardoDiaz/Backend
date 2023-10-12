@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db/connection";
-import { degree } from "./degree";
+import sequelize from "../../db/connection";
+import { degree } from "../degree";
 import { consultation } from "./consultation";
 import { interview } from "./interview";
 

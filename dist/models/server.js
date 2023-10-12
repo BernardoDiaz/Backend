@@ -21,13 +21,13 @@ const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
 const seccion_1 = __importDefault(require("../routes/seccion"));
 //MODELOS DE BD
-const aspirant_2 = require("./aspirant");
-const user_2 = require("./user");
+const aspirant_2 = require("./aspirantsModels/aspirant");
+const user_2 = require("./usersModels/user");
 const seccion_2 = require("./seccion");
 const degree_2 = require("./degree");
 const level_2 = require("./level");
-const consultation_1 = require("./consultation");
-const interview_1 = require("./interview");
+const consultation_1 = require("./aspirantsModels/consultation");
+const interview_1 = require("./aspirantsModels/interview");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();

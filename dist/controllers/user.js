@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const user_1 = require("../models/user");
+const user_1 = require("../models/usersModels/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 //Metodo para crear nuevo usuario
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

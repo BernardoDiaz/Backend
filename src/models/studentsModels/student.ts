@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
+import { degree } from "../degree";
+import { seccion } from "../seccion";
 
 export const student = sequelize.define('student', {
 
@@ -20,14 +22,22 @@ export const student = sequelize.define('student', {
         type: DataTypes.INTEGER,
         allowNull: true
     },
-    id_seccion: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
     year: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: sequelize.literal('YEAR(CURRENT_DATE())')
+        defaultValue: DataTypes.NOW
     }
 
+});
+
+degree.hasMany(student,{
+    foreignKey: 'id_degree',
+    sourceKey: 'id',
+    onDelete: 'set null'
+});
+
+student.belongsTo(degree,{
+    foreignKey:'id_degree',
+    targetKey: 'id',
+    onDelete: 'set null'
 });

@@ -14,6 +14,11 @@ import { degree } from './degree';
 import { level } from './level';
 import { consultation } from './aspirantsModels/consultation';
 import { interview } from './aspirantsModels/interview';
+import { subject } from './subject';
+import { student } from './studentsModels/student';
+import { ratingtype } from './studentsModels/ratingtype';
+import { studentdata } from './studentsModels/studentdata';
+import { ratingstudent } from './studentsModels/ratingstudent';
 
 
 class Server {
@@ -68,6 +73,13 @@ class Server {
             await consultation.sync();
             await interview.sync();
             //Fin Modulo 01 BD
+
+            await subject.sync();
+            await student.sync();
+            await ratingtype.sync();
+            await studentdata.sync();
+            await ratingstudent.sync();
+
             await user.sync();
         } catch (error) {
             console.error('Connection not valid', error);

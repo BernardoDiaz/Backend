@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.student = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
+const degree_1 = require("../degree");
 exports.student = connection_1.default.define('student', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -24,13 +25,19 @@ exports.student = connection_1.default.define('student', {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true
     },
-    id_seccion: {
-        type: sequelize_1.DataTypes.INTEGER,
-        allowNull: true
-    },
     year: {
-        type: sequelize_1.DataTypes.DATE,
+        type: sequelize_1.DataTypes.DATEONLY,
         allowNull: false,
-        defaultValue: connection_1.default.literal('YEAR(CURRENT_DATE())')
+        defaultValue: sequelize_1.DataTypes.NOW
     }
+});
+degree_1.degree.hasMany(exports.student, {
+    foreignKey: 'id_degree',
+    sourceKey: 'id',
+    onDelete: 'set null'
+});
+exports.student.belongsTo(degree_1.degree, {
+    foreignKey: 'id_degree',
+    targetKey: 'id',
+    onDelete: 'set null'
 });

@@ -23,9 +23,9 @@ export const degree = sequelize.define('degree', {
         allowNull:true
     }, 
     year:{
-        type:DataTypes.DATE,
+        type:DataTypes.DATEONLY,
         allowNull:false,
-        defaultValue: sequelize.literal('YEAR(CURRENT_DATE())') 
+        defaultValue: DataTypes.NOW
     }
 });
 seccion.hasMany(degree, {

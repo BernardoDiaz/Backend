@@ -28,6 +28,11 @@ const degree_2 = require("./degree");
 const level_2 = require("./level");
 const consultation_1 = require("./aspirantsModels/consultation");
 const interview_1 = require("./aspirantsModels/interview");
+const subject_1 = require("./subject");
+const student_1 = require("./studentsModels/student");
+const ratingtype_1 = require("./studentsModels/ratingtype");
+const studentdata_1 = require("./studentsModels/studentdata");
+const ratingstudent_1 = require("./studentsModels/ratingstudent");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -76,6 +81,11 @@ class Server {
                 yield consultation_1.consultation.sync();
                 yield interview_1.interview.sync();
                 //Fin Modulo 01 BD
+                yield subject_1.subject.sync();
+                yield student_1.student.sync();
+                yield ratingtype_1.ratingtype.sync();
+                yield studentdata_1.studentdata.sync();
+                yield ratingstudent_1.ratingstudent.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

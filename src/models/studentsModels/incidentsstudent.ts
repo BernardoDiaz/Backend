@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
+import { student } from "./student";
 
 export const incidentsstudent = sequelize.define('incidents',{
 
@@ -21,9 +22,20 @@ export const incidentsstudent = sequelize.define('incidents',{
         allowNull:false
     },
     date:{
-        type:DataTypes.DATE,
+        type:DataTypes.DATEONLY,
         allowNull:false,
-        defaultValue: sequelize.fn('NOW')
+        defaultValue: DataTypes.NOW
     }
 
+});
+
+student.hasMany(incidentsstudent, {
+    foreignKey: 'id_student',
+    sourceKey: 'id',
+    onDelete: 'set null'
+});
+incidentsstudent.belongsTo(student,{
+    foreignKey: 'id_student',
+    targetKey: 'id',
+    onDelete: 'set null'
 });

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { aspirant } from '../models/aspirantsModels/aspirant';
+import { aspirant } from '../../models/aspirantsModels/aspirant';
 
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {

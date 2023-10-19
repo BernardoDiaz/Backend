@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { deleteAspirant, getAspirantById, getAspirants, newAspirant, updateAspirant } from '../controllers/aspirant';
+import { deleteAspirant, getAspirantById, getAspirants, newAspirant, updateAspirant } from '../controllers/AspirantControllers/aspirant';
 //import validateToken from './validate-token';
 
 const router = Router();

@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
-import { student } from '../../models/studentsModels/student';
+import { studentdata } from '../../models/studentsModels/studentdata';
 
 //Metodo Listar
-export const getStudents = async (req: Request, res: Response) => {
+export const getStudentDatas = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listStudents = await student.findAll();
+    const listStudents = await studentdata.findAll();
 
     //Devolvemos la respuesta via JSON
     res.json(listStudents);
 };
 
-export const getStudentById = async (req: Request, res: Response) => {
+export const getStudentDataById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await student.findByPk(id);
+    const one = await studentdata.findByPk(id);
 
     //validacion de existencia
     try {
@@ -34,42 +34,39 @@ export const getStudentById = async (req: Request, res: Response) => {
 
 };
 
-export const newStudent = async (req: Request, res: Response) => {
-    const { name,lastname,id_degree,year} = req.body;
+export const newStudentData = async (req: Request, res: Response) => {
+    const { id_student} = req.body;
 
     try {
-        student.create({
-            name:name,
-            lastname:lastname,
-            id_degree:id_degree,
-            year:year
+        studentdata.create({
+            id_student
         });
         res.json({
-            msg: `El alumno ${name +''+lastname} fue ingresado`
+            msg: `La informacion del alumno fue ingresado`
         });
 
     } catch (error) {
         res.json({
-            msg: "Ocurrio un error registrar un alumno",
+            msg: "Ocurrio un error registrar la informacion del alumno",
             error
         });
     }
 
 };
 
-export const deleteStudent = async (req: Request, res: Response) => {
+export const deleteStudentData = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await student.findOne({ where: { id: id } });
+    const one = await studentdata.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await student.destroy({ where: { id: id } });
+            await studentdata.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });
         } else {
             res.status(404).json({
-                msg: `El alumno ya no existe`
+                msg: `La informacion del alumno ya no existe`
             });
         }
     } catch (error) {
@@ -80,21 +77,21 @@ export const deleteStudent = async (req: Request, res: Response) => {
     }
 };
 
-export const updateStudent = async (req: Request, res: Response) => {
+export const updateStudentData = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name,lastname,id_degree } = req.body;
+    const { id_student } = req.body;
 
-    const one = await student.findOne({ where: { id: id } });
+    const one = await studentdata.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await student.update({ name,lastname,id_degree }, { where: { id: id } });
+            await studentdata.update({ id_student }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });
         } else {
             return res.status(404).json({
-                msg: `No existe un registro del alumno: ${name+''+lastname} `,
+                msg: `No existe informacion`,
             });
         }
     } catch (error) {

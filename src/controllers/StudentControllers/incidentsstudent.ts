@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { incidentsstudent } from '../../models/studentsModels/incidentsstudent';
 
 //Metodo Listar
-export const getStudents = async (req: Request, res: Response) => {
+export const getIncidents = async (req: Request, res: Response) => {
 
     //Generamos la lista
     const listIncidents = await incidentsstudent.findAll();
@@ -11,14 +11,14 @@ export const getStudents = async (req: Request, res: Response) => {
     res.json(listIncidents);
 };
 
-export const getStudentById = async (req: Request, res: Response) => {
+export const getIncidentById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const oneincident = await incidentsstudent.findByPk(id);
+    const one = await incidentsstudent.findByPk(id);
 
     //validacion de existencia
     try {
-        if (oneincident) {
-            res.json(oneincident);
+        if (one) {
+            res.json(one);
         } else {
 
             return res.status(404).json({
@@ -34,7 +34,7 @@ export const getStudentById = async (req: Request, res: Response) => {
 
 };
 
-export const newStudent = async (req: Request, res: Response) => {
+export const newIncident = async (req: Request, res: Response) => {
     const { id_student,description,severity,date} = req.body;
 
     try {
@@ -57,12 +57,12 @@ export const newStudent = async (req: Request, res: Response) => {
 
 };
 
-export const deleteStudent = async (req: Request, res: Response) => {
+export const deleteIncident = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const oneincident = await incidentsstudent.findOne({ where: { id: id } });
+    const one = await incidentsstudent.findOne({ where: { id: id } });
 
     try {
-        if (oneincident) {
+        if (one) {
             await incidentsstudent.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
@@ -80,14 +80,14 @@ export const deleteStudent = async (req: Request, res: Response) => {
     }
 };
 
-export const updateStudent = async (req: Request, res: Response) => {
+export const updateIncident = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { id_student,description,severity } = req.body;
 
-    const oneincident = await incidentsstudent.findOne({ where: { id: id } });
+    const one = await incidentsstudent.findOne({ where: { id: id } });
 
     try {
-        if (oneincident) {
+        if (one) {
             await incidentsstudent.update({ id_student,description,severity }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`

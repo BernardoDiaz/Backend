@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudent = exports.deleteStudent = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
-const student_1 = require("../../models/studentsModels/student");
+exports.updateStudentData = exports.deleteStudentData = exports.newStudentData = exports.getStudentDataById = exports.getStudentDatas = void 0;
+const studentdata_1 = require("../../models/studentsModels/studentdata");
 //Metodo Listar
-const getStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getStudentDatas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listStudents = yield student_1.student.findAll();
+    const listStudents = yield studentdata_1.studentdata.findAll();
     //Devolvemos la respuesta via JSON
     res.json(listStudents);
 });
-exports.getStudents = getStudents;
-const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getStudentDatas = getStudentDatas;
+const getStudentDataById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const one = yield student_1.student.findByPk(id);
+    const one = yield studentdata_1.studentdata.findByPk(id);
     //validacion de existencia
     try {
         if (one) {
@@ -39,41 +39,38 @@ const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
-exports.getStudentById = getStudentById;
-const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, id_degree, year } = req.body;
+exports.getStudentDataById = getStudentDataById;
+const newStudentData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_student } = req.body;
     try {
-        student_1.student.create({
-            name: name,
-            lastname: lastname,
-            id_degree: id_degree,
-            year: year
+        studentdata_1.studentdata.create({
+            id_student
         });
         res.json({
-            msg: `El alumno ${name + '' + lastname} fue ingresado`
+            msg: `La informacion del alumno fue ingresado`
         });
     }
     catch (error) {
         res.json({
-            msg: "Ocurrio un error registrar un alumno",
+            msg: "Ocurrio un error registrar la informacion del alumno",
             error
         });
     }
 });
-exports.newStudent = newStudent;
-const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.newStudentData = newStudentData;
+const deleteStudentData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const one = yield student_1.student.findOne({ where: { id: id } });
+    const one = yield studentdata_1.studentdata.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield student_1.student.destroy({ where: { id: id } });
+            yield studentdata_1.studentdata.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });
         }
         else {
             res.status(404).json({
-                msg: `El alumno ya no existe`
+                msg: `La informacion del alumno ya no existe`
             });
         }
     }
@@ -84,21 +81,21 @@ const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-exports.deleteStudent = deleteStudent;
-const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteStudentData = deleteStudentData;
+const updateStudentData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, lastname, id_degree } = req.body;
-    const one = yield student_1.student.findOne({ where: { id: id } });
+    const { id_student } = req.body;
+    const one = yield studentdata_1.studentdata.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield student_1.student.update({ name, lastname, id_degree }, { where: { id: id } });
+            yield studentdata_1.studentdata.update({ id_student }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });
         }
         else {
             return res.status(404).json({
-                msg: `No existe un registro del alumno: ${name + '' + lastname} `,
+                msg: `No existe informacion`,
             });
         }
     }
@@ -109,4 +106,4 @@ const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-exports.updateStudent = updateStudent;
+exports.updateStudentData = updateStudentData;

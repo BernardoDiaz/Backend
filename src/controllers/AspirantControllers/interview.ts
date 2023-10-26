@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
-import { consultation } from '../../models/aspirantsModels/consultation';
+import { aspirant } from '../../models/aspirantsModels/aspirant';
+import sequelize from '../../db/connection';
+import { interview } from '../../models/aspirantsModels/interview';
 
 //Metodo Listar
 export const getInterviews = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listInterviews = await consultation.findAll();
+    const listInterviews = await interview.findAll({
+        include: {
+            model: aspirant, attributes: ['aspirant_fullname'],
+            where: { id: sequelize.col('interview.id') }
+        }
+    });
 
     //Devolvemos la respuesta via JSON
     res.json(listInterviews);
@@ -13,7 +20,7 @@ export const getInterviews = async (req: Request, res: Response) => {
 
 export const getInterviewById = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await consultation.findByPk(id);
+    const one = await interview.findByPk(id);
 
     //validacion de existencia
     try {
@@ -35,10 +42,10 @@ export const getInterviewById = async (req: Request, res: Response) => {
 };
 
 export const newInterview = async (req: Request, res: Response) => {
-    const { id_aspirant,comments,state} = req.body;
+    const { id_aspirant, comments, state } = req.body;
 
     try {
-        consultation.create({
+        interview.create({
             id_aspirant,
             comments,
             state
@@ -58,11 +65,11 @@ export const newInterview = async (req: Request, res: Response) => {
 
 export const deleteInterview = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await consultation.findOne({ where: { id: id } });
+    const one = await interview.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await consultation.destroy({ where: { id: id } });
+            await interview.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminada con exito`
             });
@@ -81,13 +88,13 @@ export const deleteInterview = async (req: Request, res: Response) => {
 
 export const updateInterview = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { id_aspirant,comments,state } = req.body;
+    const { id_aspirant, comments, state } = req.body;
 
-    const one = await consultation.findOne({ where: { id: id } });
+    const one = await interview.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await consultation.update({ id_aspirant,comments,state }, { where: { id: id } });
+            await interview.update({ id_aspirant, comments, state }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });

@@ -8,13 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateConsultation = exports.deleteConsultation = exports.newConsultation = exports.getConsultationById = exports.getConsultations = void 0;
 const consultation_1 = require("../../models/aspirantsModels/consultation");
+const aspirant_1 = require("../../models/aspirantsModels/aspirant");
+const connection_1 = __importDefault(require("../../db/connection"));
 //Metodo Listar
 const getConsultations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listConsultations = yield consultation_1.consultation.findAll();
+    const listConsultations = yield consultation_1.consultation.findAll({
+        include: {
+            model: aspirant_1.aspirant, attributes: ['aspirant_fullname'],
+            where: { id: connection_1.default.col('consultation.id') }
+        }
+    });
     //Devolvemos la respuesta via JSON
     res.json(listConsultations);
 });

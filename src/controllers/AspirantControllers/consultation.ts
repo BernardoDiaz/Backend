@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
 import { consultation } from '../../models/aspirantsModels/consultation';
+import { aspirant } from '../../models/aspirantsModels/aspirant';
+import sequelize from '../../db/connection';
 
 //Metodo Listar
 export const getConsultations = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listConsultations = await consultation.findAll();
+    const listConsultations = await consultation.findAll({
+        include: {
+            model: aspirant, attributes: ['aspirant_fullname'],
+            where: { id: sequelize.col('consultation.id') }
+        }
+    });
 
     //Devolvemos la respuesta via JSON
     res.json(listConsultations);
@@ -35,7 +42,7 @@ export const getConsultationById = async (req: Request, res: Response) => {
 };
 
 export const newConsultation = async (req: Request, res: Response) => {
-    const { id_aspirant,comments,state} = req.body;
+    const { id_aspirant, comments, state } = req.body;
 
     try {
         consultation.create({
@@ -81,13 +88,13 @@ export const deleteConsultation = async (req: Request, res: Response) => {
 
 export const updateConsultation = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { id_aspirant,comments,state } = req.body;
+    const { id_aspirant, comments, state } = req.body;
 
     const one = await consultation.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await consultation.update({ id_aspirant,comments,state }, { where: { id: id } });
+            await consultation.update({ id_aspirant, comments, state }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });

@@ -8,20 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateInterview = exports.deleteInterview = exports.newInterview = exports.getInterviewById = exports.getInterviews = void 0;
-const consultation_1 = require("../../models/aspirantsModels/consultation");
+const aspirant_1 = require("../../models/aspirantsModels/aspirant");
+const connection_1 = __importDefault(require("../../db/connection"));
+const interview_1 = require("../../models/aspirantsModels/interview");
 //Metodo Listar
 const getInterviews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listInterviews = yield consultation_1.consultation.findAll();
+    const listInterviews = yield interview_1.interview.findAll({
+        include: {
+            model: aspirant_1.aspirant, attributes: ['aspirant_fullname'],
+            where: { id: connection_1.default.col('interview.id') }
+        }
+    });
     //Devolvemos la respuesta via JSON
     res.json(listInterviews);
 });
 exports.getInterviews = getInterviews;
 const getInterviewById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const one = yield consultation_1.consultation.findByPk(id);
+    const one = yield interview_1.interview.findByPk(id);
     //validacion de existencia
     try {
         if (one) {
@@ -43,7 +53,7 @@ exports.getInterviewById = getInterviewById;
 const newInterview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_aspirant, comments, state } = req.body;
     try {
-        consultation_1.consultation.create({
+        interview_1.interview.create({
             id_aspirant,
             comments,
             state
@@ -62,10 +72,10 @@ const newInterview = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.newInterview = newInterview;
 const deleteInterview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const one = yield consultation_1.consultation.findOne({ where: { id: id } });
+    const one = yield interview_1.interview.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield consultation_1.consultation.destroy({ where: { id: id } });
+            yield interview_1.interview.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminada con exito`
             });
@@ -87,10 +97,10 @@ exports.deleteInterview = deleteInterview;
 const updateInterview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { id_aspirant, comments, state } = req.body;
-    const one = yield consultation_1.consultation.findOne({ where: { id: id } });
+    const one = yield interview_1.interview.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield consultation_1.consultation.update({ id_aspirant, comments, state }, { where: { id: id } });
+            yield interview_1.interview.update({ id_aspirant, comments, state }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });

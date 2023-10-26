@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const interview_1 = require("../../controllers/AspirantControllers/interview");
+//import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/', interview_1.getInterviews);
+router.get('/:id', interview_1.getInterviewById);
+router.post('/', interview_1.newInterview);
+router.put('/:id', interview_1.updateInterview);
+router.delete('/:id', interview_1.deleteInterview);
+exports.default = router;

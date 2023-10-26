@@ -1,8 +1,15 @@
 import express from 'express';
 import cors from "cors";
 //RUTAS
-import routesAspirant from '../routes/aspirant';
-import routesUsers from '../routes/user';
+import routesAspirant from '../routes/AspirantRoute/aspirant';
+import routesConsult from '../routes/AspirantRoute/consultation';
+import routesInterview from '../routes/AspirantRoute/interview';
+import routesStudent from '../routes/StudentRoute/student';
+import routesStudentData from '../routes/StudentRoute/studentdata';
+import routesIncident from '../routes/StudentRoute/incidentsstudent';
+import routesRating from '../routes/StudentRoute/ratingstudent';
+import routesRatingType from '../routes/StudentRoute/ratingtype';
+import routesUsers from '../routes/UserRoute/user';
 import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
@@ -43,6 +50,14 @@ class Server {
     routes() {
         //endpoint aspirantes
         this.app.use('/api/aspirant', routesAspirant);
+        this.app.use('/api/consultation', routesConsult);
+        this.app.use('/api/interview',routesInterview);
+        //endpoint estudiantes
+        this.app.use('/api/student', routesStudent);
+        this.app.use('/api/studentdata', routesStudentData);
+        this.app.use('/api/rating',routesRating);
+        this.app.use('/api/ratingtype',routesRatingType);
+        this.app.use('/api/incident',routesIncident);
         //endpoint usuarios
         this.app.use('/api/users', routesUsers);
         this.app.use('/api/users/login', routesUsers);

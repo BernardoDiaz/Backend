@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const studentdata_1 = require("../../controllers/StudentControllers/studentdata");
+//import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/', studentdata_1.getStudentDatas);
+router.get('/:id', studentdata_1.getStudentDataById);
+router.post('/', studentdata_1.newStudentData);
+router.put('/:id', studentdata_1.updateStudentData);
+router.delete('/:id', studentdata_1.deleteStudentData);
+exports.default = router;

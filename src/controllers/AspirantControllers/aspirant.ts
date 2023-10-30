@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
+import sequelize from '../../db/connection';
+import { degree } from '../../models/degree';
 
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listAspirants = await aspirant.findAll();
+    const listAspirants = await aspirant.findAll({include: {
+        model: degree, attributes: ['name'],
+        where: { id: sequelize.col('degree.id') }
+    }});
 
     //Devolvemos la respuesta via JSON
     res.json(listAspirants);

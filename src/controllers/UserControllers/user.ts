@@ -40,7 +40,6 @@ export const newUser = async (req: Request, res: Response) => {
 
 };
 
-
 //Metodo de loggin para usuarios y generacion de token
 export const loginUser = async (req: Request, res: Response) => {
 
@@ -69,4 +68,83 @@ export const loginUser = async (req: Request, res: Response) => {
     }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F');
     //Devolvemos el token como respuesta via JSON
     res.json(token);
+};
+
+export const getUsers =async (req:Request,res:Response) => {
+        //Generamos la lista
+        const listU = await user.findAll({attributes: ['id', 'username', 'rol']});
+    
+        //Devolvemos la respuesta via JSON
+        res.json(listU);
+}
+
+export const getUserById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const one = await user.findAll({attributes: ['id', 'username','rol'], where:{id:id}});
+
+    //validacion de existencia
+    try {
+        if (one) {
+            res.json(one);
+        } else {
+
+            return res.status(404).json({
+                msg: `No existe el usuario`
+            });
+        }
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al buscar el usuario`
+        });
+    }
+
+
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const one = await user.findOne({where:{id:id}});
+
+    try {
+        if (one) {
+            await user.destroy({where:{id:id}});
+            res.json({
+                msg: `Eliminado con exito`
+            });
+        } else {
+            res.status(404).json({
+                msg: `El grado ya no existe`
+            });
+        }
+    } catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error al eliminar, si hay una vinculacion, no te sera posible eliminarlo comunicate con el encargado de IT para verificar la situacion`,
+            error
+        });
+    }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { username, rol } = req.body;
+
+    const one = await user.findOne({ where: { id: id } });
+
+    try {
+        if (one) {
+            await user.update({ username, rol }, { where: { id: id } });
+            res.json({
+                msg: `Actualizado con exito`
+            });
+        } else {
+            return res.status(404).json({
+                msg: `No existe un registro con el id: ${id} `,
+            });
+        }
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al editar`,
+            error
+        });
+    }
 };

@@ -8,13 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAspirant = exports.deleteAspirant = exports.newAspirant = exports.getAspirantById = exports.getAspirants = void 0;
 const aspirant_1 = require("../../models/aspirantsModels/aspirant");
+const connection_1 = __importDefault(require("../../db/connection"));
+const degree_1 = require("../../models/degree");
 //Metodo Listar
 const getAspirants = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listAspirants = yield aspirant_1.aspirant.findAll();
+    const listAspirants = yield aspirant_1.aspirant.findAll({ include: {
+            model: degree_1.degree, attributes: ['name'],
+            where: { id: connection_1.default.col('degree.id') }
+        } });
     //Devolvemos la respuesta via JSON
     res.json(listAspirants);
 });

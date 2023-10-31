@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
 import { degree } from "../models/degree";
+import { seccion } from "../models/seccion";
+import sequelize from "../db/connection";
+import { level } from "../models/level";
 
 //Metodo Listar
 export const getDegrees = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listDegree = await degree.findAll();
+    const listDegree = await degree.findAll({
+        attributes: ['id', 'name'],
+        include: [{
+            model: seccion, attributes: ['name'],
+            where: { id: sequelize.col('seccion.id') },
+
+        }, {
+            model: level, attributes: ['name'],
+            where: { id: sequelize.col('level.id') }
+        }]
+    });
 
     //Devolvemos la respuesta via JSON
     res.json(listDegree);
@@ -58,11 +71,11 @@ export const newDegree = async (req: Request, res: Response) => {
 
 export const deleteDegree = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const oneDegree = await degree.findOne({where:{id:id}});
+    const oneDegree = await degree.findOne({ where: { id: id } });
 
     try {
         if (oneDegree) {
-            await degree.destroy({where:{id:id}});
+            await degree.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });

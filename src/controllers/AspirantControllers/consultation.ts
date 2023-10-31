@@ -8,6 +8,7 @@ export const getConsultations = async (req: Request, res: Response) => {
 
     //Generamos la lista
     const listConsultations = await consultation.findAll({
+        attributes:['id','comments','state'],
         include: {
             model: aspirant, attributes: ['aspirant_fullname'],
             where: { id: sequelize.col('consultation.id') }

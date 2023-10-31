@@ -3,7 +3,7 @@ import { seccion } from "../models/seccion";
 
 export const getSeccions = async (req: Request, res: Response) => {
 
-    const listSeccion = await seccion.findAll();
+    const listSeccion = await seccion.findAll({attributes:['id', 'name']});
 
     res.json(listSeccion);
 

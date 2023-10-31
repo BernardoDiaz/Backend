@@ -8,13 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDegree = exports.deleteDegree = exports.newDegree = exports.getDegreeById = exports.getDegrees = void 0;
 const degree_1 = require("../models/degree");
+const seccion_1 = require("../models/seccion");
+const connection_1 = __importDefault(require("../db/connection"));
+const level_1 = require("../models/level");
 //Metodo Listar
 const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listDegree = yield degree_1.degree.findAll();
+    const listDegree = yield degree_1.degree.findAll({
+        attributes: ['id', 'name'],
+        include: [{
+                model: seccion_1.seccion, attributes: ['name'],
+                where: { id: connection_1.default.col('seccion.id') },
+            }, {
+                model: level_1.level, attributes: ['name'],
+                where: { id: connection_1.default.col('level.id') }
+            }]
+    });
     //Devolvemos la respuesta via JSON
     res.json(listDegree);
 });

@@ -20,6 +20,7 @@ const connection_1 = __importDefault(require("../../db/connection"));
 const getConsultations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listConsultations = yield consultation_1.consultation.findAll({
+        attributes: ['id', 'comments', 'state'],
         include: {
             model: aspirant_1.aspirant, attributes: ['aspirant_fullname'],
             where: { id: connection_1.default.col('consultation.id') }

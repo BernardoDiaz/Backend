@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSeccion = exports.deleteSeccion = exports.newSeccion = exports.getSeccionById = exports.getSeccions = void 0;
 const seccion_1 = require("../models/seccion");
 const getSeccions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listSeccion = yield seccion_1.seccion.findAll();
+    const listSeccion = yield seccion_1.seccion.findAll({ attributes: ['id', 'name'] });
     res.json(listSeccion);
 });
 exports.getSeccions = getSeccions;

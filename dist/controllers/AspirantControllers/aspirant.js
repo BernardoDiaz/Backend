@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAspirant = exports.deleteAspirant = exports.newAspirant = exports.getAspirantById = exports.getAspirantsFilter = exports.getAspirants = void 0;
+exports.updateAspirant = exports.deleteAspirant = exports.newAspirant = exports.getAspirantById = exports.getAspirants = void 0;
 const aspirant_1 = require("../../models/aspirantsModels/aspirant");
 const connection_1 = __importDefault(require("../../db/connection"));
 const degree_1 = require("../../models/degree");
@@ -27,12 +27,6 @@ const getAspirants = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.json(listAspirants);
 });
 exports.getAspirants = getAspirants;
-const getAspirantsFilter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listAspirantsfl = yield aspirant_1.aspirant.findAll({ attributes: ['id', 'aspirant_fullname'] });
-    //Devolvemos la respuesta via JSON
-    res.json(listAspirantsfl);
-});
-exports.getAspirantsFilter = getAspirantsFilter;
 const getAspirantById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const oneaspirant = yield aspirant_1.aspirant.findByPk(id);

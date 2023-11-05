@@ -5,6 +5,7 @@ const consultation_1 = require("../../controllers/AspirantControllers/consultati
 //import validateToken from './validate-token';
 const router = (0, express_1.Router)();
 router.get('/', consultation_1.getConsultations);
+router.get('/fl', consultation_1.getAspirantsFilter);
 router.get('/:id', consultation_1.getConsultationById);
 router.post('/', consultation_1.newConsultation);
 router.put('/:id', consultation_1.updateConsultation);

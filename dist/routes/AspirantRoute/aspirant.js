@@ -5,7 +5,6 @@ const aspirant_1 = require("../../controllers/AspirantControllers/aspirant");
 //import validateToken from './validate-token';
 const router = (0, express_1.Router)();
 router.get('/', aspirant_1.getAspirants);
-router.get('/fl', aspirant_1.getAspirantsFilter);
 router.get('/:id', aspirant_1.getAspirantById);
 router.post('/', aspirant_1.newAspirant);
 router.put('/:id', aspirant_1.updateAspirant);

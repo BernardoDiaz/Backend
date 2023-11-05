@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { degree } from '../../models/degree';
-import { Op } from 'sequelize';
 
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
@@ -15,15 +14,6 @@ export const getAspirants = async (req: Request, res: Response) => {
 
     //Devolvemos la respuesta via JSON
     res.json(listAspirants);
-};
-
-export const getAspirantsFilter = async (req: Request, res: Response) => {
-
-     const listAspirantsfl = await aspirant.findAll(
-         {attributes:['id','aspirant_fullname']});
-
-    //Devolvemos la respuesta via JSON
-    res.json(listAspirantsfl);
 };
 
 export const getAspirantById = async (req: Request, res: Response) => {

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { interview } from '../../models/aspirantsModels/interview';
+import { Sequelize } from 'sequelize';
 
 //Metodo Listar
 export const getInterviews = async (req: Request, res: Response) => {
@@ -16,6 +17,26 @@ export const getInterviews = async (req: Request, res: Response) => {
 
     //Devolvemos la respuesta via JSON
     res.json(listInterviews);
+};
+
+export const getAspirantsFilter = async (req: Request, res: Response) => {
+
+    //  const listAspirantsfl = await aspirant.findAll(
+    //      {attributes:['id','aspirant_fullname']});
+
+    
+    const listAspirantsfl = await interview.findAll({
+        attributes: ['id',[Sequelize.col('aspirant.id'), 'id_aspirant'], [Sequelize.col('aspirant.aspirant_fullname'), 'aspirant_fullname']],
+        include: [{
+          model: aspirant,
+          attributes: []   
+        }],
+        where: {
+          state: 'Pendiente',
+        },
+      });
+    //Devolvemos la respuesta via JSON
+    res.json(listAspirantsfl);
 };
 
 export const getInterviewById = async (req: Request, res: Response) => {

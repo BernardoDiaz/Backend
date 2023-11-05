@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { consultation } from '../../models/aspirantsModels/consultation';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
+import { Sequelize } from 'sequelize';
 
 //Metodo Listar
 export const getConsultations = async (req: Request, res: Response) => {
@@ -17,6 +18,23 @@ export const getConsultations = async (req: Request, res: Response) => {
 
     //Devolvemos la respuesta via JSON
     res.json(listConsultations);
+};
+
+export const getAspirantsFilter = async (req: Request, res: Response) => {
+
+
+    const listAspirantsfl = await consultation.findAll({
+        attributes: ['id',[Sequelize.col('aspirant.id'), 'id'], [Sequelize.col('aspirant.aspirant_fullname'), 'aspirant_fullname']],
+        include: [{
+          model: aspirant,
+          attributes: []
+        }],
+        where: {
+          state: 'Pendiente',
+        },
+      });
+    //Devolvemos la respuesta via JSON
+    res.json(listAspirantsfl);
 };
 
 export const getConsultationById = async (req: Request, res: Response) => {

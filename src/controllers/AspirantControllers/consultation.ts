@@ -20,6 +20,23 @@ export const getConsultations = async (req: Request, res: Response) => {
     res.json(listConsultations);
 };
 
+export const getConsultationsPendient = async (req: Request, res: Response) => {
+
+    //Generamos la lista
+    const listInterviews = await consultation.findAll({
+        include: {
+          model: aspirant,
+          attributes: ['aspirant_fullname'],
+          where: { id: sequelize.col('consultation.id') }
+        },
+        where: { state: 'Pendiente' }
+    });
+
+    //Devolvemos la respuesta via JSON
+    res.json(listInterviews);
+};
+
+
 export const getAspirantsFilter = async (req: Request, res: Response) => {
 
 

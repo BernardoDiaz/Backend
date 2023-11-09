@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateConsultation = exports.deleteConsultation = exports.newConsultation = exports.getConsultationById = exports.getAspirantsFilter = exports.getConsultations = void 0;
+exports.updateConsultation = exports.deleteConsultation = exports.newConsultation = exports.getConsultationById = exports.getAspirantsFilter = exports.getConsultationsPendient = exports.getConsultations = void 0;
 const consultation_1 = require("../../models/aspirantsModels/consultation");
 const aspirant_1 = require("../../models/aspirantsModels/aspirant");
 const connection_1 = __importDefault(require("../../db/connection"));
@@ -31,6 +31,20 @@ const getConsultations = (req, res) => __awaiter(void 0, void 0, void 0, functio
     res.json(listConsultations);
 });
 exports.getConsultations = getConsultations;
+const getConsultationsPendient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //Generamos la lista
+    const listInterviews = yield consultation_1.consultation.findAll({
+        include: {
+            model: aspirant_1.aspirant,
+            attributes: ['aspirant_fullname'],
+            where: { id: connection_1.default.col('consultation.id') }
+        },
+        where: { state: 'Pendiente' }
+    });
+    //Devolvemos la respuesta via JSON
+    res.json(listInterviews);
+});
+exports.getConsultationsPendient = getConsultationsPendient;
 const getAspirantsFilter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listAspirantsfl = yield consultation_1.consultation.findAll({
         attributes: ['id', [sequelize_1.Sequelize.col('aspirant.id'), 'id'], [sequelize_1.Sequelize.col('aspirant.aspirant_fullname'), 'aspirant_fullname']],

@@ -27,6 +27,7 @@ const user_1 = __importDefault(require("../routes/UserRoute/user"));
 const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
 const seccion_1 = __importDefault(require("../routes/seccion"));
+const subject_1 = __importDefault(require("../routes/subject"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -35,7 +36,7 @@ const degree_2 = require("./degree");
 const level_2 = require("./level");
 const consultation_2 = require("./aspirantsModels/consultation");
 const interview_2 = require("./aspirantsModels/interview");
-const subject_1 = require("./subject");
+const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
 const ratingtype_2 = require("./studentsModels/ratingtype");
 const studentdata_2 = require("./studentsModels/studentdata");
@@ -76,6 +77,8 @@ class Server {
         this.app.use('/api/level', level_1.default);
         //endpoint secciones
         this.app.use('/api/seccion', seccion_1.default);
+        //endpoint asignaturas
+        this.app.use('/api/subject', subject_1.default);
     }
     ;
     midlewares() {
@@ -96,7 +99,7 @@ class Server {
                 yield consultation_2.consultation.sync();
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD
-                yield subject_1.subject.sync();
+                yield subject_2.subject.sync();
                 yield student_2.student.sync();
                 yield ratingtype_2.ratingtype.sync();
                 yield studentdata_2.studentdata.sync();

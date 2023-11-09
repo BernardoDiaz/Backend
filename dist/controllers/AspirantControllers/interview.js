@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateInterview = exports.deleteInterview = exports.newInterview = exports.getInterviewById = exports.getAspirantsFilter = exports.getInterviews = void 0;
+exports.updateInterview = exports.deleteInterview = exports.newInterview = exports.getInterviewById = exports.getAspirantsFilter = exports.getInterviewsPendient = exports.getInterviews = void 0;
 const aspirant_1 = require("../../models/aspirantsModels/aspirant");
 const connection_1 = __importDefault(require("../../db/connection"));
 const interview_1 = require("../../models/aspirantsModels/interview");
@@ -30,6 +30,20 @@ const getInterviews = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.json(listInterviews);
 });
 exports.getInterviews = getInterviews;
+const getInterviewsPendient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //Generamos la lista
+    const listInterviews = yield interview_1.interview.findAll({
+        include: {
+            model: aspirant_1.aspirant,
+            attributes: ['aspirant_fullname'],
+            where: { id: connection_1.default.col('interview.id') }
+        },
+        where: { state: 'Pendiente' }
+    });
+    //Devolvemos la respuesta via JSON
+    res.json(listInterviews);
+});
+exports.getInterviewsPendient = getInterviewsPendient;
 const getAspirantsFilter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //  const listAspirantsfl = await aspirant.findAll(
     //      {attributes:['id','aspirant_fullname']});

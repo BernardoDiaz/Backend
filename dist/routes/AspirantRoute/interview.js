@@ -5,6 +5,7 @@ const interview_1 = require("../../controllers/AspirantControllers/interview");
 //import validateToken from './validate-token';
 const router = (0, express_1.Router)();
 router.get('/', interview_1.getInterviews);
+router.get('/pendient', interview_1.getInterviewsPendient);
 router.get('/fl', interview_1.getAspirantsFilter);
 router.get('/:id', interview_1.getInterviewById);
 router.post('/', interview_1.newInterview);

@@ -13,6 +13,7 @@ import routesUsers from '../routes/UserRoute/user';
 import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
+import routesSubject from '../routes/subject';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -67,6 +68,8 @@ class Server {
         this.app.use('/api/level', routesLevel);
         //endpoint secciones
         this.app.use('/api/seccion', routesSeccion);
+        //endpoint asignaturas
+        this.app.use('/api/subject', routesSubject);
 
     };
 

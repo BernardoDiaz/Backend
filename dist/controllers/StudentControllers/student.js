@@ -8,15 +8,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStudent = exports.deleteStudent = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
+const degree_1 = require("../../models/degree");
+const connection_1 = __importDefault(require("../../db/connection"));
+const seccion_1 = require("../../models/seccion");
 //Metodo Listar
 const getStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //Generamos la lista
-    const listStudents = yield student_1.student.findAll();
-    //Devolvemos la respuesta via JSON
-    res.json(listStudents);
+    try {
+        // Generamos la lista de estudiantes
+        const listaEstudiantes = yield student_1.student.findAll({
+            attributes: ['id', 'name', 'lastname'],
+            include: [
+                {
+                    model: degree_1.degree,
+                    attributes: ['name'],
+                    where: { id: connection_1.default.col('degree.id') },
+                    include: [
+                        {
+                            model: seccion_1.seccion,
+                            attributes: ['name'],
+                            where: { id: connection_1.default.col('degree.id_seccion') }
+                        }
+                    ]
+                }
+            ]
+        });
+        // Devolvemos la respuesta en formato JSON
+        res.json(listaEstudiantes);
+    }
+    catch (error) {
+        // Manejamos cualquier error aquí
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 exports.getStudents = getStudents;
 const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

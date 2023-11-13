@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
 import { degree } from "../degree";
-import { seccion } from "../seccion";
 
 export const student = sequelize.define('student', {
 

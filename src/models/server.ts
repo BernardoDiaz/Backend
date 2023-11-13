@@ -8,7 +8,6 @@ import routesStudent from '../routes/StudentRoute/student';
 import routesStudentData from '../routes/StudentRoute/studentdata';
 import routesIncident from '../routes/StudentRoute/incidentsstudent';
 import routesRating from '../routes/StudentRoute/ratingstudent';
-import routesRatingType from '../routes/StudentRoute/ratingtype';
 import routesUsers from '../routes/UserRoute/user';
 import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
@@ -24,7 +23,6 @@ import { consultation } from './aspirantsModels/consultation';
 import { interview } from './aspirantsModels/interview';
 import { subject } from './subject';
 import { student } from './studentsModels/student';
-import { ratingtype } from './studentsModels/ratingtype';
 import { studentdata } from './studentsModels/studentdata';
 import { ratingstudent } from './studentsModels/ratingstudent';
 
@@ -57,7 +55,6 @@ class Server {
         this.app.use('/api/student', routesStudent);
         this.app.use('/api/studentdata', routesStudentData);
         this.app.use('/api/rating',routesRating);
-        this.app.use('/api/ratingtype',routesRatingType);
         this.app.use('/api/incident',routesIncident);
         //endpoint usuarios
         this.app.use('/api/users', routesUsers);
@@ -94,9 +91,8 @@ class Server {
 
             await subject.sync();
             await student.sync();
-            await ratingtype.sync();
             await studentdata.sync();
-            await ratingstudent.sync();
+            await ratingstudent.sync(); 
 
             await user.sync();
         } catch (error) {

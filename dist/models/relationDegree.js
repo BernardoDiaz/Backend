@@ -13,10 +13,6 @@ exports.relationDegree = connection_1.default.define('assignedDegree', {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false
-    },
     id_user: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true

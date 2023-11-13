@@ -22,7 +22,6 @@ const student_1 = __importDefault(require("../routes/StudentRoute/student"));
 const studentdata_1 = __importDefault(require("../routes/StudentRoute/studentdata"));
 const incidentsstudent_1 = __importDefault(require("../routes/StudentRoute/incidentsstudent"));
 const ratingstudent_1 = __importDefault(require("../routes/StudentRoute/ratingstudent"));
-const ratingtype_1 = __importDefault(require("../routes/StudentRoute/ratingtype"));
 const user_1 = __importDefault(require("../routes/UserRoute/user"));
 const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
@@ -38,7 +37,6 @@ const consultation_2 = require("./aspirantsModels/consultation");
 const interview_2 = require("./aspirantsModels/interview");
 const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
-const ratingtype_2 = require("./studentsModels/ratingtype");
 const studentdata_2 = require("./studentsModels/studentdata");
 const ratingstudent_2 = require("./studentsModels/ratingstudent");
 class Server {
@@ -66,7 +64,6 @@ class Server {
         this.app.use('/api/student', student_1.default);
         this.app.use('/api/studentdata', studentdata_1.default);
         this.app.use('/api/rating', ratingstudent_1.default);
-        this.app.use('/api/ratingtype', ratingtype_1.default);
         this.app.use('/api/incident', incidentsstudent_1.default);
         //endpoint usuarios
         this.app.use('/api/users', user_1.default);
@@ -101,7 +98,6 @@ class Server {
                 //Fin Modulo 01 BD
                 yield subject_2.subject.sync();
                 yield student_2.student.sync();
-                yield ratingtype_2.ratingtype.sync();
                 yield studentdata_2.studentdata.sync();
                 yield ratingstudent_2.ratingstudent.sync();
                 yield user_2.user.sync();

@@ -8,6 +8,10 @@ export const relationDegree =  sequelize.define('assignedDegree',{
         primaryKey:true,
         autoIncrement:true
     },
+    name:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
     id_user:{
         type:DataTypes.INTEGER,
         allowNull:true

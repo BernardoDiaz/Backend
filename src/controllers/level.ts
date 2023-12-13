@@ -3,7 +3,7 @@ import { level } from "../models/level";
 
 export const getLevels = async (req:Request,res:Response) => {
     
-    const listLevel = await level.findAll({attributes:['id','name']});
+    const listLevel = await level.findAll({attributes:['id','name'],  order: [['id', 'ASC']]});
 
     res.json(listLevel);
 } 

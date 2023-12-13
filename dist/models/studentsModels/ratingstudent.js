@@ -8,6 +8,7 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 const student_1 = require("./student");
 const subject_1 = require("../subject");
+const ratingtype_1 = require("./ratingtype");
 exports.ratingstudent = connection_1.default.define('rating', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -22,27 +23,16 @@ exports.ratingstudent = connection_1.default.define('rating', {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true
     },
-    rating1: {
+    id_typerating: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: true
+    },
+    rating: {
         type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 2
     },
-    rating2: {
-        type: sequelize_1.DataTypes.DOUBLE,
-        allowNull: false,
-        defaultValue: 0
-    },
-    rating3: {
-        type: sequelize_1.DataTypes.DOUBLE,
-        allowNull: false,
-        defaultValue: 0
-    },
-    rating_final: {
-        type: sequelize_1.DataTypes.DOUBLE,
-        allowNull: false,
-        defaultValue: 0
-    },
-    date_rating: {
+    date: {
         type: sequelize_1.DataTypes.DATEONLY,
         allowNull: false,
         defaultValue: sequelize_1.DataTypes.NOW
@@ -65,6 +55,16 @@ subject_1.subject.hasMany(exports.ratingstudent, {
 });
 exports.ratingstudent.belongsTo(subject_1.subject, {
     foreignKey: 'id_subject',
+    targetKey: 'id',
+    onDelete: 'set null'
+});
+ratingtype_1.ratingtype.hasMany(exports.ratingstudent, {
+    foreignKey: 'id_typerating',
+    sourceKey: 'id',
+    onDelete: 'set null'
+});
+exports.ratingstudent.belongsTo(ratingtype_1.ratingtype, {
+    foreignKey: 'id_typerating',
     targetKey: 'id',
     onDelete: 'set null'
 });

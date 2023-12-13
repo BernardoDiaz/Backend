@@ -1,31 +1,35 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection";
-import { subject } from "./subject";
+import { degree } from "./degree";
 
-export const relationSubject =  sequelize.define('assignedDegree',{
+export const relationDegree =  sequelize.define('assignedDegree',{
     id:{
         type:DataTypes.INTEGER,
         primaryKey:true,
         autoIncrement:true
     },
+    name:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
     id_user:{
         type:DataTypes.INTEGER,
         allowNull:true
     },
-    id_subject:{
+    id_degree:{
         type:DataTypes.INTEGER,
         allowNull:true
     }
 });
 
-subject.hasMany(relationSubject,{
-    foreignKey: 'id_subject',
+degree.hasMany(relationDegree,{
+    foreignKey: 'id_degree',
     sourceKey: 'id',
     onDelete: 'set null'
 });
 
-relationSubject.belongsTo(subject,{
-    foreignKey:'id_subject',
+relationDegree.belongsTo(degree,{
+    foreignKey:'id_degree',
     targetKey: 'id',
     onDelete: 'set null'
     

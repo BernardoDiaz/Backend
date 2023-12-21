@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const payment_1 = require("../../controllers/paymentsControllers/payment");
+//import validateToken from './validate-token';
+const router = (0, express_1.Router)();
+router.get('/', payment_1.getPayment);
+router.get('/:id', payment_1.getPaymentById);
+router.post('/', payment_1.newPayment);
+router.put('/:id', payment_1.updatePayment);
+router.delete('/:id', payment_1.deletePayment);
+exports.default = router;

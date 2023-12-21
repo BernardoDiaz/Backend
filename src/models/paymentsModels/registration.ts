@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db/connection";
-import { student } from "./studentsModels/student";
+import sequelize from "../../db/connection";
+import { student } from "../studentsModels/student";
+import { degree } from "../degree";
 
 export const registration = sequelize.define('registration',{
     id:{
@@ -16,7 +17,7 @@ export const registration = sequelize.define('registration',{
         type: DataTypes.DATEONLY,
         allowNull:false
     },
-    price:{
+    payment_amount:{
         type:DataTypes.DOUBLE,
         allowNull:false
     }

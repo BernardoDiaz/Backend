@@ -13,6 +13,9 @@ import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
+import routesRegistration from '../routes/PaymentsRoute/registration';
+import routesPayment from '../routes/PaymentsRoute/payment';
+import routesOtherPayment from '../routes/PaymentsRoute/otherPayment';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -25,6 +28,9 @@ import { subject } from './subject';
 import { student } from './studentsModels/student';
 import { studentdata } from './studentsModels/studentdata';
 import { ratingstudent } from './studentsModels/ratingstudent';
+import { registration } from './paymentsModels/registration';
+import { payment } from './paymentsModels/payment';
+import { other_payment } from './paymentsModels/otherPayment';
 
 
 class Server {
@@ -68,6 +74,11 @@ class Server {
         //endpoint asignaturas
         this.app.use('/api/subject', routesSubject);
 
+        //endpoint matricula y pagos
+        this.app.use('/api/registration', routesRegistration);
+        this.app.use('/api/payment', routesPayment);
+        this.app.use('/api/otherpayment', routesOtherPayment);
+
     };
 
     midlewares() {
@@ -93,6 +104,11 @@ class Server {
             await student.sync();
             await studentdata.sync();
             await ratingstudent.sync(); 
+
+
+            await registration.sync();
+            await payment.sync();
+            await other_payment.sync();  
 
             await user.sync();
         } catch (error) {

@@ -27,6 +27,9 @@ const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
 const seccion_1 = __importDefault(require("../routes/seccion"));
 const subject_1 = __importDefault(require("../routes/subject"));
+const registration_1 = __importDefault(require("../routes/PaymentsRoute/registration"));
+const payment_1 = __importDefault(require("../routes/PaymentsRoute/payment"));
+const otherPayment_1 = __importDefault(require("../routes/PaymentsRoute/otherPayment"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -39,6 +42,9 @@ const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
 const studentdata_2 = require("./studentsModels/studentdata");
 const ratingstudent_2 = require("./studentsModels/ratingstudent");
+const registration_2 = require("./paymentsModels/registration");
+const payment_2 = require("./paymentsModels/payment");
+const otherPayment_2 = require("./paymentsModels/otherPayment");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -76,6 +82,10 @@ class Server {
         this.app.use('/api/seccion', seccion_1.default);
         //endpoint asignaturas
         this.app.use('/api/subject', subject_1.default);
+        //endpoint matricula y pagos
+        this.app.use('/api/registration', registration_1.default);
+        this.app.use('/api/payment', payment_1.default);
+        this.app.use('/api/otherpayment', otherPayment_1.default);
     }
     ;
     midlewares() {
@@ -100,6 +110,9 @@ class Server {
                 yield student_2.student.sync();
                 yield studentdata_2.studentdata.sync();
                 yield ratingstudent_2.ratingstudent.sync();
+                yield registration_2.registration.sync();
+                yield payment_2.payment.sync();
+                yield otherPayment_2.other_payment.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

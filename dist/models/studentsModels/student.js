@@ -29,6 +29,10 @@ exports.student = connection_1.default.define('student', {
         type: sequelize_1.DataTypes.DATEONLY,
         allowNull: false,
         defaultValue: sequelize_1.DataTypes.NOW
+    },
+    state: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     }
 });
 degree_1.degree.hasMany(exports.student, {

@@ -15,7 +15,6 @@ import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
 import routesRegistration from '../routes/PaymentsRoute/registration';
 import routesPayment from '../routes/PaymentsRoute/payment';
-import routesOtherPayment from '../routes/PaymentsRoute/otherPayment';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -30,7 +29,8 @@ import { studentdata } from './studentsModels/studentdata';
 import { ratingstudent } from './studentsModels/ratingstudent';
 import { registration } from './paymentsModels/registration';
 import { payment } from './paymentsModels/payment';
-import { other_payment } from './paymentsModels/otherPayment';
+import { product } from './paymentsModels/product';
+import { category } from './paymentsModels/category';
 
 
 class Server {
@@ -77,7 +77,7 @@ class Server {
         //endpoint matricula y pagos
         this.app.use('/api/registration', routesRegistration);
         this.app.use('/api/payment', routesPayment);
-        this.app.use('/api/otherpayment', routesOtherPayment);
+
 
     };
 
@@ -98,17 +98,18 @@ class Server {
             await aspirant.sync();
             await consultation.sync();
             await interview.sync();
-            //Fin Modulo 01 BD
+            //Fin Modulo 01 BD 
 
             await subject.sync();
             await student.sync();
             await studentdata.sync();
-            await ratingstudent.sync(); 
+            //await ratingstudent.sync(); 
 
 
             await registration.sync();
-            await payment.sync();
-            await other_payment.sync();  
+            await category.sync();
+            await product.sync();
+            await payment.sync(); 
 
             await user.sync();
         } catch (error) {

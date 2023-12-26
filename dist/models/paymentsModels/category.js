@@ -3,26 +3,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.other_payment = void 0;
+exports.category = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
-exports.other_payment = connection_1.default.define('other_payment', {
+const product_1 = require("./product");
+exports.category = connection_1.default.define('category', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    name_fee: {
+    name: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
-    date_payments: {
-        type: sequelize_1.DataTypes.DATEONLY,
-        allowNull: false
-    },
-    payment_amount: {
-        type: sequelize_1.DataTypes.DOUBLE,
+    id_product: {
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
     }
+});
+product_1.product.belongsTo(exports.category, {
+    foreignKey: 'id_product',
+    targetKey: 'id',
+    onDelete: 'restrict'
+});
+exports.category.hasMany(product_1.product, {
+    foreignKey: 'id_product',
+    sourceKey: 'id',
+    onDelete: 'restrict'
 });

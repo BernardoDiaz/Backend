@@ -69,13 +69,14 @@ const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getStudentById = getStudentById;
 const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, id_degree, year } = req.body;
+    const { name, lastname, id_degree, year, state } = req.body;
     try {
         student_1.student.create({
             name: name,
             lastname: lastname,
             id_degree: id_degree,
-            year: year
+            year: year,
+            state: state
         });
         res.json({
             msg: `El alumno ${name + '' + lastname} fue ingresado`

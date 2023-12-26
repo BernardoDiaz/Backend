@@ -21,11 +21,15 @@ export const student = sequelize.define('student', {
     id_degree: {
         type: DataTypes.INTEGER,
         allowNull: true
-    },
+    }, 
     year: {
         type: DataTypes.DATEONLY,
         allowNull: false,
         defaultValue: DataTypes.NOW
+    },
+    state:{
+        type:DataTypes.STRING,
+        allowNull:false
     }
 
 });

@@ -33,7 +33,6 @@ export const getStudents = async (req: Request, res: Response) => {
     }
 };
 
-
 export const getStudentById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const one = await student.findByPk(id);
@@ -58,14 +57,15 @@ export const getStudentById = async (req: Request, res: Response) => {
 };
 
 export const newStudent = async (req: Request, res: Response) => {
-    const { name, lastname, id_degree, year } = req.body;
+    const { name, lastname, id_degree, year, state } = req.body;
 
     try {
         student.create({
             name: name,
             lastname: lastname,
             id_degree: id_degree,
-            year: year
+            year: year,
+            state:state
         });
         res.json({
             msg: `El alumno ${name + '' + lastname} fue ingresado`

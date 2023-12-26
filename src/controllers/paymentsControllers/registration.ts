@@ -8,20 +8,7 @@ import { degree } from '../../models/degree';
 export const getRegistration = async (req: Request, res: Response) => {
     try {
         // Generamos la lista de estudiantes
-        const list = await registration.findAll({
-            attributes: ['id', 'date_registration', 'payment_amount'],
-            include: [
-                {
-                    model: student,
-                    attributes: ['name','lastname'],
-                    where: { id: sequelize.col('student.id') },
-                    include:[{
-                        model:degree,
-                        attributes:['name'],
-                        where:{id: sequelize.col('student.id_degree')}
-                    }]
-                }]
-        });
+        const list = await registration.findAll();
 
         // Devolvemos la respuesta en formato JSON
         res.json(list);
@@ -55,20 +42,28 @@ export const getRegistrationById = async (req: Request, res: Response) => {
 
 };
 
+//matriculas pendientes
+export const getAlumnosOffRegistration = async (req: Request, res: Response) => {
+    const list = await student.findAll({ where: { state: 'Matrícula Pendiente' } });
+    // Devolvemos la respuesta en formato JSON
+    res.json(list);
+};
+ 
 export const newRegistration = async (req: Request, res: Response) => {
-    const { id_student, date_registration,payment_amount } = req.body;
+    const { id_student, date_registration, payment_type, payment_amount } = req.body;
 
     try {
         registration.create({
-            id_student:id_student,
-            date_registration:date_registration,
-            payment_amount:payment_amount
+            id_student: id_student,
+            date_registration: date_registration,
+            payment_type: payment_type,
+            payment_amount: payment_amount
         });
         res.json({
             msg: `Matricula ingresada`
         });
 
-    } catch (error) {
+    } catch (error) { 
         res.json({
             msg: "Ocurrio un error registrar la matricula",
             error
@@ -102,13 +97,13 @@ export const deleteRegistration = async (req: Request, res: Response) => {
 
 export const updateRegistration = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { id_student, date_registration,payment_amount } = req.body;
+    const { id_student, date_registration, payment_type, payment_amount, } = req.body;
 
     const one = await registration.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await student.update({ id_student, date_registration, payment_amount }, { where: { id: id } });
+            await student.update({ id_student, date_registration, payment_type,payment_amount }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });
@@ -122,5 +117,23 @@ export const updateRegistration = async (req: Request, res: Response) => {
             msg: `Ocurrio un error al editar la informacion`,
             error
         });
+    }
+};
+
+export const updateRegistrationActive = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const state  = 'Activo';
+
+    const one = await student.findOne({ where: { id: id } });
+
+    try {
+        if (one) {
+            await student.update({ state }, { where: { id: id } });
+            res.json();
+        } else {
+            return res.status(404).json();
+        }
+    } catch (error) {
+        return res.status(404).json(); 
     }
 };

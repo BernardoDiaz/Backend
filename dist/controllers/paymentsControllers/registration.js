@@ -8,34 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateRegistration = exports.deleteRegistration = exports.newRegistration = exports.getRegistrationById = exports.getRegistration = void 0;
+exports.updateRegistrationActive = exports.updateRegistration = exports.deleteRegistration = exports.newRegistration = exports.getAlumnosOffRegistration = exports.getRegistrationById = exports.getRegistration = void 0;
 const student_1 = require("../../models/studentsModels/student");
-const connection_1 = __importDefault(require("../../db/connection"));
 const registration_1 = require("../../models/paymentsModels/registration");
-const degree_1 = require("../../models/degree");
 //Metodo Listar
 const getRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Generamos la lista de estudiantes
-        const list = yield registration_1.registration.findAll({
-            attributes: ['id', 'date_registration', 'payment_amount'],
-            include: [
-                {
-                    model: student_1.student,
-                    attributes: ['name', 'lastname'],
-                    where: { id: connection_1.default.col('student.id') },
-                    include: [{
-                            model: degree_1.degree,
-                            attributes: ['name'],
-                            where: { id: connection_1.default.col('student.id_degree') }
-                        }]
-                }
-            ]
-        });
+        const list = yield registration_1.registration.findAll();
         // Devolvemos la respuesta en formato JSON
         res.json(list);
     }
@@ -66,12 +47,20 @@ const getRegistrationById = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getRegistrationById = getRegistrationById;
+//matriculas pendientes
+const getAlumnosOffRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const list = yield student_1.student.findAll({ where: { state: 'Matrícula Pendiente' } });
+    // Devolvemos la respuesta en formato JSON
+    res.json(list);
+});
+exports.getAlumnosOffRegistration = getAlumnosOffRegistration;
 const newRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_student, date_registration, payment_amount } = req.body;
+    const { id_student, date_registration, payment_type, payment_amount } = req.body;
     try {
         registration_1.registration.create({
             id_student: id_student,
             date_registration: date_registration,
+            payment_type: payment_type,
             payment_amount: payment_amount
         });
         res.json({
@@ -112,11 +101,11 @@ const deleteRegistration = (req, res) => __awaiter(void 0, void 0, void 0, funct
 exports.deleteRegistration = deleteRegistration;
 const updateRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { id_student, date_registration, payment_amount } = req.body;
+    const { id_student, date_registration, payment_type, payment_amount, } = req.body;
     const one = yield registration_1.registration.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield student_1.student.update({ id_student, date_registration, payment_amount }, { where: { id: id } });
+            yield student_1.student.update({ id_student, date_registration, payment_type, payment_amount }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });
@@ -135,3 +124,21 @@ const updateRegistration = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.updateRegistration = updateRegistration;
+const updateRegistrationActive = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const state = 'Activo';
+    const one = yield student_1.student.findOne({ where: { id: id } });
+    try {
+        if (one) {
+            yield student_1.student.update({ state }, { where: { id: id } });
+            res.json();
+        }
+        else {
+            return res.status(404).json();
+        }
+    }
+    catch (error) {
+        return res.status(404).json();
+    }
+});
+exports.updateRegistrationActive = updateRegistrationActive;

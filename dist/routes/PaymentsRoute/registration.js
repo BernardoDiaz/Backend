@@ -5,8 +5,10 @@ const registration_1 = require("../../controllers/paymentsControllers/registrati
 //import validateToken from './validate-token';
 const router = (0, express_1.Router)();
 router.get('/', registration_1.getRegistration);
+router.get('/offRegistration', registration_1.getAlumnosOffRegistration);
 router.get('/:id', registration_1.getRegistrationById);
 router.post('/', registration_1.newRegistration);
 router.put('/:id', registration_1.updateRegistration);
+router.put('/on/:id', registration_1.updateRegistrationActive);
 router.delete('/:id', registration_1.deleteRegistration);
 exports.default = router;

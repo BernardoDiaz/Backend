@@ -18,21 +18,34 @@ exports.registration = connection_1.default.define('registration', {
         allowNull: false,
     },
     date_registration: {
-        type: sequelize_1.DataTypes.DATEONLY,
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
+    },
+    payment_type: {
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     payment_amount: {
         type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
+    },
+    year: {
+        type: sequelize_1.DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue: sequelize_1.DataTypes.NOW
+    },
+    state: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     }
 });
 student_1.student.hasMany(exports.registration, {
-    foreignKey: 'id_student',
+    foreignKey: 'id_degree',
     sourceKey: 'id',
     onDelete: 'restrict'
 });
 exports.registration.belongsTo(student_1.student, {
-    foreignKey: 'id_student',
+    foreignKey: 'id_degree',
     targetKey: 'id',
     onDelete: 'restrict'
 });

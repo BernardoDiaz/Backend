@@ -29,7 +29,6 @@ const seccion_1 = __importDefault(require("../routes/seccion"));
 const subject_1 = __importDefault(require("../routes/subject"));
 const registration_1 = __importDefault(require("../routes/PaymentsRoute/registration"));
 const payment_1 = __importDefault(require("../routes/PaymentsRoute/payment"));
-const otherPayment_1 = __importDefault(require("../routes/PaymentsRoute/otherPayment"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -41,10 +40,10 @@ const interview_2 = require("./aspirantsModels/interview");
 const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
 const studentdata_2 = require("./studentsModels/studentdata");
-const ratingstudent_2 = require("./studentsModels/ratingstudent");
 const registration_2 = require("./paymentsModels/registration");
 const payment_2 = require("./paymentsModels/payment");
-const otherPayment_2 = require("./paymentsModels/otherPayment");
+const product_1 = require("./paymentsModels/product");
+const category_1 = require("./paymentsModels/category");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -85,7 +84,6 @@ class Server {
         //endpoint matricula y pagos
         this.app.use('/api/registration', registration_1.default);
         this.app.use('/api/payment', payment_1.default);
-        this.app.use('/api/otherpayment', otherPayment_1.default);
     }
     ;
     midlewares() {
@@ -105,14 +103,15 @@ class Server {
                 yield aspirant_2.aspirant.sync();
                 yield consultation_2.consultation.sync();
                 yield interview_2.interview.sync();
-                //Fin Modulo 01 BD
+                //Fin Modulo 01 BD 
                 yield subject_2.subject.sync();
                 yield student_2.student.sync();
                 yield studentdata_2.studentdata.sync();
-                yield ratingstudent_2.ratingstudent.sync();
+                //await ratingstudent.sync(); 
                 yield registration_2.registration.sync();
+                yield category_1.category.sync();
+                yield product_1.product.sync();
                 yield payment_2.payment.sync();
-                yield otherPayment_2.other_payment.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

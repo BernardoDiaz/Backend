@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
-import { registration } from "./matricula";
 import { student } from "../studentsModels/student";
 
 export const payment = sequelize.define('payment', {
@@ -25,7 +24,7 @@ export const payment = sequelize.define('payment', {
     datePayment:{
         type:DataTypes.DATEONLY,
         allowNull:false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW 
     }
 });
 

@@ -27,8 +27,6 @@ const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
 const seccion_1 = __importDefault(require("../routes/seccion"));
 const subject_1 = __importDefault(require("../routes/subject"));
-const registration_1 = __importDefault(require("../routes/PaymentsRoute/registration"));
-const payment_1 = __importDefault(require("../routes/PaymentsRoute/payment"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -42,10 +40,10 @@ const student_2 = require("./studentsModels/student");
 const studentdata_2 = require("./studentsModels/studentdata");
 const matricula_1 = require("./paymentsModels/matricula");
 const categorias_1 = require("./paymentsModels/categorias");
-const Pago_1 = require("./paymentsModels/Pago");
 const detallePago_1 = require("./paymentsModels/detallePago");
 const planPagos_1 = require("./paymentsModels/planPagos");
 const productos_1 = require("./paymentsModels/productos");
+const pago_1 = require("./paymentsModels/pago");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -84,8 +82,6 @@ class Server {
         //endpoint asignaturas
         this.app.use('/api/subject', subject_1.default);
         //endpoint matricula y pagos
-        this.app.use('/api/registration', registration_1.default);
-        this.app.use('/api/payment', payment_1.default);
     }
     ;
     midlewares() {
@@ -107,7 +103,7 @@ class Server {
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD 
                 yield subject_2.subject.sync();
-                yield Pago_1.payment.sync();
+                yield pago_1.payment.sync();
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();
                 yield studentdata_2.studentdata.sync();

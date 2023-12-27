@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.detailsPayment = void 0;
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
-const Pago_1 = require("./Pago");
 const productos_1 = require("./productos");
+const pago_1 = require("./pago");
 exports.detailsPayment = connection_1.default.define('detailsPayment', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -23,12 +23,12 @@ exports.detailsPayment = connection_1.default.define('detailsPayment', {
         allowNull: false
     }
 });
-Pago_1.payment.hasMany(exports.detailsPayment, {
+pago_1.payment.hasMany(exports.detailsPayment, {
     foreignKey: 'id_payment',
     sourceKey: 'id',
     onDelete: 'RESTRICT'
 });
-exports.detailsPayment.belongsTo(Pago_1.payment, {
+exports.detailsPayment.belongsTo(pago_1.payment, {
     foreignKey: 'id_payment',
     targetKey: 'id',
     onDelete: 'RESTRICT'

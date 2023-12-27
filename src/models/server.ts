@@ -13,8 +13,7 @@ import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
-import routesRegistration from '../routes/PaymentsRoute/registration';
-import routesPayment from '../routes/PaymentsRoute/payment';
+
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -29,10 +28,10 @@ import { studentdata } from './studentsModels/studentdata';
 import { ratingstudent } from './studentsModels/ratingstudent';
 import { registration } from './paymentsModels/matricula';
 import { category } from './paymentsModels/categorias';
-import { payment } from './paymentsModels/Pago';
 import { detailsPayment } from './paymentsModels/detallePago';
 import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
+import { payment } from './paymentsModels/pago'; 
 
 
 class Server {
@@ -77,8 +76,7 @@ class Server {
         this.app.use('/api/subject', routesSubject);
 
         //endpoint matricula y pagos
-        this.app.use('/api/registration', routesRegistration);
-        this.app.use('/api/payment', routesPayment);
+
 
 
     };

@@ -27,10 +27,12 @@ import { subject } from './subject';
 import { student } from './studentsModels/student';
 import { studentdata } from './studentsModels/studentdata';
 import { ratingstudent } from './studentsModels/ratingstudent';
-import { registration } from './paymentsModels/registration';
-import { payment } from './paymentsModels/payment';
-import { product } from './paymentsModels/product';
-import { category } from './paymentsModels/category';
+import { registration } from './paymentsModels/matricula';
+import { category } from './paymentsModels/categorias';
+import { payment } from './paymentsModels/Pago';
+import { detailsPayment } from './paymentsModels/detallePago';
+import { planPayment } from './paymentsModels/planPagos';
+import { product } from './paymentsModels/productos';
 
 
 class Server {
@@ -99,17 +101,20 @@ class Server {
             await consultation.sync();
             await interview.sync();
             //Fin Modulo 01 BD 
-
+            
             await subject.sync();
+            await payment.sync();
             await student.sync();
+            await registration.sync();
             await studentdata.sync();
             //await ratingstudent.sync(); 
-
-
-            await registration.sync();
-            await category.sync();
+            
             await product.sync();
-            await payment.sync(); 
+            await category.sync();
+            await detailsPayment.sync();
+            await planPayment.sync(); 
+
+
 
             await user.sync();
         } catch (error) {

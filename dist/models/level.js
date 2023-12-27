@@ -16,6 +16,14 @@ exports.level = connection_1.default.define('level', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         unique: true
+    },
+    priceRegistration: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: false
+    },
+    priceFee: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: false
     }
 });
 // level.sync()

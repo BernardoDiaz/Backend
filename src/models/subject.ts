@@ -8,13 +8,18 @@ export const subject =  sequelize.define('subject',{
         primaryKey:true,
         autoIncrement:true
     },
-    name:{
+    nameSubject:{
         type:DataTypes.STRING,
         allowNull:false
     },
     id_degree:{
         type:DataTypes.INTEGER,
         allowNull:true
+    },
+    cantPeriods:{
+        type:DataTypes.INTEGER,
+        allowNull:false,
+        defaultValue: 3
     }
 });
 

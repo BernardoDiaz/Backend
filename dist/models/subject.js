@@ -13,13 +13,18 @@ exports.subject = connection_1.default.define('subject', {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    nameSubject: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     id_degree: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true
+    },
+    cantPeriods: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 3
     }
 });
 degree_1.degree.hasMany(exports.subject, {

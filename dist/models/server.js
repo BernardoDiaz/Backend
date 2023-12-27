@@ -40,10 +40,12 @@ const interview_2 = require("./aspirantsModels/interview");
 const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
 const studentdata_2 = require("./studentsModels/studentdata");
-const registration_2 = require("./paymentsModels/registration");
-const payment_2 = require("./paymentsModels/payment");
-const product_1 = require("./paymentsModels/product");
-const category_1 = require("./paymentsModels/category");
+const matricula_1 = require("./paymentsModels/matricula");
+const categorias_1 = require("./paymentsModels/categorias");
+const Pago_1 = require("./paymentsModels/Pago");
+const detallePago_1 = require("./paymentsModels/detallePago");
+const planPagos_1 = require("./paymentsModels/planPagos");
+const productos_1 = require("./paymentsModels/productos");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -105,13 +107,15 @@ class Server {
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD 
                 yield subject_2.subject.sync();
+                yield Pago_1.payment.sync();
                 yield student_2.student.sync();
+                yield matricula_1.registration.sync();
                 yield studentdata_2.studentdata.sync();
                 //await ratingstudent.sync(); 
-                yield registration_2.registration.sync();
-                yield category_1.category.sync();
-                yield product_1.product.sync();
-                yield payment_2.payment.sync();
+                yield productos_1.product.sync();
+                yield categorias_1.category.sync();
+                yield detallePago_1.detailsPayment.sync();
+                yield planPagos_1.planPayment.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

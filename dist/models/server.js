@@ -27,6 +27,8 @@ const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
 const seccion_1 = __importDefault(require("../routes/seccion"));
 const subject_1 = __importDefault(require("../routes/subject"));
+const categorias_1 = __importDefault(require("../routes/PaymentsRoute/categorias"));
+const productos_1 = __importDefault(require("../routes/PaymentsRoute/productos"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -39,10 +41,10 @@ const subject_2 = require("./subject");
 const student_2 = require("./studentsModels/student");
 const studentdata_2 = require("./studentsModels/studentdata");
 const matricula_1 = require("./paymentsModels/matricula");
-const categorias_1 = require("./paymentsModels/categorias");
+const categorias_2 = require("./paymentsModels/categorias");
 const detallePago_1 = require("./paymentsModels/detallePago");
 const planPagos_1 = require("./paymentsModels/planPagos");
-const productos_1 = require("./paymentsModels/productos");
+const productos_2 = require("./paymentsModels/productos");
 const pago_1 = require("./paymentsModels/pago");
 class Server {
     constructor() {
@@ -82,6 +84,9 @@ class Server {
         //endpoint asignaturas
         this.app.use('/api/subject', subject_1.default);
         //endpoint matricula y pagos
+        this.app.use('/api/category', categorias_1.default);
+        this.app.use('/api/product', productos_1.default);
+        //endpoint categorias y productos
     }
     ;
     midlewares() {
@@ -103,13 +108,13 @@ class Server {
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD 
                 yield subject_2.subject.sync();
-                yield pago_1.payment.sync();
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();
                 yield studentdata_2.studentdata.sync();
                 //await ratingstudent.sync(); 
-                yield productos_1.product.sync();
-                yield categorias_1.category.sync();
+                yield pago_1.payment.sync();
+                yield categorias_2.category.sync();
+                yield productos_2.product.sync();
                 yield detallePago_1.detailsPayment.sync();
                 yield planPagos_1.planPayment.sync();
                 yield user_2.user.sync();

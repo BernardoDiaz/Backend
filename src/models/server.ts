@@ -13,7 +13,8 @@ import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
 import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
-
+import routesCategory from '../routes/PaymentsRoute/categorias';
+import routesProduct from '../routes/PaymentsRoute/productos';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -76,6 +77,9 @@ class Server {
         this.app.use('/api/subject', routesSubject);
 
         //endpoint matricula y pagos
+        this.app.use('/api/category', routesCategory);
+        this.app.use('/api/product', routesProduct);
+        //endpoint categorias y productos
 
 
 
@@ -101,14 +105,14 @@ class Server {
             //Fin Modulo 01 BD 
             
             await subject.sync();
-            await payment.sync();
             await student.sync();
             await registration.sync();
             await studentdata.sync();
             //await ratingstudent.sync(); 
             
-            await product.sync();
+            await payment.sync();
             await category.sync();
+            await product.sync();
             await detailsPayment.sync();
             await planPayment.sync(); 
 

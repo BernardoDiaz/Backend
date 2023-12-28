@@ -10,7 +10,7 @@ export const payment = sequelize.define('payment', {
         autoIncrement: true
     },
     id_student:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:false
     },
     totalAmount:{
@@ -28,13 +28,13 @@ export const payment = sequelize.define('payment', {
     }
 });
 
-payment.hasMany(student,{
+student.hasMany(payment,{
     foreignKey:'id_student',
     sourceKey:'id',
     onDelete:'RESTRICT'
 });
 
-student.belongsTo(payment,{
+payment.belongsTo(student,{
     foreignKey:'id_student',
     targetKey: 'id',
     onDelete:'RESTRICT'

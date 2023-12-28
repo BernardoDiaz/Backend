@@ -8,6 +8,7 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 const degree_1 = require("../degree");
 const student_1 = require("../studentsModels/student");
+const level_1 = require("../level");
 exports.registration = connection_1.default.define('registration', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -15,10 +16,14 @@ exports.registration = connection_1.default.define('registration', {
         autoIncrement: true
     },
     id_student: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     id_degree: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false
+    },
+    id_level: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
     },
@@ -44,6 +49,16 @@ degree_1.degree.hasMany(exports.registration, {
 });
 exports.registration.belongsTo(degree_1.degree, {
     foreignKey: 'id_degree',
+    targetKey: 'id',
+    onDelete: 'RESTRICT'
+});
+level_1.level.hasMany(exports.registration, {
+    foreignKey: 'id_level',
+    sourceKey: 'id',
+    onDelete: 'RESTRICT'
+});
+exports.registration.belongsTo(level_1.level, {
+    foreignKey: 'id_level',
     targetKey: 'id',
     onDelete: 'RESTRICT'
 });

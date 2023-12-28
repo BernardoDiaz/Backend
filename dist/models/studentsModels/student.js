@@ -8,9 +8,8 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 exports.student = connection_1.default.define('student', {
     id: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true
     },
     name: {
         type: sequelize_1.DataTypes.STRING,
@@ -21,12 +20,12 @@ exports.student = connection_1.default.define('student', {
         allowNull: false
     },
     year: {
-        type: sequelize_1.DataTypes.DATEONLY,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: sequelize_1.DataTypes.NOW
     },
     state: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 'Activo'
     }
 });

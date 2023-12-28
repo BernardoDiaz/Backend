@@ -14,7 +14,7 @@ exports.payment = connection_1.default.define('payment', {
         autoIncrement: true
     },
     id_student: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     totalAmount: {
@@ -31,12 +31,12 @@ exports.payment = connection_1.default.define('payment', {
         defaultValue: sequelize_1.DataTypes.NOW
     }
 });
-exports.payment.hasMany(student_1.student, {
+student_1.student.hasMany(exports.payment, {
     foreignKey: 'id_student',
     sourceKey: 'id',
     onDelete: 'RESTRICT'
 });
-student_1.student.belongsTo(exports.payment, {
+exports.payment.belongsTo(student_1.student, {
     foreignKey: 'id_student',
     targetKey: 'id',
     onDelete: 'RESTRICT'

@@ -24,13 +24,13 @@ export const product = sequelize.define('product', {
     
 });
 
-product.hasMany(category,{
+category.hasMany(product,{
     foreignKey:'id_category',
     sourceKey:'id',
     onDelete:'RESTRICT'
 });
 
-category.belongsTo(product,{
+product.belongsTo(category,{
     foreignKey:'id_category',
     targetKey: 'id',
     onDelete:'RESTRICT'

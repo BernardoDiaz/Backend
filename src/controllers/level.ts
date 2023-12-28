@@ -3,7 +3,8 @@ import { level } from "../models/level";
 
 export const getLevels = async (req:Request,res:Response) => {
     
-    const listLevel = await level.findAll({attributes:['id','name'],  order: [['id', 'ASC']]});
+    const listLevel = await level.findAll({attributes:['id','name', 'priceRegistration',
+    'priceFee'],  order: [['id', 'ASC']]});
 
     res.json(listLevel);
 } 
@@ -33,7 +34,7 @@ export const getLevelById = async (req: Request, res: Response) => {
 
 export const newLevel = async (req:Request, res:Response) => {
     
-    const {name} = req.body;
+    const {name,priceRegistration,priceFee} = req.body;
 
     //Validar nombre unico de nivel
     const namevalid = await level.findOne({where:{name:name}});
@@ -47,7 +48,9 @@ export const newLevel = async (req:Request, res:Response) => {
     //Guardando nivel en bd
     try {
         await level.create({
-            name: name
+            name,
+            priceRegistration,
+            priceFee  
         });
 
         res.json({
@@ -87,13 +90,13 @@ export const deleteLevel = async (req: Request, res: Response) => {
 
 export const updateLevel = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name,priceRegistration,priceFee} = req.body;
 
     const oneLevel = await level.findOne({ where: { id: id } });
 
     try {
         if (oneLevel) {
-            await level.update({ name }, { where: { id: id } });
+            await level.update({ name,priceRegistration,priceFee}, { where: { id: id } });
             res.json({
                 msg: `Nivel academico, actualizado con exito`
             });

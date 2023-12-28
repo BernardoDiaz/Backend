@@ -26,4 +26,3 @@ exports.level = connection_1.default.define('level', {
         allowNull: false
     }
 });
-// level.sync()

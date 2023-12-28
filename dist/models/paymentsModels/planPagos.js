@@ -15,7 +15,7 @@ exports.planPayment = connection_1.default.define('planPayment', {
         autoIncrement: true
     },
     id_student: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     }, id_level: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -31,8 +31,7 @@ exports.planPayment = connection_1.default.define('planPayment', {
     },
     datePayment: {
         type: sequelize_1.DataTypes.DATEONLY,
-        allowNull: false,
-        defaultValue: sequelize_1.DataTypes.NOW
+        allowNull: true,
     },
     dateExpiration: {
         type: sequelize_1.DataTypes.DATEONLY,
@@ -58,13 +57,13 @@ exports.planPayment.belongsTo(student_1.student, {
     targetKey: 'id',
     onDelete: 'RESTRICT'
 });
-exports.planPayment.hasMany(level_1.level, {
+level_1.level.hasMany(exports.planPayment, {
     foreignKey: 'id_level',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
-level_1.level.belongsTo(exports.planPayment, {
+exports.planPayment.belongsTo(level_1.level, {
     foreignKey: 'id_level',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });

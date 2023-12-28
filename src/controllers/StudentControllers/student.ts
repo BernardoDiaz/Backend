@@ -1,28 +1,16 @@
 import { Request, Response } from 'express';
 import { student } from '../../models/studentsModels/student';
-import { degree } from '../../models/degree';
 import sequelize from '../../db/connection';
-import { seccion } from '../../models/seccion';
+import { registration } from '../../models/paymentsModels/matricula';
+import * as shortid from 'shortid';
+import { planPayment } from '../../models/paymentsModels/planPagos';
 
 //Metodo Listar
 export const getStudents = async (req: Request, res: Response) => {
     try {
         // Generamos la lista de estudiantes
         const listaEstudiantes = await student.findAll({
-            attributes: ['id', 'name', 'lastname'],
-            include: [
-                {
-                    model: degree,
-                    attributes: ['name'],
-                    where: { id: sequelize.col('degree.id') },
-                    include: [
-                        {
-                            model: seccion,
-                            attributes: ['name'],
-                            where: { id: sequelize.col('degree.id_seccion') }
-                        }
-                    ]
-                }]
+            attributes: ['id', 'name', 'lastname', 'state']
         });
 
         // Devolvemos la respuesta en formato JSON
@@ -57,16 +45,47 @@ export const getStudentById = async (req: Request, res: Response) => {
 };
 
 export const newStudent = async (req: Request, res: Response) => {
-    const { name, lastname, id_degree, year, state } = req.body;
+    const { name, lastname, year, state, id_degree, id_level } = req.body;
 
     try {
-        student.create({
+        const idGenerete = shortid.generate();
+        await student.create({
+            id: idGenerete,
             name: name,
             lastname: lastname,
-            id_degree: id_degree,
             year: year,
-            state:state
+            state: state
         });
+        //generacion de matricula
+        await registration.create({
+            id_student: idGenerete,
+            id_degree,
+            id_level,
+            year
+        });
+
+        //generacion de plan de pago
+        const { price } = req.body;
+        const planPayments = [];
+
+        for (let i = 1; i <= 11; i++) {
+            const date = new Date(year, i - 1, 18);
+
+            planPayments.push({ 
+                id_student: idGenerete,
+                id_level,
+                nameFee: 'Cuota ' + i,
+                year,
+                datePayment: null,
+                dateExpiration: date,
+                price,
+                state: false
+            });
+        }
+
+        await planPayment.bulkCreate(planPayments);
+
+
         res.json({
             msg: `El alumno ${name + '' + lastname} fue ingresado`
         });
@@ -110,7 +129,7 @@ export const updateStudent = async (req: Request, res: Response) => {
     const one = await student.findOne({ where: { id: id } });
 
     try {
-        if (one) {
+        if (one) { 
             await student.update({ name, lastname, id_degree }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`

@@ -21,5 +21,3 @@ export const level = sequelize.define('level',{
         allowNull:false
     }
 });
- 
-// level.sync()

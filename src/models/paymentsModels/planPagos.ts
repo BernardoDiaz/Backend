@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+ import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
 import { level } from "../level";
 import { student } from "../studentsModels/student";
@@ -11,7 +11,7 @@ export const planPayment = sequelize.define('planPayment', {
         autoIncrement: true
     },
     id_student:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:false
     },id_level:{
         type:DataTypes.INTEGER,
@@ -27,8 +27,7 @@ export const planPayment = sequelize.define('planPayment', {
     },
     datePayment:{
         type:DataTypes.DATEONLY,
-        allowNull:false,
-        defaultValue: DataTypes.NOW
+        allowNull:true,
     },
     dateExpiration:{
         type:DataTypes.DATEONLY,
@@ -56,14 +55,14 @@ planPayment.belongsTo(student,{
     onDelete: 'RESTRICT'
 });
 
-planPayment.hasMany(level, {
+level.hasMany(planPayment, {
     foreignKey: 'id_level',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
-level.belongsTo(planPayment,{
+planPayment.belongsTo(level,{
     foreignKey: 'id_level',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });

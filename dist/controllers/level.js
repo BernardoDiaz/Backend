@@ -12,7 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLevel = exports.deleteLevel = exports.newLevel = exports.getLevelById = exports.getLevels = void 0;
 const level_1 = require("../models/level");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listLevel = yield level_1.level.findAll({ attributes: ['id', 'name'], order: [['id', 'ASC']] });
+    const listLevel = yield level_1.level.findAll({ attributes: ['id', 'name', 'priceRegistration',
+            'priceFee'], order: [['id', 'ASC']] });
     res.json(listLevel);
 });
 exports.getLevels = getLevels;
@@ -38,7 +39,7 @@ const getLevelById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getLevelById = getLevelById;
 const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
+    const { name, priceRegistration, priceFee } = req.body;
     //Validar nombre unico de nivel
     const namevalid = yield level_1.level.findOne({ where: { name: name } });
     if (namevalid) {
@@ -50,7 +51,9 @@ const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Guardando nivel en bd
     try {
         yield level_1.level.create({
-            name: name
+            name,
+            priceRegistration,
+            priceFee
         });
         res.json({
             msg: `El nivel ${name} creado exitosamente`
@@ -90,11 +93,11 @@ const deleteLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.deleteLevel = deleteLevel;
 const updateLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, priceRegistration, priceFee } = req.body;
     const oneLevel = yield level_1.level.findOne({ where: { id: id } });
     try {
         if (oneLevel) {
-            yield level_1.level.update({ name }, { where: { id: id } });
+            yield level_1.level.update({ name, priceRegistration, priceFee }, { where: { id: id } });
             res.json({
                 msg: `Nivel academico, actualizado con exito`
             });

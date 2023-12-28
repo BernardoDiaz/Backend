@@ -27,12 +27,12 @@ exports.product = connection_1.default.define('product', {
         allowNull: false
     },
 });
-exports.product.hasMany(categorias_1.category, {
+categorias_1.category.hasMany(exports.product, {
     foreignKey: 'id_category',
     sourceKey: 'id',
     onDelete: 'RESTRICT'
 });
-categorias_1.category.belongsTo(exports.product, {
+exports.product.belongsTo(categorias_1.category, {
     foreignKey: 'id_category',
     targetKey: 'id',
     onDelete: 'RESTRICT'

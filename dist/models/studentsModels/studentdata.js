@@ -14,7 +14,7 @@ exports.studentdata = connection_1.default.define('studentdata', {
         autoIncrement: true
     },
     id_student: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
     //datos del alumno de ficha Liceo Rey David

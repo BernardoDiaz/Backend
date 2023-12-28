@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,35 +31,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStudent = exports.deleteStudent = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
-const degree_1 = require("../../models/degree");
-const connection_1 = __importDefault(require("../../db/connection"));
-const seccion_1 = require("../../models/seccion");
+const matricula_1 = require("../../models/paymentsModels/matricula");
+const shortid = __importStar(require("shortid"));
+const planPagos_1 = require("../../models/paymentsModels/planPagos");
 //Metodo Listar
 const getStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Generamos la lista de estudiantes
         const listaEstudiantes = yield student_1.student.findAll({
-            attributes: ['id', 'name', 'lastname'],
-            include: [
-                {
-                    model: degree_1.degree,
-                    attributes: ['name'],
-                    where: { id: connection_1.default.col('degree.id') },
-                    include: [
-                        {
-                            model: seccion_1.seccion,
-                            attributes: ['name'],
-                            where: { id: connection_1.default.col('degree.id_seccion') }
-                        }
-                    ]
-                }
-            ]
+            attributes: ['id', 'name', 'lastname', 'state']
         });
         // Devolvemos la respuesta en formato JSON
         res.json(listaEstudiantes);
@@ -69,15 +75,40 @@ const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getStudentById = getStudentById;
 const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, id_degree, year, state } = req.body;
+    const { name, lastname, year, state, id_degree, id_level } = req.body;
     try {
-        student_1.student.create({
+        const idGenerete = shortid.generate();
+        yield student_1.student.create({
+            id: idGenerete,
             name: name,
             lastname: lastname,
-            id_degree: id_degree,
             year: year,
             state: state
         });
+        //generacion de matricula
+        yield matricula_1.registration.create({
+            id_student: idGenerete,
+            id_degree,
+            id_level,
+            year
+        });
+        //generacion de plan de pago
+        const { price } = req.body;
+        const planPayments = [];
+        for (let i = 1; i <= 11; i++) {
+            const date = new Date(year, i - 1, 18);
+            planPayments.push({
+                id_student: idGenerete,
+                id_level,
+                nameFee: 'Cuota ' + i,
+                year,
+                datePayment: null,
+                dateExpiration: date,
+                price,
+                state: false
+            });
+        }
+        yield planPagos_1.planPayment.bulkCreate(planPayments);
         res.json({
             msg: `El alumno ${name + '' + lastname} fue ingresado`
         });

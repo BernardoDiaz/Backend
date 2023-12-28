@@ -9,7 +9,7 @@ export const studentdata = sequelize.define('studentdata',{
         autoIncrement:true
     },
     id_student:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:true
     },
     //datos del alumno de ficha Liceo Rey David

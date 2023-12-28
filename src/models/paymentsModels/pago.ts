@@ -5,9 +5,8 @@ import { student } from "../studentsModels/student";
 export const payment = sequelize.define('payment', {
 
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true
     },
     id_student:{
         type:DataTypes.STRING,

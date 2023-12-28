@@ -29,6 +29,7 @@ const seccion_1 = __importDefault(require("../routes/seccion"));
 const subject_1 = __importDefault(require("../routes/subject"));
 const categorias_1 = __importDefault(require("../routes/PaymentsRoute/categorias"));
 const productos_1 = __importDefault(require("../routes/PaymentsRoute/productos"));
+const pruebaArray_1 = __importDefault(require("../routes/PaymentsRoute/pruebaArray"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -83,10 +84,10 @@ class Server {
         this.app.use('/api/seccion', seccion_1.default);
         //endpoint asignaturas
         this.app.use('/api/subject', subject_1.default);
-        //endpoint matricula y pagos
         this.app.use('/api/category', categorias_1.default);
         this.app.use('/api/product', productos_1.default);
         //endpoint categorias y productos
+        this.app.use('/array', pruebaArray_1.default);
     }
     ;
     midlewares() {

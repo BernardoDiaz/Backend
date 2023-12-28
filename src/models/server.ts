@@ -15,6 +15,7 @@ import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
 import routesCategory from '../routes/PaymentsRoute/categorias';
 import routesProduct from '../routes/PaymentsRoute/productos';
+import  prue  from '../routes/PaymentsRoute/pruebaArray';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -32,7 +33,7 @@ import { category } from './paymentsModels/categorias';
 import { detailsPayment } from './paymentsModels/detallePago';
 import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
-import { payment } from './paymentsModels/pago'; 
+import { payment } from './paymentsModels/pago';  
 
 
 class Server {
@@ -76,11 +77,11 @@ class Server {
         //endpoint asignaturas
         this.app.use('/api/subject', routesSubject);
 
-        //endpoint matricula y pagos
         this.app.use('/api/category', routesCategory);
         this.app.use('/api/product', routesProduct);
         //endpoint categorias y productos
 
+        this.app.use('/array', prue);
 
 
     };

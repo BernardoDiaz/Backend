@@ -15,7 +15,7 @@ exports.detailsPayment = connection_1.default.define('detailsPayment', {
         autoIncrement: true
     },
     id_payment: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     id_product: {

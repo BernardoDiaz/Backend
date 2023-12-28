@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { student } from '../../models/studentsModels/student';
-import sequelize from '../../db/connection';
 import { registration } from '../../models/paymentsModels/matricula';
 import * as shortid from 'shortid';
 import { planPayment } from '../../models/paymentsModels/planPagos';

@@ -40,7 +40,13 @@ const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Generamos la lista de estudiantes
-        const list = yield pago_1.payment.findAll();
+        const list = yield pago_1.payment.findAll({
+            attributes: ['id', 'id_student', 'totalAmount', 'year', 'datePayment'],
+            include: [{
+                    model: detallePago_1.detailsPayment,
+                    attributes: ['id_payment', 'id_product']
+                }]
+        });
         // Devolvemos la respuesta en formato JSON
         res.json(list);
     }
@@ -73,27 +79,35 @@ const getPaymentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPaymentById = getPaymentById;
 const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //constantes de pago
-    const { id_student, totalAmount, year, datePayment } = req.body;
+    const { id_student, totalAmount, year, datePayment, detalle } = req.body;
     try {
-        //generamos el id de la compra
-        const idGenerete = shortid.generate();
-        pago_1.payment.create({
-            id: idGenerete,
-            id_student,
-            totalAmount,
-            year,
-            datePayment
-        });
-        setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
-            const detalle = req.body.detalle.map((detalle) => ({
-                id_payment: idGenerete,
-                id_product: detalle.id_product
-            }));
-            yield detallePago_1.detailsPayment.bulkCreate(detalle);
+        // Verificar si el arreglo del detalle está vacío
+        if (detalle.length === 0) {
             res.json({
-                msg: `Pago Registrado`
+                msg: `No se ha seleccionado ningun producto`
             });
-        }), 5000); // delay of 5 seconds
+        }
+        else {
+            //generamos el id de la compra
+            const idGenerete = shortid.generate();
+            pago_1.payment.create({
+                id: idGenerete,
+                id_student,
+                totalAmount,
+                year,
+                datePayment
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const detalle = req.body.detalle.map((detalle) => ({
+                    id_payment: idGenerete,
+                    id_product: detalle.id_product
+                }));
+                yield detallePago_1.detailsPayment.bulkCreate(detalle);
+                res.json({
+                    msg: `Pago Registrado con exito`
+                });
+            }), 5000); // delay of 5 seconds
+        }
     }
     catch (error) {
         res.json({

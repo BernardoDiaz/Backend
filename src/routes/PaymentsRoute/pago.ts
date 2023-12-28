@@ -4,10 +4,8 @@ import { getPayment, newPayment } from "../../controllers/paymentsControllers/pa
 
 const router = Router();
 
-router.get('/get', getPayment);
-router.post('/add', newPayment);
-router.put('/:id', );
-router.delete('/:id', );
+router.get('/', getPayment);
+router.post('/', newPayment);
 
 
 export default router; 

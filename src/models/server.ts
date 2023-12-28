@@ -15,7 +15,7 @@ import routesSeccion from '../routes/seccion';
 import routesSubject from '../routes/subject';
 import routesCategory from '../routes/PaymentsRoute/categorias';
 import routesProduct from '../routes/PaymentsRoute/productos';
-import  prue  from '../routes/PaymentsRoute/pruebaArray';
+import  routesPayment  from '../routes/PaymentsRoute/pago';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -81,7 +81,7 @@ class Server {
         this.app.use('/api/product', routesProduct);
         //endpoint categorias y productos
 
-        this.app.use('/array', prue);
+        this.app.use('/api/payment', routesPayment);
 
 
     };

@@ -72,6 +72,7 @@ export const newStudent = async (req: Request, res: Response) => {
 
             planPayments.push({ 
                 id_student: idGenerete,
+                id_payment:null,
                 id_level,
                 nameFee: 'Cuota ' + i,
                 year,
@@ -86,7 +87,7 @@ export const newStudent = async (req: Request, res: Response) => {
 
 
         res.json({
-            msg: `El alumno ${name + '' + lastname} fue ingresado`
+            msg: `El alumno ${name + ' ' + lastname} fue ingresado`
         });
 
     } catch (error) {

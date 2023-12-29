@@ -8,11 +8,16 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 const level_1 = require("../level");
 const student_1 = require("../studentsModels/student");
+const pago_1 = require("./pago");
 exports.planPayment = connection_1.default.define('planPayment', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
+    },
+    id_payment: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
     },
     id_student: {
         type: sequelize_1.DataTypes.STRING,
@@ -32,6 +37,7 @@ exports.planPayment = connection_1.default.define('planPayment', {
     datePayment: {
         type: sequelize_1.DataTypes.DATEONLY,
         allowNull: true,
+        defaultValue: sequelize_1.DataTypes.NOW
     },
     dateExpiration: {
         type: sequelize_1.DataTypes.DATEONLY,
@@ -46,6 +52,16 @@ exports.planPayment = connection_1.default.define('planPayment', {
         allowNull: false,
         defaultValue: false
     }
+});
+pago_1.payment.hasMany(exports.planPayment, {
+    foreignKey: 'id_payment',
+    sourceKey: 'id',
+    onDelete: 'RESTRICT'
+});
+exports.planPayment.belongsTo(pago_1.payment, {
+    foreignKey: 'id_payment',
+    targetKey: 'id',
+    onDelete: 'RESTRICT'
 });
 student_1.student.hasMany(exports.planPayment, {
     foreignKey: 'id_student',

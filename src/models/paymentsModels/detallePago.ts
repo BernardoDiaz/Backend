@@ -16,6 +16,14 @@ export const detailsPayment = sequelize.define('detailsPayment', {
     id_product:{
         type:DataTypes.INTEGER,
         allowNull:false
+    },
+    nameProduct:{ 
+        type:DataTypes.STRING,
+        allowNull:false
+    },
+    price:{
+        type:DataTypes.DOUBLE,
+        allowNull:false
     }
 });
 

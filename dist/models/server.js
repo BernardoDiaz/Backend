@@ -30,6 +30,7 @@ const subject_1 = __importDefault(require("../routes/subject"));
 const categorias_1 = __importDefault(require("../routes/PaymentsRoute/categorias"));
 const productos_1 = __importDefault(require("../routes/PaymentsRoute/productos"));
 const pago_1 = __importDefault(require("../routes/PaymentsRoute/pago"));
+const seatchs_1 = __importDefault(require("../routes/searchRoute/seatchs"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -88,6 +89,7 @@ class Server {
         this.app.use('/api/product', productos_1.default);
         //endpoint categorias y productos
         this.app.use('/api/payment', pago_1.default);
+        this.app.use('/api/search', seatchs_1.default);
     }
     ;
     midlewares() {

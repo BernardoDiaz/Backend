@@ -21,6 +21,14 @@ exports.detailsPayment = connection_1.default.define('detailsPayment', {
     id_product: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
+    },
+    nameProduct: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
+    },
+    price: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: false
     }
 });
 pago_1.payment.hasMany(exports.detailsPayment, {

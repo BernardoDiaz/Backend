@@ -99,6 +99,7 @@ const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             const date = new Date(year, i - 1, 18);
             planPayments.push({
                 id_student: idGenerete,
+                id_payment: null,
                 id_level,
                 nameFee: 'Cuota ' + i,
                 year,
@@ -110,7 +111,7 @@ const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         yield planPagos_1.planPayment.bulkCreate(planPayments);
         res.json({
-            msg: `El alumno ${name + '' + lastname} fue ingresado`
+            msg: `El alumno ${name + ' ' + lastname} fue ingresado`
         });
     }
     catch (error) {

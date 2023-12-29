@@ -36,6 +36,7 @@ exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
 const shortid = __importStar(require("shortid"));
 const pago_1 = require("../../models/paymentsModels/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
+const planPagos_1 = require("../../models/paymentsModels/planPagos");
 //Metodo Listar
 const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -45,6 +46,9 @@ const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             include: [{
                     model: detallePago_1.detailsPayment,
                     attributes: ['id_payment', 'id_product']
+                }, {
+                    model: planPagos_1.planPayment,
+                    attributes: ['nameFee', 'state']
                 }]
         });
         // Devolvemos la respuesta en formato JSON
@@ -79,15 +83,10 @@ const getPaymentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPaymentById = getPaymentById;
 const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //constantes de pago
-    const { id_student, totalAmount, year, datePayment, detalle } = req.body;
+    const { id_student, totalAmount, year, datePayment, detalle, cuotas } = req.body;
     try {
         // Verificar si el arreglo del detalle está vacío
-        if (detalle.length === 0) {
-            res.json({
-                msg: `No se ha seleccionado ningun producto`
-            });
-        }
-        else {
+        if (detalle.length > 0 && cuotas.length > 0) {
             //generamos el id de la compra
             const idGenerete = shortid.generate();
             pago_1.payment.create({
@@ -100,13 +99,91 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const detalle = req.body.detalle.map((detalle) => ({
                     id_payment: idGenerete,
-                    id_product: detalle.id_product
+                    id_product: detalle.id_product,
+                    nameProduct: detalle.nameProduct,
+                    price: detalle.price
+                }));
+                yield detallePago_1.detailsPayment.bulkCreate(detalle);
+            }), 2000); // delay of 2 seconds
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const cuotas = req.body.cuotas.map((cuotas) => ({
+                    id: cuotas.id,
+                    id_payment: idGenerete,
+                    state: cuotas.state
+                }));
+                for (let i = 0; i < cuotas.length; i++) {
+                    const { id, id_payment, state } = cuotas[i];
+                    yield planPagos_1.planPayment.update({
+                        id_payment: id_payment,
+                        state: state
+                    }, {
+                        where: {
+                            id: id
+                        }
+                    });
+                }
+                res.json({
+                    msg: `Pago Registrado con éxito`
+                });
+            }), 2000);
+        }
+        else if (detalle.length > 0) {
+            //generamos el id de la compra
+            const idGenerete = shortid.generate();
+            pago_1.payment.create({
+                id: idGenerete,
+                id_student,
+                totalAmount,
+                year,
+                datePayment
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const detalle = req.body.detalle.map((detalle) => ({
+                    id_payment: idGenerete,
+                    id_product: detalle.id_product,
+                    nameProduct: detalle.nameProduct,
+                    price: detalle.price
                 }));
                 yield detallePago_1.detailsPayment.bulkCreate(detalle);
                 res.json({
                     msg: `Pago Registrado con exito`
                 });
             }), 5000); // delay of 5 seconds
+        }
+        else if (cuotas.length > 0) {
+            //generamos el id de la compra
+            const idGenerete = shortid.generate();
+            pago_1.payment.create({
+                id: idGenerete,
+                id_student,
+                totalAmount,
+                year,
+                datePayment
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const cuotas = req.body.cuotas.map((cuotas) => ({
+                    id: cuotas.id,
+                    id_payment: idGenerete,
+                    state: cuotas.state
+                }));
+                for (let i = 0; i < cuotas.length; i++) {
+                    const { id, id_payment, state } = cuotas[i];
+                    yield planPagos_1.planPayment.update({
+                        id_payment: id_payment,
+                        state: state
+                    }, {
+                        where: {
+                            id: id
+                        }
+                    });
+                }
+                res.json({
+                    msg: `Pago Registrado con éxito`
+                });
+            }), 2000);
+        }
+        else {
+            res.json({ msg: `No hay productos seleccionados` });
         }
     }
     catch (error) {

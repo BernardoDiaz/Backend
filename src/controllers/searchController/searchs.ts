@@ -16,20 +16,8 @@ export const searchStudents = async (req: Request, res: Response) => {
             where: { state: 'Activo' },
             include: [{
                 model: registration,
-                attributes: ['id_degree', 'id_level', 'year'],
-                where: { year: actualYear },
-
-                //incluir grado
-                include: [{
-                    model: degree,
-                    attributes: ['name'],
-
-                    //incluir seccion
-                    include: [{
-                        model: seccion,
-                        attributes: ['name']
-                    }]
-                }]
+                attributes: [],
+                where: { year: actualYear }
             }]
         });
         res.json(list);
@@ -44,21 +32,27 @@ export const searchStudentById = async (req: Request, res: Response) => {
     const one = await student.findByPk(id, {
         attributes: ['id', 'name', 'lastname'],
         include: [{
-            model: registration,
-            attributes: ['id_degree', 'id_level', 'year'],
-            //incluir grado
+          model: registration,
+          attributes: ['id_degree', 'id_level', 'year'],
+          //incluir grado
+          include: [{
+            model: degree,
+            attributes: ['name'],
+      
+            //incluir seccion
             include: [{
-                model: degree,
-                attributes: ['name'],
-
-                //incluir seccion
-                include: [{
-                    model: seccion,
-                    attributes: ['name']
-                }]
+              model: seccion,
+              attributes: ['name']
             }]
+          }]
+        }, {
+          model: planPayment,
+          attributes: ['nameFee','price'],
+          where:{state:false}
+          //incluir otra tabla
         }]
-    });
+      });
+      
 
     try {
         if (one) {
@@ -71,54 +65,5 @@ export const searchStudentById = async (req: Request, res: Response) => {
             msg: `Error al buscar`,
             error
         });
-    }
-};
-
-export const searchCategoryById = async (req:Request,res:Response) =>{
-
-    try {
-        const idCategory = req.params.idCategory
-        const list = await category.findAll({
-            attributes:['nameCategory'],
-            include:[{
-                model:product,
-                attributes:['id','nameProduct','price'],
-                where:{id_category:idCategory}
-            }]
-        });
-        res.json(list);
-
-    } catch (error) {
-        res.status(500).json({
-            msg:'Error del servidor'
-        })
-    }
-};
-
-export const searchPaymentPlanByStudent = async(req:Request,res:Response) =>{
-
-    try {
-        const actualYear = new Date().getFullYear();
-        const idStudent = req.params.idStudent
-        
-        const list = await registration.findAll({
-            attributes:['id_student','year'],
-            where:{id_student:idStudent, year:actualYear},
-            include:[{
-                model:student,
-                attributes:['name','lastname'],
-                include:[{
-                    model:planPayment,
-                    attributes:['id','nameFee','datePayment','dateExpiration','price'],
-                    where:{state: false}
-                }]
-            }],
-
-        })
-        res.json(list);
-    } catch (error) {
-        res.status(500).json({
-            error:`Error interno del servidor`
-        })
     }
 };

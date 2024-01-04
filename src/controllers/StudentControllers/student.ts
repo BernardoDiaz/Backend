@@ -64,28 +64,41 @@ export const newStudent = async (req: Request, res: Response) => {
         });
 
         //generacion de plan de pago
-        const { price } = req.body;
+        const { priceFee } = req.body;
         const planPayments = [];
 
         for (let i = 1; i <= 11; i++) {
-            const date = new Date(year, i - 1, 18);
-
-            planPayments.push({ 
-                id_student: idGenerete,
-                id_payment:null,
-                id_level,
-                nameFee: 'Cuota ' + i,
-                year,
-                datePayment: null,
-                dateExpiration: date,
-                price,
-                state: false
-            });
+          const date = new Date(year, i - 1, 18);
+        
+          planPayments.push({
+            id_student: idGenerete,
+            id_payment: null,
+            id_level,
+            nameFee: 'Cuota ' + i,
+            year,
+            datePayment: null,
+            dateExpiration: date,
+            price:priceFee,
+            state: false,
+          });
         }
-
+        const { priceRegistration } = req.body;
+        const studentInfo = {
+          id_student: idGenerete,
+          id_payment: null,
+          id_level,
+          nameFee: 'Matrícula',
+          year,
+          datePayment: null,
+          dateExpiration: new Date(year, 0, 18),
+          price:priceRegistration,
+          state: false,
+        };
+        
+         await planPayments.unshift(studentInfo);
+        
         await planPayment.bulkCreate(planPayments);
-
-
+        
         res.json({
             msg: `El alumno ${name + ' ' + lastname} fue ingresado`
         });

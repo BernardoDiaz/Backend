@@ -6,6 +6,4 @@ const searchs_1 = require("../../controllers/searchController/searchs");
 const router = (0, express_1.Router)();
 router.get('/', searchs_1.searchStudents);
 router.get('/:id', searchs_1.searchStudentById);
-router.get('/product/:idCategory', searchs_1.searchCategoryById);
-router.get('/planpayment/:idStudent', searchs_1.searchPaymentPlanByStudent);
 exports.default = router;

@@ -8,21 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProduct = exports.deleteProduct = exports.newProduct = exports.getProduct = void 0;
-const connection_1 = __importDefault(require("../../db/connection"));
 const productos_1 = require("../../models/paymentsModels/productos");
 const categorias_1 = require("../../models/paymentsModels/categorias");
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const list = yield productos_1.product.findAll({ attributes: ['id', 'nameProduct', 'price'], include: {
-                model: categorias_1.category,
-                attributes: ['id', 'nameCategory'],
-                where: { id: connection_1.default.col('category.id') }
-            } });
+        const list = yield productos_1.product.findAll({ attributes: ['id', 'nameProduct', 'price'] });
         res.json(list);
     }
     catch (error) {

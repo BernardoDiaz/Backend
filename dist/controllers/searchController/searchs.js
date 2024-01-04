@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchStudentById = exports.searchStudents = void 0;
+exports.searchStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const degree_1 = require("../../models/degree");
@@ -20,13 +20,36 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const list = yield student_1.student.findAll({
             attributes: ['id', 'name', 'lastname'],
-            where: { state: 'Activo' },
             include: [{
                     model: matricula_1.registration,
-                    attributes: [],
-                    where: { year: actualYear }
+                    attributes: ['id_degree', 'id_level', 'year'],
+                    where: { year: actualYear },
+                    //incluir grado
+                    include: [{
+                            model: degree_1.degree,
+                            attributes: ['name'],
+                            //incluir seccion
+                            include: [{
+                                    model: seccion_1.seccion,
+                                    attributes: ['name']
+                                }]
+                        }]
+                }, {
+                    model: planPagos_1.planPayment,
+                    attributes: ['nameFee', 'price'],
+                    where: { state: false }
+                    //incluir otra tabla
                 }]
         });
+        // const list = await student.findAll({
+        //     attributes: ['id', 'name', 'lastname'],
+        //     where: { state: 'Activo' },
+        //     include: [{
+        //         model: registration,
+        //         attributes: [],
+        //         where: { year: actualYear }
+        //     }]
+        // });
         res.json(list);
     }
     catch (error) {
@@ -35,43 +58,3 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.searchStudents = searchStudents;
-const searchStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const one = yield student_1.student.findByPk(id, {
-        attributes: ['id', 'name', 'lastname'],
-        include: [{
-                model: matricula_1.registration,
-                attributes: ['id_degree', 'id_level', 'year'],
-                //incluir grado
-                include: [{
-                        model: degree_1.degree,
-                        attributes: ['name'],
-                        //incluir seccion
-                        include: [{
-                                model: seccion_1.seccion,
-                                attributes: ['name']
-                            }]
-                    }]
-            }, {
-                model: planPagos_1.planPayment,
-                attributes: ['nameFee', 'price'],
-                where: { state: false }
-                //incluir otra tabla
-            }]
-    });
-    try {
-        if (one) {
-            res.json(one);
-        }
-        else {
-            res.status(404).json({ msg: 'No existe un registro' });
-        }
-    }
-    catch (error) {
-        res.status(500).json({
-            msg: `Error al buscar`,
-            error
-        });
-    }
-});
-exports.searchStudentById = searchStudentById;

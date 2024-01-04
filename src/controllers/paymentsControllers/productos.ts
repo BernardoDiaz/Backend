@@ -6,11 +6,7 @@ import { category } from "../../models/paymentsModels/categorias";
 
 export const getProduct = async (req:Request,res:Response) => {
     try {
-        const list = await product.findAll({attributes:['id','nameProduct','price'],include:{
-            model:category,
-            attributes:['id','nameCategory'],
-            where:{id: sequelize.col('category.id')}
-        }});
+        const list = await product.findAll({attributes:['id','nameProduct','price']});
             res.json(list);
         
     } catch (error) {

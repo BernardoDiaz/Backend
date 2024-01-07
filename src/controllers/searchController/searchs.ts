@@ -1,11 +1,8 @@
 import { Request, Response } from 'express';
-import sequelize from '../../db/connection';
 import { student } from '../../models/studentsModels/student';
 import { registration } from '../../models/paymentsModels/matricula';
 import { degree } from '../../models/degree';
 import { seccion } from '../../models/seccion';
-import { product } from '../../models/paymentsModels/productos';
-import { category } from '../../models/paymentsModels/categorias';
 import { planPayment } from '../../models/paymentsModels/planPagos';
 
 export const searchStudents = async (req: Request, res: Response) => {
@@ -20,7 +17,7 @@ export const searchStudents = async (req: Request, res: Response) => {
               //incluir grado
               include: [{
                 model: degree,
-                attributes: ['name'],
+                attributes: ['name'], 
           
                 //incluir seccion
                 include: [{
@@ -28,11 +25,6 @@ export const searchStudents = async (req: Request, res: Response) => {
                   attributes: ['name']
                 }]
               }]
-            }, {
-              model: planPayment,
-              attributes: ['nameFee','price'],
-              where:{state:false}
-              //incluir otra tabla
             }]
           });
         // const list = await student.findAll({
@@ -49,4 +41,16 @@ export const searchStudents = async (req: Request, res: Response) => {
         // Manejamos cualquier error aquí
         res.status(500).json({ error: 'Error interno del servidor' });
     }
+};
+
+export const searchPlanPayment = async (req: Request, res: Response) => {
+  const { id_student } = req.params;
+  try {
+    const one = await planPayment.findAll({where:{id_student:id_student, state: false},
+    attributes:['id','nameFee','price']});
+    res.json(one);
+  } catch (error) {
+    // Manejamos cualquier error aquí
+    res.status(500).json({ error: 'Error para traer el plan de pagos' });
+  }
 };

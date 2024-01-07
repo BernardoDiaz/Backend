@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchStudents = void 0;
+exports.searchPlanPayment = exports.searchStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const degree_1 = require("../../models/degree");
@@ -34,11 +34,6 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
                                     attributes: ['name']
                                 }]
                         }]
-                }, {
-                    model: planPagos_1.planPayment,
-                    attributes: ['nameFee', 'price'],
-                    where: { state: false }
-                    //incluir otra tabla
                 }]
         });
         // const list = await student.findAll({
@@ -58,3 +53,16 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.searchStudents = searchStudents;
+const searchPlanPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_student } = req.params;
+    try {
+        const one = yield planPagos_1.planPayment.findAll({ where: { id_student: id_student, state: false },
+            attributes: ['id', 'nameFee', 'price'] });
+        res.json(one);
+    }
+    catch (error) {
+        // Manejamos cualquier error aquí
+        res.status(500).json({ error: 'Error para traer el plan de pagos' });
+    }
+});
+exports.searchPlanPayment = searchPlanPayment;

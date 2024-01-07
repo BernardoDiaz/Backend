@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import * as shortid from 'shortid';
 import { payment } from '../../models/paymentsModels/pago';
 import { detailsPayment } from '../../models/paymentsModels/detallePago';
-import sequelize from '../../db/connection';
 import { planPayment } from '../../models/paymentsModels/planPagos';
+import { format } from 'date-fns';
 
 //Metodo Listar
 export const getPayment = async (req: Request, res: Response) => {
@@ -54,8 +54,8 @@ export const getPaymentById = async (req: Request, res: Response) => {
 export const newPayment = async (req: Request, res: Response) => {
 
     //constantes de pago
-    const { id_student, totalAmount, year, datePayment, detalle, cuotas } = req.body;
-
+    const { id_student, totalAmount, year, detalle, cuotas } = req.body;
+    const datePayment:  string = format(new Date(), 'yyyy-MM-dd');
     try {
         // Verificar si el arreglo del detalle está vacío
         if (detalle.length > 0 && cuotas.length > 0) {
@@ -84,13 +84,15 @@ export const newPayment = async (req: Request, res: Response) => {
                 const cuotas = req.body.cuotas.map((cuotas: any) => ({
                     id: cuotas.id,
                     id_payment: idGenerete,
-                    state: cuotas.state
+                    datePayment,
+                    state: true
                 }));
 
                 for (let i = 0; i < cuotas.length; i++) {
                     const { id, id_payment, state } = cuotas[i];
                     await planPayment.update({
                         id_payment: id_payment,
+                        datePayment,
                         state: state
                     }, {
                         where: {

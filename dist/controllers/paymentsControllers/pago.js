@@ -37,20 +37,24 @@ const shortid = __importStar(require("shortid"));
 const pago_1 = require("../../models/paymentsModels/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
-const date_fns_1 = require("date-fns");
+const student_1 = require("../../models/studentsModels/student");
 //Metodo Listar
 const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Generamos la lista de estudiantes
         const list = yield pago_1.payment.findAll({
-            attributes: ['id', 'id_student', 'totalAmount', 'year', 'datePayment'],
+            attributes: ['count', 'totalAmount', 'year', 'datePayment'],
             include: [{
+                    model: student_1.student,
+                    attributes: ['name', 'lastname']
+                }, {
                     model: detallePago_1.detailsPayment,
                     attributes: ['id_payment', 'id_product']
                 }, {
                     model: planPagos_1.planPayment,
                     attributes: ['nameFee', 'state']
-                }]
+                }],
+            order: [['datePayment', 'DESC']]
         });
         // Devolvemos la respuesta en formato JSON
         res.json(list);
@@ -85,9 +89,9 @@ exports.getPaymentById = getPaymentById;
 const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //constantes de pago
     const { id_student, totalAmount, year, detalle, cuotas } = req.body;
-    const datePayment = (0, date_fns_1.format)(new Date(), 'yyyy-MM-dd');
+    const fechaActual = new Date();
     try {
-        // Verificar si el arreglo del detalle está vacío
+        // Verificar si el arreglo del detalle está vacío 
         if (detalle.length > 0 && cuotas.length > 0) {
             //generamos el id de la compra
             const idGenerete = shortid.generate();
@@ -96,7 +100,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment: fechaActual
             });
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const detalle = req.body.detalle.map((detalle) => ({
@@ -106,19 +110,19 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     price: detalle.price
                 }));
                 yield detallePago_1.detailsPayment.bulkCreate(detalle);
-            }), 2000); // delay of 2 seconds
+            }), 1000); // delay of 2 seconds
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const cuotas = req.body.cuotas.map((cuotas) => ({
                     id: cuotas.id,
                     id_payment: idGenerete,
-                    datePayment,
+                    datePayment: fechaActual,
                     state: true
                 }));
                 for (let i = 0; i < cuotas.length; i++) {
                     const { id, id_payment, state } = cuotas[i];
                     yield planPagos_1.planPayment.update({
                         id_payment: id_payment,
-                        datePayment,
+                        datePayment: fechaActual,
                         state: state
                     }, {
                         where: {
@@ -139,7 +143,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment: fechaActual
             });
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const detalle = req.body.detalle.map((detalle) => ({
@@ -152,7 +156,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 res.json({
                     msg: `Pago Registrado con exito`
                 });
-            }), 5000); // delay of 5 seconds
+            }), 1000); // delay of 1 seconds
         }
         else if (cuotas.length > 0) {
             //generamos el id de la compra
@@ -162,18 +166,20 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment: fechaActual
             });
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const cuotas = req.body.cuotas.map((cuotas) => ({
                     id: cuotas.id,
                     id_payment: idGenerete,
-                    state: cuotas.state
+                    datePayment: fechaActual,
+                    state: true
                 }));
                 for (let i = 0; i < cuotas.length; i++) {
                     const { id, id_payment, state } = cuotas[i];
                     yield planPagos_1.planPayment.update({
                         id_payment: id_payment,
+                        datePayment: fechaActual,
                         state: state
                     }, {
                         where: {

@@ -4,22 +4,26 @@ import { payment } from '../../models/paymentsModels/pago';
 import { detailsPayment } from '../../models/paymentsModels/detallePago';
 import { planPayment } from '../../models/paymentsModels/planPagos';
 import { format } from 'date-fns';
+import { student } from '../../models/studentsModels/student';
 
 //Metodo Listar
 export const getPayment = async (req: Request, res: Response) => {
     try {
         // Generamos la lista de estudiantes
         const list = await payment.findAll({
-            attributes: ['id', 'id_student', 'totalAmount', 'year', 'datePayment'],
+            attributes: ['count','totalAmount', 'year', 'datePayment'],
             include: [{
+                model: student,
+                attributes: ['name', 'lastname']
+            }, {
                 model: detailsPayment,
                 attributes: ['id_payment', 'id_product']
             }, {
                 model: planPayment,
                 attributes: ['nameFee', 'state']
-            }]
+            }],
+            order: [['datePayment', 'DESC']]
         });
-
         // Devolvemos la respuesta en formato JSON
         res.json(list);
     } catch (error) {
@@ -55,10 +59,11 @@ export const newPayment = async (req: Request, res: Response) => {
 
     //constantes de pago
     const { id_student, totalAmount, year, detalle, cuotas } = req.body;
-    const datePayment:  string = format(new Date(), 'yyyy-MM-dd');
+    const fechaActual = new Date();
+
     try {
-        // Verificar si el arreglo del detalle está vacío
-        if (detalle.length > 0 && cuotas.length > 0) {
+        // Verificar si el arreglo del detalle está vacío 
+        if (detalle.length > 0 && cuotas.length > 0) { 
             //generamos el id de la compra
             const idGenerete = shortid.generate();
 
@@ -67,7 +72,7 @@ export const newPayment = async (req: Request, res: Response) => {
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment:fechaActual
             });
             setTimeout(async () => {
                 const detalle =
@@ -78,13 +83,13 @@ export const newPayment = async (req: Request, res: Response) => {
                         price: detalle.price
                     }));
                 await detailsPayment.bulkCreate(detalle);
-            }, 2000); // delay of 2 seconds
+            }, 1000); // delay of 2 seconds
 
             setTimeout(async () => {
                 const cuotas = req.body.cuotas.map((cuotas: any) => ({
                     id: cuotas.id,
                     id_payment: idGenerete,
-                    datePayment,
+                    datePayment: fechaActual,
                     state: true
                 }));
 
@@ -92,7 +97,7 @@ export const newPayment = async (req: Request, res: Response) => {
                     const { id, id_payment, state } = cuotas[i];
                     await planPayment.update({
                         id_payment: id_payment,
-                        datePayment,
+                        datePayment: fechaActual,
                         state: state
                     }, {
                         where: {
@@ -117,7 +122,7 @@ export const newPayment = async (req: Request, res: Response) => {
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment : fechaActual
             });
 
             setTimeout(async () => {
@@ -135,7 +140,7 @@ export const newPayment = async (req: Request, res: Response) => {
                 res.json({
                     msg: `Pago Registrado con exito`
                 });
-            }, 5000); // delay of 5 seconds
+            }, 1000); // delay of 1 seconds
 
         } else if (cuotas.length > 0) {
             //generamos el id de la compra
@@ -146,20 +151,22 @@ export const newPayment = async (req: Request, res: Response) => {
                 id_student,
                 totalAmount,
                 year,
-                datePayment
+                datePayment : fechaActual
             });
 
             setTimeout(async () => {
                 const cuotas = req.body.cuotas.map((cuotas: any) => ({
                     id: cuotas.id,
                     id_payment: idGenerete,
-                    state: cuotas.state
+                    datePayment: fechaActual,
+                    state: true
                 }));
 
                 for (let i = 0; i < cuotas.length; i++) {
                     const { id, id_payment, state } = cuotas[i];
                     await planPayment.update({
                         id_payment: id_payment,
+                        datePayment: fechaActual,
                         state: state
                     }, {
                         where: {

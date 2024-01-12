@@ -8,15 +8,9 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 const student_1 = require("../studentsModels/student");
 exports.payment = connection_1.default.define('payment', {
-    count: {
-        type: sequelize_1.DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
-    },
     id: {
         type: sequelize_1.DataTypes.STRING,
-        unique: true
+        primaryKey: true
     },
     id_student: {
         type: sequelize_1.DataTypes.STRING,

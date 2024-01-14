@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -33,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
-const shortid = __importStar(require("shortid"));
 const pago_1 = require("../../models/paymentsModels/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
@@ -43,7 +19,7 @@ const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         // Generamos la lista de estudiantes
         const list = yield pago_1.payment.findAll({
-            attributes: ['count', 'totalAmount', 'year', 'datePayment'],
+            attributes: ['id', 'totalAmount', 'year', 'datePayment'],
             include: [{
                     model: student_1.student,
                     attributes: ['name', 'lastname']
@@ -88,15 +64,13 @@ const getPaymentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPaymentById = getPaymentById;
 const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //constantes de pago
-    const { id_student, totalAmount, year, detalle, cuotas } = req.body;
+    const { id_payment, id_student, totalAmount, year, detalle, cuotas } = req.body;
     const fechaActual = new Date();
     try {
         // Verificar si el arreglo del detalle está vacío 
         if (detalle.length > 0 && cuotas.length > 0) {
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
             pago_1.payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -104,7 +78,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const detalle = req.body.detalle.map((detalle) => ({
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     id_product: detalle.id_product,
                     nameProduct: detalle.nameProduct,
                     price: detalle.price
@@ -114,7 +88,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const cuotas = req.body.cuotas.map((cuotas) => ({
                     id: cuotas.id,
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     datePayment: fechaActual,
                     state: true
                 }));
@@ -136,10 +110,8 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             }), 2000);
         }
         else if (detalle.length > 0) {
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
             pago_1.payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -147,7 +119,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const detalle = req.body.detalle.map((detalle) => ({
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     id_product: detalle.id_product,
                     nameProduct: detalle.nameProduct,
                     price: detalle.price
@@ -159,10 +131,8 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             }), 1000); // delay of 1 seconds
         }
         else if (cuotas.length > 0) {
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
             pago_1.payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -171,7 +141,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
                 const cuotas = req.body.cuotas.map((cuotas) => ({
                     id: cuotas.id,
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     datePayment: fechaActual,
                     state: true
                 }));

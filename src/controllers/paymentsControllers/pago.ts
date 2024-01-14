@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import * as shortid from 'shortid';
 import { payment } from '../../models/paymentsModels/pago';
 import { detailsPayment } from '../../models/paymentsModels/detallePago';
 import { planPayment } from '../../models/paymentsModels/planPagos';
-import { format } from 'date-fns';
 import { student } from '../../models/studentsModels/student';
 
 //Metodo Listar
@@ -11,7 +9,7 @@ export const getPayment = async (req: Request, res: Response) => {
     try {
         // Generamos la lista de estudiantes
         const list = await payment.findAll({
-            attributes: ['count','totalAmount', 'year', 'datePayment'],
+            attributes: ['id','totalAmount', 'year', 'datePayment'],
             include: [{
                 model: student,
                 attributes: ['name', 'lastname']
@@ -58,17 +56,14 @@ export const getPaymentById = async (req: Request, res: Response) => {
 export const newPayment = async (req: Request, res: Response) => {
 
     //constantes de pago
-    const { id_student, totalAmount, year, detalle, cuotas } = req.body;
+    const { id_payment,id_student, totalAmount, year, detalle, cuotas } = req.body;
     const fechaActual = new Date();
 
     try {
         // Verificar si el arreglo del detalle está vacío 
         if (detalle.length > 0 && cuotas.length > 0) { 
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
-
             payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -77,7 +72,7 @@ export const newPayment = async (req: Request, res: Response) => {
             setTimeout(async () => {
                 const detalle =
                     req.body.detalle.map((detalle: any) => ({
-                        id_payment: idGenerete,
+                        id_payment: id_payment,
                         id_product: detalle.id_product,
                         nameProduct: detalle.nameProduct,
                         price: detalle.price
@@ -88,7 +83,7 @@ export const newPayment = async (req: Request, res: Response) => {
             setTimeout(async () => {
                 const cuotas = req.body.cuotas.map((cuotas: any) => ({
                     id: cuotas.id,
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     datePayment: fechaActual,
                     state: true
                 }));
@@ -114,11 +109,9 @@ export const newPayment = async (req: Request, res: Response) => {
             }, 2000);
 
         } else if (detalle.length > 0) {
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
 
             payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -128,7 +121,7 @@ export const newPayment = async (req: Request, res: Response) => {
             setTimeout(async () => {
                 const detalle =
                     req.body.detalle.map((detalle: any) => ({
-                        id_payment: idGenerete,
+                        id_payment: id_payment,
                         id_product: detalle.id_product,
                         nameProduct: detalle.nameProduct,
                         price: detalle.price
@@ -143,11 +136,9 @@ export const newPayment = async (req: Request, res: Response) => {
             }, 1000); // delay of 1 seconds
 
         } else if (cuotas.length > 0) {
-            //generamos el id de la compra
-            const idGenerete = shortid.generate();
 
             payment.create({
-                id: idGenerete,
+                id: id_payment,
                 id_student,
                 totalAmount,
                 year,
@@ -157,7 +148,7 @@ export const newPayment = async (req: Request, res: Response) => {
             setTimeout(async () => {
                 const cuotas = req.body.cuotas.map((cuotas: any) => ({
                     id: cuotas.id,
-                    id_payment: idGenerete,
+                    id_payment: id_payment,
                     datePayment: fechaActual,
                     state: true
                 }));

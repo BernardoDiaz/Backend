@@ -17,6 +17,7 @@ import routesCategory from '../routes/PaymentsRoute/categorias';
 import routesProduct from '../routes/PaymentsRoute/productos';
 import routesPayment  from '../routes/PaymentsRoute/pago';
 import routesSearch from '../routes/searchRoute/seatchs';
+import routesPDF from '../routes/ReportsRoute/generatePDF';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -35,6 +36,7 @@ import { detailsPayment } from './paymentsModels/detallePago';
 import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
 import { payment } from './paymentsModels/pago';  
+import { generatePDF } from './ReportsModel/generatePDF';
 
 
 class Server {
@@ -85,6 +87,7 @@ class Server {
         this.app.use('/api/payment', routesPayment);
 
         this.app.use('/api/search', routesSearch);
+        this.app.use('/api/gpdf', routesPDF);
 
 
     };
@@ -119,6 +122,7 @@ class Server {
             await product.sync();
             await detailsPayment.sync();
             await planPayment.sync(); 
+            await generatePDF.sync();
 
 
 

@@ -31,6 +31,7 @@ const categorias_1 = __importDefault(require("../routes/PaymentsRoute/categorias
 const productos_1 = __importDefault(require("../routes/PaymentsRoute/productos"));
 const pago_1 = __importDefault(require("../routes/PaymentsRoute/pago"));
 const seatchs_1 = __importDefault(require("../routes/searchRoute/seatchs"));
+const generatePDF_1 = __importDefault(require("../routes/ReportsRoute/generatePDF"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -48,6 +49,7 @@ const detallePago_1 = require("./paymentsModels/detallePago");
 const planPagos_1 = require("./paymentsModels/planPagos");
 const productos_2 = require("./paymentsModels/productos");
 const pago_2 = require("./paymentsModels/pago");
+const generatePDF_2 = require("./ReportsModel/generatePDF");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -90,6 +92,7 @@ class Server {
         //endpoint categorias y productos
         this.app.use('/api/payment', pago_1.default);
         this.app.use('/api/search', seatchs_1.default);
+        this.app.use('/api/gpdf', generatePDF_1.default);
     }
     ;
     midlewares() {
@@ -120,6 +123,7 @@ class Server {
                 yield productos_2.product.sync();
                 yield detallePago_1.detailsPayment.sync();
                 yield planPagos_1.planPayment.sync();
+                yield generatePDF_2.generatePDF.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

@@ -3,6 +3,7 @@ import { student } from '../../models/studentsModels/student';
 import { registration } from '../../models/paymentsModels/matricula';
 import * as shortid from 'shortid';
 import { planPayment } from '../../models/paymentsModels/planPagos';
+import { degree } from '../../models/degree';
 
 //Metodo Listar
 export const getStudents = async (req: Request, res: Response) => {
@@ -44,7 +45,7 @@ export const getStudentById = async (req: Request, res: Response) => {
 };
 
 export const newStudent = async (req: Request, res: Response) => {
-    const { name, lastname, year, state, id_degree, id_level } = req.body;
+    const { name, lastname, year, id_degree, id_level } = req.body;
 
     try {
         const idGenerete = shortid.generate();
@@ -53,7 +54,7 @@ export const newStudent = async (req: Request, res: Response) => {
             name: name,
             lastname: lastname,
             year: year,
-            state: state
+            state: true
         });
         //generacion de matricula
         await registration.create({
@@ -65,7 +66,7 @@ export const newStudent = async (req: Request, res: Response) => {
 
         //generacion de plan de pago
         const { priceFee } = req.body;
-        const planPayments = [];
+        const planPayments = []; 
 
         for (let i = 1; i <= 11; i++) {
           const date = new Date(year, i - 1, 18);

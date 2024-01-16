@@ -15,9 +15,26 @@ export const getDegrees = async (req: Request, res: Response) => {
             where: { id: sequelize.col('seccion.id') },
 
         }, {
-            model: level, attributes: ['name'],
+            model: level, attributes: ['name', 'PriceRegistration', 'priceFee'],
             where: { id: sequelize.col('level.id') }
         }]
+    });
+
+    //Devolvemos la respuesta via JSON
+    res.json(listDegree);
+};
+
+export const getDegreeByLevel = async (req: Request, res: Response) => {
+    const {idLevel} = req.params;
+    //Generamos la lista
+    const listDegree = await level.findAll({
+        attributes: ['id','PriceRegistration', 'priceFee'],
+        include: [
+            {
+                attributes:[],
+                model: degree, 
+                where:{id_level:idLevel}
+            }],
     });
 
     //Devolvemos la respuesta via JSON

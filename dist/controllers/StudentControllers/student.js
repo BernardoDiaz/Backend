@@ -75,7 +75,7 @@ const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getStudentById = getStudentById;
 const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, year, state, id_degree, id_level } = req.body;
+    const { name, lastname, year, id_degree, id_level } = req.body;
     try {
         const idGenerete = shortid.generate();
         yield student_1.student.create({
@@ -83,7 +83,7 @@ const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             name: name,
             lastname: lastname,
             year: year,
-            state: state
+            state: true
         });
         //generacion de matricula
         yield matricula_1.registration.create({

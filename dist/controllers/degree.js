@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDegree = exports.deleteDegree = exports.newDegree = exports.getDegreeById = exports.getDegrees = void 0;
+exports.updateDegree = exports.deleteDegree = exports.newDegree = exports.getDegreeById = exports.getDegreeByLevel = exports.getDegrees = void 0;
 const degree_1 = require("../models/degree");
 const seccion_1 = require("../models/seccion");
 const connection_1 = __importDefault(require("../db/connection"));
@@ -26,7 +26,7 @@ const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 model: seccion_1.seccion, attributes: ['name'],
                 where: { id: connection_1.default.col('seccion.id') },
             }, {
-                model: level_1.level, attributes: ['name'],
+                model: level_1.level, attributes: ['name', 'PriceRegistration', 'priceFee'],
                 where: { id: connection_1.default.col('level.id') }
             }]
     });
@@ -34,6 +34,23 @@ const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     res.json(listDegree);
 });
 exports.getDegrees = getDegrees;
+const getDegreeByLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idLevel } = req.params;
+    //Generamos la lista
+    const listDegree = yield level_1.level.findAll({
+        attributes: ['id', 'PriceRegistration', 'priceFee'],
+        include: [
+            {
+                attributes: [],
+                model: degree_1.degree,
+                where: { id_level: idLevel }
+            }
+        ],
+    });
+    //Devolvemos la respuesta via JSON
+    res.json(listDegree);
+});
+exports.getDegreeByLevel = getDegreeByLevel;
 const getDegreeById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const oneDegree = yield degree_1.degree.findByPk(id);

@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLevel = exports.deleteLevel = exports.newLevel = exports.getLevelById = exports.getLevels = void 0;
 const level_1 = require("../models/level");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listLevel = yield level_1.level.findAll({ attributes: ['id', 'name', 'priceRegistration',
-            'priceFee'], order: [['id', 'ASC']] });
+    const listLevel = yield level_1.level.findAll({
+        attributes: ['id', 'name', 'priceRegistration', 'priceFee'],
+        order: [['id', 'ASC']]
+    });
     res.json(listLevel);
 });
 exports.getLevels = getLevels;

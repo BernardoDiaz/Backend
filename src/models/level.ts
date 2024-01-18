@@ -19,5 +19,10 @@ export const level = sequelize.define('level',{
     priceFee:{
         type:DataTypes.DOUBLE,
         allowNull:false
+    },
+    periodsToEvaluate:{
+        type:DataTypes.INTEGER,
+        allowNull:false,
+        defaultValue: 3
     }
 });

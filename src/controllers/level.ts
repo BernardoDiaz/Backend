@@ -4,7 +4,7 @@ import { level } from "../models/level";
 export const getLevels = async (req:Request,res:Response) => {
     
     const listLevel = await level.findAll({
-    attributes:['id','name','priceRegistration','priceFee'],
+    attributes:['id','name','priceRegistration','priceFee','periodsToEvaluate'],
         order: [['id', 'ASC']]});
 
     res.json(listLevel);
@@ -23,7 +23,7 @@ export const getLevelById = async (req: Request, res: Response) => {
             return res.status(404).json({
                 msg: `No existe el nivel academico`
             });
-        }
+        } 
     } catch (error) {
         return res.status(404).json({
             msg: `Ocurrio un error al buscar el nivel academico`

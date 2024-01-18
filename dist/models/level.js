@@ -24,5 +24,10 @@ exports.level = connection_1.default.define('level', {
     priceFee: {
         type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
+    },
+    periodsToEvaluate: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 3
     }
 });

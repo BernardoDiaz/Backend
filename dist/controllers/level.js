@@ -13,7 +13,7 @@ exports.updateLevel = exports.deleteLevel = exports.newLevel = exports.getLevelB
 const level_1 = require("../models/level");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listLevel = yield level_1.level.findAll({
-        attributes: ['id', 'name', 'priceRegistration', 'priceFee'],
+        attributes: ['id', 'name', 'priceRegistration', 'priceFee', 'periodsToEvaluate'],
         order: [['id', 'ASC']]
     });
     res.json(listLevel);

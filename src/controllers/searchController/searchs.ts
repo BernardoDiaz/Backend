@@ -27,15 +27,6 @@ export const searchStudents = async (req: Request, res: Response) => {
               }]
             }]
           });
-        // const list = await student.findAll({
-        //     attributes: ['id', 'name', 'lastname'],
-        //     where: { state: 'Activo' },
-        //     include: [{
-        //         model: registration,
-        //         attributes: [],
-        //         where: { year: actualYear }
-        //     }]
-        // });
         res.json(list);
     } catch (error) {
         // Manejamos cualquier error aquí

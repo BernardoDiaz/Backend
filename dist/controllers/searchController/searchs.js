@@ -36,15 +36,6 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
                         }]
                 }]
         });
-        // const list = await student.findAll({
-        //     attributes: ['id', 'name', 'lastname'],
-        //     where: { state: 'Activo' },
-        //     include: [{
-        //         model: registration,
-        //         attributes: [],
-        //         where: { year: actualYear }
-        //     }]
-        // });
         res.json(list);
     }
     catch (error) {

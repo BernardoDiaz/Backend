@@ -39,29 +39,29 @@ import { interview } from "./interview";
 degree.hasMany(aspirant,{
     foreignKey:'id_degree',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 aspirant.belongsTo(degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 aspirant.hasMany(consultation,{
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 consultation.belongsTo(aspirant,{
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 aspirant.hasMany(interview,{
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 interview.belongsTo(aspirant,{

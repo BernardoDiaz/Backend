@@ -35,22 +35,22 @@ exports.degree = connection_1.default.define('degree', {
 seccion_1.seccion.hasMany(exports.degree, {
     foreignKey: 'id_seccion',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.degree.belongsTo(seccion_1.seccion, {
     foreignKey: 'id_seccion',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 level_1.level.hasMany(exports.degree, {
     foreignKey: 'id_level',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.degree.belongsTo(level_1.level, {
     foreignKey: 'id_level',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 //  degree.sync({alter:true});
 //  seccion.sync({alter:true});

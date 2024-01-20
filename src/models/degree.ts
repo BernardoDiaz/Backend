@@ -31,25 +31,25 @@ export const degree = sequelize.define('degree', {
 seccion.hasMany(degree, {
     foreignKey: 'id_seccion',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 degree.belongsTo(seccion, {
     foreignKey: 'id_seccion',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 level.hasMany(degree, {
     foreignKey: 'id_level',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 degree.belongsTo(level,{
     foreignKey: 'id_level',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 

@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.teacher = void 0;
+exports.GradeAssignment = void 0;
 const sequelize_1 = require("sequelize");
-const connection_1 = __importDefault(require("../db/connection"));
-const level_1 = require("./level");
-exports.teacher = connection_1.default.define('teacher', {
+const connection_1 = __importDefault(require("../../db/connection"));
+exports.GradeAssignment = connection_1.default.define('GradeAssignment', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
@@ -15,22 +14,20 @@ exports.teacher = connection_1.default.define('teacher', {
     },
     name: {
         type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    priceRegistration: {
+        type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
     },
-    lastname: {
-        type: sequelize_1.DataTypes.STRING,
+    priceFee: {
+        type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
     },
-    id_level: {
+    periodsToEvaluate: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 3
     }
-});
-level_1.level.hasMany(exports.teacher, {
-    foreignKey: 'id_level',
-    onDelete: 'RESTRICT'
-});
-exports.teacher.belongsTo(level_1.level, {
-    foreignKey: 'id_level',
-    onDelete: 'RESTRICT'
 });

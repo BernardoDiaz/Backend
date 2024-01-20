@@ -43,27 +43,27 @@ exports.aspirant = connection_1.default.define('aspirant', {
 degree_1.degree.hasMany(exports.aspirant, {
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.aspirant.belongsTo(degree_1.degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.aspirant.hasMany(consultation_1.consultation, {
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 consultation_1.consultation.belongsTo(exports.aspirant, {
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.aspirant.hasMany(interview_1.interview, {
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 interview_1.interview.belongsTo(exports.aspirant, {
     foreignKey: 'id_aspirant',

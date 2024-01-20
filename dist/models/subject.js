@@ -30,10 +30,10 @@ exports.subject = connection_1.default.define('subject', {
 degree_1.degree.hasMany(exports.subject, {
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.subject.belongsTo(degree_1.degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });

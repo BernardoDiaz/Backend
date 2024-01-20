@@ -4,6 +4,7 @@ import cors from "cors";
 import routesAspirant from '../routes/AspirantRoute/aspirant';
 import routesConsult from '../routes/AspirantRoute/consultation';
 import routesInterview from '../routes/AspirantRoute/interview';
+import routesTeacher from '../routes/teacher';
 import routesStudent from '../routes/StudentRoute/student';
 import routesStudentData from '../routes/StudentRoute/studentdata';
 import routesIncident from '../routes/StudentRoute/incidentsstudent';
@@ -29,7 +30,6 @@ import { interview } from './aspirantsModels/interview';
 import { subject } from './subject';
 import { student } from './studentsModels/student';
 import { studentdata } from './studentsModels/studentdata';
-import { ratingstudent } from './studentsModels/ratingstudent';
 import { registration } from './paymentsModels/matricula';
 import { category } from './paymentsModels/categorias';
 import { detailsPayment } from './paymentsModels/detallePago';
@@ -37,6 +37,8 @@ import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
 import { payment } from './paymentsModels/pago';  
 import { generatePDF } from './ReportsModel/generatePDF';
+import { teacher } from './teacher';
+import { DegreeAssignment } from './intermediateModels/teacherDegree';
 
 
 class Server {
@@ -88,6 +90,7 @@ class Server {
 
         this.app.use('/api/search', routesSearch);
         this.app.use('/api/gpdf', routesPDF);
+        this.app.use('/api/teacher',routesTeacher);
 
 
     };
@@ -111,6 +114,8 @@ class Server {
             await interview.sync();
             //Fin Modulo 01 BD 
             
+            await teacher.sync();
+            await DegreeAssignment.sync();
             await subject.sync();
             await student.sync();
             await registration.sync();

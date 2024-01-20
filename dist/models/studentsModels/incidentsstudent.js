@@ -34,10 +34,10 @@ exports.incidentsstudent = connection_1.default.define('incidents', {
 student_1.student.hasMany(exports.incidentsstudent, {
     foreignKey: 'id_student',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 exports.incidentsstudent.belongsTo(student_1.student, {
     foreignKey: 'id_student',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });

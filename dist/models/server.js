@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const aspirant_1 = __importDefault(require("../routes/AspirantRoute/aspirant"));
 const consultation_1 = __importDefault(require("../routes/AspirantRoute/consultation"));
 const interview_1 = __importDefault(require("../routes/AspirantRoute/interview"));
+const teacher_1 = __importDefault(require("../routes/teacher"));
 const student_1 = __importDefault(require("../routes/StudentRoute/student"));
 const studentdata_1 = __importDefault(require("../routes/StudentRoute/studentdata"));
 const incidentsstudent_1 = __importDefault(require("../routes/StudentRoute/incidentsstudent"));
@@ -50,6 +51,8 @@ const planPagos_1 = require("./paymentsModels/planPagos");
 const productos_2 = require("./paymentsModels/productos");
 const pago_2 = require("./paymentsModels/pago");
 const generatePDF_2 = require("./ReportsModel/generatePDF");
+const teacher_2 = require("./teacher");
+const teacherDegree_1 = require("./intermediateModels/teacherDegree");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -93,6 +96,7 @@ class Server {
         this.app.use('/api/payment', pago_1.default);
         this.app.use('/api/search', seatchs_1.default);
         this.app.use('/api/gpdf', generatePDF_1.default);
+        this.app.use('/api/teacher', teacher_1.default);
     }
     ;
     midlewares() {
@@ -113,6 +117,8 @@ class Server {
                 yield consultation_2.consultation.sync();
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD 
+                yield teacher_2.teacher.sync();
+                yield teacherDegree_1.DegreeAssignment.sync();
                 yield subject_2.subject.sync();
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();

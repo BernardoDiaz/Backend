@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const teacherControllers_1 = require("../controllers/teacherControllers");
+//import validateToken from "./validate-token";
+const router = (0, express_1.Router)();
+router.get('/', teacherControllers_1.getTeacher);
+router.get('/ag/:id_levelSearch', teacherControllers_1.getDegreeTeacher);
+router.post('/', teacherControllers_1.newTeacher);
+exports.default = router;

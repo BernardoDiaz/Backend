@@ -26,12 +26,12 @@ export const subject =  sequelize.define('subject',{
 degree.hasMany(subject,{
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 
 subject.belongsTo(degree,{
     foreignKey:'id_degree',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
     
 });

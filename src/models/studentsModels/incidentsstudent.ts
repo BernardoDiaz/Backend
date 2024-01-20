@@ -32,10 +32,10 @@ export const incidentsstudent = sequelize.define('incidents',{
 student.hasMany(incidentsstudent, {
     foreignKey: 'id_student',
     sourceKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });
 incidentsstudent.belongsTo(student,{
     foreignKey: 'id_student',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'RESTRICT'
 });

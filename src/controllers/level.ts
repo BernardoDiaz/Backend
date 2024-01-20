@@ -13,7 +13,7 @@ export const getLevels = async (req:Request,res:Response) => {
 export const getLevelById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const oneLevel = await level.findByPk(id);
-
+ 
     //validacion de existencia
     try {
         if (oneLevel) {

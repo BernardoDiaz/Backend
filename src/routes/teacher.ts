@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getDegreeTeacher, getTeacher, newTeacher } from "../controllers/teacherControllers";
+import { getDegreeTeacher, getTeacher, newTeacher } from "../controllers/teacher";
 //import validateToken from "./validate-token";
 
 const router = Router();

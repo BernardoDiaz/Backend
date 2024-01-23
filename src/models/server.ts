@@ -7,8 +7,7 @@ import routesInterview from '../routes/AspirantRoute/interview';
 import routesTeacher from '../routes/teacher';
 import routesStudent from '../routes/StudentRoute/student';
 import routesStudentData from '../routes/StudentRoute/studentdata';
-import routesIncident from '../routes/StudentRoute/incidentsstudent';
-import routesRating from '../routes/StudentRoute/ratingstudent';
+import routesIncident from '../routes/StudentRoute/incidentsstudent';;
 import routesUsers from '../routes/UserRoute/user';
 import routesDegree from '../routes/degree';
 import routesLevel from '../routes/level';
@@ -19,6 +18,7 @@ import routesProduct from '../routes/PaymentsRoute/productos';
 import routesPayment  from '../routes/PaymentsRoute/pago';
 import routesSearch from '../routes/searchRoute/seatchs';
 import routesPDF from '../routes/ReportsRoute/generatePDF';
+import routesAssigment from '../routes/intermediateRoute/teacherDegree';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -39,7 +39,6 @@ import { payment } from './paymentsModels/pago';
 import { generatePDF } from './ReportsModel/generatePDF';
 import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';
-
 
 class Server {
     private app: express.Application;
@@ -68,7 +67,6 @@ class Server {
         //endpoint estudiantes
         this.app.use('/api/student', routesStudent);
         this.app.use('/api/studentdata', routesStudentData);
-        this.app.use('/api/rating',routesRating);
         this.app.use('/api/incident',routesIncident);
         //endpoint usuarios
         this.app.use('/api/users', routesUsers);
@@ -91,6 +89,8 @@ class Server {
         this.app.use('/api/search', routesSearch);
         this.app.use('/api/gpdf', routesPDF);
         this.app.use('/api/teacher',routesTeacher);
+
+        this.app.use('/api/assig', routesAssigment);
 
 
     };

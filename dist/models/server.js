@@ -22,7 +22,7 @@ const teacher_1 = __importDefault(require("../routes/teacher"));
 const student_1 = __importDefault(require("../routes/StudentRoute/student"));
 const studentdata_1 = __importDefault(require("../routes/StudentRoute/studentdata"));
 const incidentsstudent_1 = __importDefault(require("../routes/StudentRoute/incidentsstudent"));
-const ratingstudent_1 = __importDefault(require("../routes/StudentRoute/ratingstudent"));
+;
 const user_1 = __importDefault(require("../routes/UserRoute/user"));
 const degree_1 = __importDefault(require("../routes/degree"));
 const level_1 = __importDefault(require("../routes/level"));
@@ -33,6 +33,7 @@ const productos_1 = __importDefault(require("../routes/PaymentsRoute/productos")
 const pago_1 = __importDefault(require("../routes/PaymentsRoute/pago"));
 const seatchs_1 = __importDefault(require("../routes/searchRoute/seatchs"));
 const generatePDF_1 = __importDefault(require("../routes/ReportsRoute/generatePDF"));
+const teacherDegree_1 = __importDefault(require("../routes/intermediateRoute/teacherDegree"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -52,7 +53,7 @@ const productos_2 = require("./paymentsModels/productos");
 const pago_2 = require("./paymentsModels/pago");
 const generatePDF_2 = require("./ReportsModel/generatePDF");
 const teacher_2 = require("./teacher");
-const teacherDegree_1 = require("./intermediateModels/teacherDegree");
+const teacherDegree_2 = require("./intermediateModels/teacherDegree");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -77,7 +78,6 @@ class Server {
         //endpoint estudiantes
         this.app.use('/api/student', student_1.default);
         this.app.use('/api/studentdata', studentdata_1.default);
-        this.app.use('/api/rating', ratingstudent_1.default);
         this.app.use('/api/incident', incidentsstudent_1.default);
         //endpoint usuarios
         this.app.use('/api/users', user_1.default);
@@ -97,6 +97,7 @@ class Server {
         this.app.use('/api/search', seatchs_1.default);
         this.app.use('/api/gpdf', generatePDF_1.default);
         this.app.use('/api/teacher', teacher_1.default);
+        this.app.use('/api/assig', teacherDegree_1.default);
     }
     ;
     midlewares() {
@@ -118,7 +119,7 @@ class Server {
                 yield interview_2.interview.sync();
                 //Fin Modulo 01 BD 
                 yield teacher_2.teacher.sync();
-                yield teacherDegree_1.DegreeAssignment.sync();
+                yield teacherDegree_2.DegreeAssignment.sync();
                 yield subject_2.subject.sync();
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();

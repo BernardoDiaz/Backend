@@ -2,7 +2,7 @@
 import sequelize from "../../db/connection";
 import { level } from "../level";
 import { student } from "../studentsModels/student";
-import { payment } from "../paymentsModels/pago";
+import { payment } from "./pago";
 
 export const planPayment = sequelize.define('planPayment', {
 

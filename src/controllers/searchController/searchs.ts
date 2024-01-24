@@ -4,7 +4,7 @@ import { registration } from '../../models/paymentsModels/matricula';
 import { degree } from '../../models/degree';
 import { seccion } from '../../models/seccion';
 import { planPayment } from '../../models/paymentsModels/planPagos';
-
+ 
 export const searchStudents = async (req: Request, res: Response) => {
     const actualYear = new Date().getFullYear();
     try {

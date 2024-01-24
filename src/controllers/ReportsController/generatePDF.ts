@@ -15,7 +15,7 @@ export const viewTicket = async(req:Request,res:Response) =>{
         res.status(500).json({msg:`Error al recuperar el pdf`});
     }
 };
-
+ 
 
 export const newTicket = async (req: Request, res: Response) => {
 

@@ -8,4 +8,4 @@ router.get('/:idLevel', getDegreeByLevel);
 router.post('/', newDegree);
 
 
-export default router;
+export default router; 

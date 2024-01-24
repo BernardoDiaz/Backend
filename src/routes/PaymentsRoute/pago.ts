@@ -8,4 +8,4 @@ router.get('/', getPayment);
 router.post('/', newPayment);
 
 
-export default router; 
+export default router;  

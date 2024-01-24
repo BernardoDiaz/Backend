@@ -6,4 +6,4 @@ router.get('/:id',viewTicket);
 router.post('/', newTicket);
 
 
-export default router; 
+export default router;  

@@ -5,7 +5,7 @@ import { category } from "./categorias";
 export const product = sequelize.define('product', {
     //PRODUCTOS GENERICOS 
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, 
         primaryKey: true,
         autoIncrement: true
     },

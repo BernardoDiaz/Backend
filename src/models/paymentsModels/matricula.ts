@@ -7,7 +7,7 @@ import { level } from "../level";
 export const registration = sequelize.define('registration', {
 
     id: {
-        type: DataTypes.INTEGER, 
+        type: DataTypes.INTEGER,  
         primaryKey: true,
         autoIncrement:true
     },

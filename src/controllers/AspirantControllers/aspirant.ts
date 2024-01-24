@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { degree } from '../../models/degree';
-
+ 
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
 

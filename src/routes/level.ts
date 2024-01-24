@@ -10,4 +10,4 @@ router.post('/', newLevel);
 router.put('/:id', updateLevel);
 router.delete('/:id', deleteLevel);
 
-export default router; 
+export default router;  

@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStudentData = exports.deleteStudentData = exports.newStudentData = exports.getStudentDataById = exports.getStudentDatas = void 0;
 const studentdata_1 = require("../../models/studentsModels/studentdata");
-//Metodo Listar
+//Metodo Listar 
 const getStudentDatas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listStudents = yield studentdata_1.studentdata.findAll();

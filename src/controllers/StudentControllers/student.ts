@@ -3,7 +3,6 @@ import { student } from '../../models/studentsModels/student';
 import { registration } from '../../models/paymentsModels/matricula';
 import * as shortid from 'shortid';
 import { planPayment } from '../../models/paymentsModels/planPagos';
-import { degree } from '../../models/degree';
 
 //Metodo Listar
 export const getStudents = async (req: Request, res: Response) => {

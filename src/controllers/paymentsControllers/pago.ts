@@ -3,7 +3,7 @@ import { payment } from '../../models/paymentsModels/pago';
 import { detailsPayment } from '../../models/paymentsModels/detallePago';
 import { planPayment } from '../../models/paymentsModels/planPagos';
 import { student } from '../../models/studentsModels/student';
-
+ 
 //Metodo Listar
 export const getPayment = async (req: Request, res: Response) => {
     try {

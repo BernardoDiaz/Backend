@@ -4,7 +4,7 @@ import sequelize from "../../db/connection";
 export const interview = sequelize.define('interview',{
 
     id:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, 
         primaryKey:true,
         autoIncrement:true
     },

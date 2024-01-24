@@ -1,9 +1,8 @@
 import { Response,Request } from "express";
-import sequelize from "../../db/connection";
 import { product } from "../../models/paymentsModels/productos";
 import { category } from "../../models/paymentsModels/categorias";
 
-
+ 
 export const getProduct = async (req:Request,res:Response) => {
     try {
         const list = await product.findAll({attributes:['id','nameProduct','price']});

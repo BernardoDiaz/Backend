@@ -3,7 +3,7 @@ import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { interview } from '../../models/aspirantsModels/interview';
 import { Sequelize } from 'sequelize';
-
+ 
 //Metodo Listar
 export const getInterviews = async (req: Request, res: Response) => {
 

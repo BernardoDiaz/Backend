@@ -11,4 +11,4 @@ router.post('/', newSubject);
 router.put('/:id', updateSubject);
 router.delete('/:id', deleteSubject);
 
-export default router; 
+export default router;  

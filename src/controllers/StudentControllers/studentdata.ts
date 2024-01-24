@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { studentdata } from '../../models/studentsModels/studentdata';
 
-//Metodo Listar
+//Metodo Listar 
 export const getStudentDatas = async (req: Request, res: Response) => {
 
     //Generamos la lista

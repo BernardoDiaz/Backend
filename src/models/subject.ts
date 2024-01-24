@@ -34,4 +34,4 @@ subject.belongsTo(degree,{
     targetKey: 'id',
     onDelete: 'RESTRICT'
     
-});
+}); 

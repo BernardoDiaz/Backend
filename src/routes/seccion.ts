@@ -9,5 +9,5 @@ router.get('/:id', getSeccionById);
 router.post('/', newSeccion);
 router.put('/:id', updateSeccion);
 router.delete('/:id', deleteSeccion);
-
+ 
 export default router;

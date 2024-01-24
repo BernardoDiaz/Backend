@@ -18,4 +18,3 @@ exports.seccion = connection_1.default.define('seccion', {
         unique: true
     }
 });
-// seccion.sync({alter:true})

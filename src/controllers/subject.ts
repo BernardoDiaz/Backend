@@ -11,7 +11,7 @@ export const getSubjects = async (req:Request,res:Response) => {
 export const getSubjectById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const one = await subject.findByPk(id);
-
+ 
     //validacion de existencia
     try {
         if (one) {

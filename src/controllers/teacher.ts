@@ -17,7 +17,7 @@ export const getTeacher = async (req: Request, res: Response) => {
     //Devolvemos la respuesta via JSON
     res.json(list);
 };
-  
+   
   interface IDegreeAssignment {
     id_degree: number;
     // Agrega aquí cualquier otro campo que necesites

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { incidentsstudent } from '../../models/studentsModels/incidentsstudent';
-
+ 
 //Metodo Listar
 export const getIncidents = async (req: Request, res: Response) => {
 

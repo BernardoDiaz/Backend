@@ -10,5 +10,5 @@ router.post('/', newAspirant);
 router.put('/:id', updateAspirant);
 router.delete('/:id', deleteAspirant);
 
-
+ 
 export default router;  

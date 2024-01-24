@@ -3,7 +3,7 @@ import { degree } from "../models/degree";
 import { seccion } from "../models/seccion";
 import sequelize from "../db/connection";
 import { level } from "../models/level";
-
+ 
 //Metodo Listar
 export const getDegrees = async (req: Request, res: Response) => {
 

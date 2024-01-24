@@ -10,5 +10,5 @@ router.post('/', newIncident);
 router.put('/:id', updateIncident);
 router.delete('/:id', deleteIncident);
 
-
+ 
 export default router;  

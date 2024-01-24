@@ -5,7 +5,7 @@ import { student } from "./student";
 export const incidentsstudent = sequelize.define('incidents',{
 
     id:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.INTEGER, 
         primaryKey:true,
         autoIncrement:true
     },

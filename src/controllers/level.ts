@@ -9,7 +9,7 @@ export const getLevels = async (req:Request,res:Response) => {
 
     res.json(listLevel);
 } 
-
+ 
 export const getLevelById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const oneLevel = await level.findByPk(id);

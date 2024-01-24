@@ -6,7 +6,7 @@ import { teacher } from "../teacher";
 export const DegreeAssignment = sequelize.define('DegreeAssignment',{
     id:{
         type:DataTypes.INTEGER,
-        primaryKey:true,
+        primaryKey:true, 
         autoIncrement:true
     },
     id_teacher:{

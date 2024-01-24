@@ -14,7 +14,7 @@ export const level = sequelize.define('level',{
     },
     priceRegistration:{
         type:DataTypes.DOUBLE,
-        allowNull:false
+        allowNull:false 
     },
     priceFee:{
         type:DataTypes.DOUBLE,

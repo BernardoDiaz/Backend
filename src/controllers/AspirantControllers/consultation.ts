@@ -3,7 +3,7 @@ import { consultation } from '../../models/aspirantsModels/consultation';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { Sequelize } from 'sequelize';
-
+ 
 //Metodo Listar
 export const getConsultations = async (req: Request, res: Response) => {
 

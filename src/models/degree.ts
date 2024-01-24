@@ -12,7 +12,7 @@ export const degree = sequelize.define('degree', {
     },
     name:{
         type:DataTypes.STRING,
-        allowNull:false
+        allowNull:false 
     },
     id_seccion:{
         type:DataTypes.INTEGER,

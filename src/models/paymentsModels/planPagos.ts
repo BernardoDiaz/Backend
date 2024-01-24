@@ -6,7 +6,7 @@ import { payment } from "./pago";
 
 export const planPayment = sequelize.define('planPayment', {
 
-    id: {
+    id: { 
         type: DataTypes.INTEGER, 
         primaryKey: true,
         autoIncrement: true

@@ -3,7 +3,7 @@ import sequelize from "../../db/connection";
 
 export const consultation = sequelize.define('consultation', {
     id:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, 
         primaryKey:true,
         autoIncrement:true
     },

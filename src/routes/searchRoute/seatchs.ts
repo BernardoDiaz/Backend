@@ -8,4 +8,4 @@ const router = Router();
 router.get('/', searchStudents);
 router.get('/:id_student',searchPlanPayment);
 
-export default router; 
+export default router;  

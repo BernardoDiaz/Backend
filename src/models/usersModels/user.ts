@@ -5,7 +5,7 @@ import sequelize from "../../db/connection";
     id:{
         type: DataTypes.INTEGER,
         primaryKey:true,
-        autoIncrement: true
+        autoIncrement: true 
     },
     username:{
         type: DataTypes.STRING,

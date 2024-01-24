@@ -14,5 +14,3 @@ export const seccion = sequelize.define('seccion', {
         unique:true
     }                           
 });
-
-// seccion.sync({alter:true})

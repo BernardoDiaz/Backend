@@ -11,4 +11,4 @@ router.put('/:id', updateStudentData);
 router.delete('/:id', deleteStudentData);
 
 
-export default router; 
+export default router;  

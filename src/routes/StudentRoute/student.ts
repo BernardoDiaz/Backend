@@ -10,5 +10,5 @@ router.post('/', newStudent);
 router.put('/:id', updateStudent);
 router.delete('/:id', deleteStudent);
 
-
+ 
 export default router;

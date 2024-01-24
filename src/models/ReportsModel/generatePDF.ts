@@ -5,7 +5,7 @@ import { payment } from "../paymentsModels/pago";
 export const generatePDF = sequelize.define('generatePDF', {
 
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER,  
         primaryKey:true,
         autoIncrement:true
     },

@@ -13,7 +13,7 @@ export const teacher = sequelize.define('teacher',{
         allowNull:false
     },
     lastname:{
-        type:DataTypes.STRING,
+        type:DataTypes.STRING, 
         allowNull:false
     },
     id_level:{

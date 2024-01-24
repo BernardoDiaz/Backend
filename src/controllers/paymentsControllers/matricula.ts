@@ -4,7 +4,7 @@ import { student } from "../../models/studentsModels/student";
 import sequelize from "../../db/connection";
 import { degree } from "../../models/degree";
 
-
+ 
 export const get = async (req:Request,res:Response) => {
     try{
     const list = await registration.findAll({

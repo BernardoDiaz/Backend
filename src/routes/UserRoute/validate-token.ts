@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Jwt from "jsonwebtoken";
-
+ 
 const validateToken = (req: Request, res: Response, next: NextFunction) => {
     console.log('valido');
     const headerToken = req.headers['authorization'];

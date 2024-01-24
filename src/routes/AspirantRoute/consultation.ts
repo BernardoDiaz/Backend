@@ -12,5 +12,5 @@ router.post('/', newConsultation);
 router.put('/:id', updateConsultation);
 router.delete('/:id', deleteConsultation);
 
-
+ 
 export default router;  

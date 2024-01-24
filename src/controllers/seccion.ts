@@ -7,7 +7,7 @@ export const getSeccions = async (req: Request, res: Response) => {
 
     res.json(listSeccion);
 
-};
+}; 
 
 export const getSeccionById = async (req: Request, res: Response) => {
     const { id } = req.params;

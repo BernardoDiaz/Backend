@@ -4,7 +4,7 @@ import { teacher } from "../../models/teacher";
 import { degree } from "../../models/degree";
 import { seccion } from "../../models/seccion";
 import { level } from "../../models/level";
-
+ 
 
 export const getTeachers =async (req:Request,res:Response) => {
     

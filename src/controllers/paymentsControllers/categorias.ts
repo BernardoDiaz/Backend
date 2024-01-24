@@ -2,7 +2,7 @@ import { Response,Request } from "express";
 import sequelize from "../../db/connection";
 import { category } from "../../models/paymentsModels/categorias";
 
-
+ 
 export const getCategory = async (req:Request,res:Response) => {
     try {
         const list = await category.findAll({attributes:['id','nameCategory']});

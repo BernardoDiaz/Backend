@@ -6,7 +6,7 @@ export const payment = sequelize.define('payment', {
 
     id: {
         type: DataTypes.STRING,
-        primaryKey:true
+        primaryKey:true 
     },
     id_student: {
         type: DataTypes.STRING,

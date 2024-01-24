@@ -7,7 +7,7 @@ export const detailsPayment = sequelize.define('detailsPayment', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement:true
+        autoIncrement:true 
     },
     id_payment:{
         type:DataTypes.STRING,

@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 import { user } from "../../models/usersModels/user";
 import Jwt from "jsonwebtoken";
-
+ 
 //Metodo para crear nuevo usuario
 export const newUser = async (req: Request, res: Response) => {
 

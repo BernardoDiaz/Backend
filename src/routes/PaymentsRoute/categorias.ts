@@ -9,4 +9,4 @@ router.post('/', newCategory);
 router.put('/:id', updateCategory);
 router.delete('/:id', deleteCategory);
 
-export default router; 
+export default router;  

@@ -3,7 +3,7 @@ import sequelize from "../../db/connection";
 
 export const student = sequelize.define('student', {
 
-    id: {
+    id: { 
         type: DataTypes.STRING,
         primaryKey: true,
     },

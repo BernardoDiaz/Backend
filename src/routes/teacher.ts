@@ -8,4 +8,4 @@ router.get('/', getTeacher);
 router.get('/ag/:id_levelSearch', getDegreeTeacher);
 router.post('/',newTeacher);
 
-export default router; 
+export default router;  

@@ -19,7 +19,7 @@ export const getStudents = async (req: Request, res: Response) => {
         // Manejamos cualquier error aquí
         res.status(500).json({ error: 'Error interno del servidor' });
     }
-};
+}; 
 
 export const getStudentById = async (req: Request, res: Response) => {
     const { id } = req.params;

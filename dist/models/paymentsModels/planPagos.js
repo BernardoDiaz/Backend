@@ -8,7 +8,7 @@ const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../../db/connection"));
 const level_1 = require("../level");
 const student_1 = require("../studentsModels/student");
-const pago_1 = require("./pago");
+const pago_1 = require("./Pago");
 exports.planPayment = connection_1.default.define('planPayment', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,

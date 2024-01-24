@@ -23,7 +23,7 @@ export const getPayment = async (req: Request, res: Response) => {
             order: [['datePayment', 'DESC']]
         });
         // Devolvemos la respuesta en formato JSON
-        res.json(list);
+        res.json(list); 
     } catch (error) {
         // Manejamos cualquier error aquí
         res.status(500).json({ error: 'Error interno del servidor' });

@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
 import { product } from "./productos";
-import { payment } from "./pago";
+import { payment } from "../pago";
 export const detailsPayment = sequelize.define('detailsPayment', {
 
     id: {

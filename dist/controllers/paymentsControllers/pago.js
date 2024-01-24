@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
-const pago_1 = require("../../models/paymentsModels/pago");
+const pago_1 = require("../../models/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
 const student_1 = require("../../models/studentsModels/student");

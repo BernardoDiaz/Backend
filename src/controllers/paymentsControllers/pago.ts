@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { payment } from '../../models/paymentsModels/pago';
+import { payment } from '../../models/pago';
 import { detailsPayment } from '../../models/paymentsModels/detallePago';
 import { planPayment } from '../../models/paymentsModels/planPagos';
 import { student } from '../../models/studentsModels/student';

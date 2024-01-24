@@ -35,7 +35,7 @@ import { category } from './paymentsModels/categorias';
 import { detailsPayment } from './paymentsModels/detallePago';
 import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
-import { payment } from './paymentsModels/pago';  
+import { payment } from './pago';  
 import { generatePDF } from './ReportsModel/generatePDF';
 import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';

@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
-import { payment } from "../paymentsModels/pago";
+import { payment } from "../pago";
 
 export const generatePDF = sequelize.define('generatePDF', {
 

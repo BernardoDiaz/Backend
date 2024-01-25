@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { level } from "../models/level";
 import { teacher } from "../models/teacher";
 import { degree } from "../models/degree";
@@ -59,12 +60,14 @@ export const getTeacher = async (req: Request, res: Response) => {
     
 export const newTeacher = async (req: Request, res: Response) => {
 
-    const { name, lastname, id_level } = req.body;
+    const { name, lastname, password, id_level } = req.body;
 
+    const hastPassword = await bcrypt.hash(password,10);
     try {
         await teacher.create({
             name: name,
             lastname: lastname,
+            password:hastPassword,
             id_level: id_level
         });
         res.json({
@@ -77,4 +80,4 @@ export const newTeacher = async (req: Request, res: Response) => {
             error
         });
     }
-};
+}; 

@@ -16,10 +16,20 @@ export const teacher = sequelize.define('teacher',{
         type:DataTypes.STRING, 
         allowNull:false
     },
+    password:{
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
+    },
     id_level:{
         type:DataTypes.INTEGER,
         allowNull:false
-    }
+    },
+    state:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false,
+        defaultValue:1
+    } 
 });
 
 level.hasMany(teacher, {

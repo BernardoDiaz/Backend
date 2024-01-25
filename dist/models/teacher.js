@@ -21,9 +21,19 @@ exports.teacher = connection_1.default.define('teacher', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        unique: true,
+        allowNull: false
+    },
     id_level: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
+    },
+    state: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 1
     }
 });
 level_1.level.hasMany(exports.teacher, {

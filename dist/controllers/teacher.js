@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newTeacher = exports.getDegreeTeacher = exports.getTeacher = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const level_1 = require("../models/level");
 const teacher_1 = require("../models/teacher");
 const degree_1 = require("../models/degree");
@@ -57,11 +61,13 @@ const getDegreeTeacher = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getDegreeTeacher = getDegreeTeacher;
 const newTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, id_level } = req.body;
+    const { name, lastname, password, id_level } = req.body;
+    const hastPassword = yield bcrypt_1.default.hash(password, 10);
     try {
         yield teacher_1.teacher.create({
             name: name,
             lastname: lastname,
+            password: hastPassword,
             id_level: id_level
         });
         res.json({

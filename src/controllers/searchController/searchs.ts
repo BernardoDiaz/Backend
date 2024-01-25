@@ -34,6 +34,21 @@ export const searchStudents = async (req: Request, res: Response) => {
     }
 };
 
+export const searchRegistration = async (req: Request, res: Response) => {
+  const actualYear = new Date().getFullYear();
+  try {
+      const list = await student.findAll({
+          attributes: ['id', 'name', 'lastname'],
+      });
+
+      res.json(list);
+      
+  } catch (error) {
+      // Manejamos cualquier error aquí
+      res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 export const searchPlanPayment = async (req: Request, res: Response) => {
   const { id_student } = req.params;
   try {

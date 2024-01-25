@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchPlanPayment = exports.searchStudents = void 0;
+exports.searchPlanPayment = exports.searchRegistration = exports.searchStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const degree_1 = require("../../models/degree");
@@ -44,6 +44,20 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.searchStudents = searchStudents;
+const searchRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const actualYear = new Date().getFullYear();
+    try {
+        const list = yield student_1.student.findAll({
+            attributes: ['id', 'name', 'lastname'],
+        });
+        res.json(list);
+    }
+    catch (error) {
+        // Manejamos cualquier error aquí
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.searchRegistration = searchRegistration;
 const searchPlanPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_student } = req.params;
     try {

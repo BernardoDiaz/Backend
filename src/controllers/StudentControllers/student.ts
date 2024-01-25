@@ -112,6 +112,67 @@ export const newStudent = async (req: Request, res: Response) => {
 
 };
 
+export const newRegistration = async (req: Request, res: Response) => {
+    const { id_student, id_degree, id_level, year } = req.body;
+
+    try {
+        //generacion de matricula
+        await registration.create({
+            id_student,
+            id_degree,
+            id_level,
+            year
+        });
+
+        //generacion de plan de pago
+        const { priceFee } = req.body;
+        const planPayments = []; 
+
+        for (let i = 1; i <= 11; i++) {
+          const date = new Date(year, i - 1, 18);
+        
+          planPayments.push({
+            id_student: id_student,
+            id_payment: null,
+            id_level,
+            nameFee: 'Cuota ' + i +' - '+ year,
+            year,
+            datePayment: null,
+            dateExpiration: date,
+            price:priceFee,
+            state: false,
+          });
+        }
+        const { priceRegistration } = req.body;
+        const studentInfo = {
+          id_student: id_student,
+          id_payment: null,
+          id_level,
+          nameFee: 'Matrícula - '+ year,
+          year,
+          datePayment: null,
+          dateExpiration: new Date(year, 0, 18),
+          price:priceRegistration,
+          state: false,
+        };
+        
+         await planPayments.unshift(studentInfo);
+        
+        await planPayment.bulkCreate(planPayments);
+        
+        res.json({
+            msg: `El alumno fue matriculado con exito`
+        });
+
+    } catch (error) {
+        res.json({
+            msg: "Ocurrio un error registrar un alumno",
+            error
+        });
+    }
+
+};
+
 export const deleteStudent = async (req: Request, res: Response) => {
     const { id } = req.params;
     const one = await student.findOne({ where: { id: id } });

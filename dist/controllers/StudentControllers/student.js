@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudent = exports.deleteStudent = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
+exports.updateStudent = exports.deleteStudent = exports.newRegistration = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const shortid = __importStar(require("shortid"));
@@ -135,6 +135,59 @@ const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.newStudent = newStudent;
+const newRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_student, id_degree, id_level, year } = req.body;
+    try {
+        //generacion de matricula
+        yield matricula_1.registration.create({
+            id_student,
+            id_degree,
+            id_level,
+            year
+        });
+        //generacion de plan de pago
+        const { priceFee } = req.body;
+        const planPayments = [];
+        for (let i = 1; i <= 11; i++) {
+            const date = new Date(year, i - 1, 18);
+            planPayments.push({
+                id_student: id_student,
+                id_payment: null,
+                id_level,
+                nameFee: 'Cuota ' + i + ' - ' + year,
+                year,
+                datePayment: null,
+                dateExpiration: date,
+                price: priceFee,
+                state: false,
+            });
+        }
+        const { priceRegistration } = req.body;
+        const studentInfo = {
+            id_student: id_student,
+            id_payment: null,
+            id_level,
+            nameFee: 'Matrícula - ' + year,
+            year,
+            datePayment: null,
+            dateExpiration: new Date(year, 0, 18),
+            price: priceRegistration,
+            state: false,
+        };
+        yield planPayments.unshift(studentInfo);
+        yield planPagos_1.planPayment.bulkCreate(planPayments);
+        res.json({
+            msg: `El alumno fue matriculado con exito`
+        });
+    }
+    catch (error) {
+        res.json({
+            msg: "Ocurrio un error registrar un alumno",
+            error
+        });
+    }
+});
+exports.newRegistration = newRegistration;
 const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const one = yield student_1.student.findOne({ where: { id: id } });

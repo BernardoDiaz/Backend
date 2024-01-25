@@ -7,6 +7,7 @@ const router = (0, express_1.Router)();
 router.get('/', student_1.getStudents);
 router.get('/:id', student_1.getStudentById);
 router.post('/', student_1.newStudent);
+router.post('/newR', student_1.newRegistration);
 router.put('/:id', student_1.updateStudent);
 router.delete('/:id', student_1.deleteStudent);
 exports.default = router;

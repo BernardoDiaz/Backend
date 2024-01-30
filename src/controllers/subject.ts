@@ -1,17 +1,17 @@
-import { Response,Request } from "express";
+import { Response, Request } from "express";
 import { subject } from "../models/subject";
 
-export const getSubjects = async (req:Request,res:Response) => {
-    
-    const list = await subject.findAll({attributes:['id','name']});
+export const getSubjects = async (req: Request, res: Response) => {
+
+    const list = await subject.findAll({ attributes: ['id', 'name'] });
 
     res.json(list);
-} 
+}
 
 export const getSubjectById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const one = await subject.findByPk(id);
- 
+
     //validacion de existencia
     try {
         if (one) {
@@ -31,44 +31,13 @@ export const getSubjectById = async (req: Request, res: Response) => {
 
 };
 
-export const newSubject = async (req:Request, res:Response) => {
-    
-    const {name} = req.body;
-
-    //Validar nombre unico de nivel
-    const namevalid = await subject.findOne({where:{name:name}});
-
-    if (namevalid) {
-        return res.status(400).json({
-            msg: `Ya existe una asignatura registrado como ${name}`
-        });
-    };
-
-    //Guardando nivel en bd
-    try {
-        await subject.create({
-            name: name
-        });
-
-        res.json({
-            msg:`La asignatura ${name} creado exitosamente`
-        });
-        
-    } catch (error) {
-        res.status(400).json({
-            msg: "Ocurrio un error, al crear la asignatura",
-            error
-        });
-    }
-};
-
 export const deleteSubject = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await subject.findOne({where:{id:id}});
+    const one = await subject.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await subject.destroy({where:{id:id}});
+            await subject.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });
@@ -109,3 +78,25 @@ export const updateSubject = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const newSubject = async (req: Request, res: Response) => {
+
+    try {
+        const asignacionGrado =
+            req.body.asignacionGrado.map((materia: any) => ({
+                nameSubject: materia.nameSubject,
+                id_degree: materia.id_degree
+            }));
+        await subject.bulkCreate(asignacionGrado);
+
+        res.json({
+            msg: `Materias Asignadas`
+        });
+
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+}; 

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSubject = exports.deleteSubject = exports.newSubject = exports.getSubjectById = exports.getSubjects = void 0;
+exports.newSubject = exports.updateSubject = exports.deleteSubject = exports.getSubjectById = exports.getSubjects = void 0;
 const subject_1 = require("../models/subject");
 const getSubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const list = yield subject_1.subject.findAll({ attributes: ['id', 'name'] });
@@ -37,33 +37,6 @@ const getSubjectById = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getSubjectById = getSubjectById;
-const newSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
-    //Validar nombre unico de nivel
-    const namevalid = yield subject_1.subject.findOne({ where: { name: name } });
-    if (namevalid) {
-        return res.status(400).json({
-            msg: `Ya existe una asignatura registrado como ${name}`
-        });
-    }
-    ;
-    //Guardando nivel en bd
-    try {
-        yield subject_1.subject.create({
-            name: name
-        });
-        res.json({
-            msg: `La asignatura ${name} creado exitosamente`
-        });
-    }
-    catch (error) {
-        res.status(400).json({
-            msg: "Ocurrio un error, al crear la asignatura",
-            error
-        });
-    }
-});
-exports.newSubject = newSubject;
 const deleteSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const one = yield subject_1.subject.findOne({ where: { id: id } });
@@ -113,3 +86,22 @@ const updateSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateSubject = updateSubject;
+const newSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const asignacionGrado = req.body.asignacionGrado.map((materia) => ({
+            nameSubject: materia.nameSubject,
+            id_degree: materia.id_degree
+        }));
+        yield subject_1.subject.bulkCreate(asignacionGrado);
+        res.json({
+            msg: `Materias Asignadas`
+        });
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+});
+exports.newSubject = newSubject;

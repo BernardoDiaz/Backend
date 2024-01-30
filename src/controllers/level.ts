@@ -1,19 +1,22 @@
-import { Response,Request } from "express";
+import { Response, Request } from "express";
 import { level } from "../models/level";
+import { degree } from "../models/degree";
+import { seccion } from "../models/seccion";
 
-export const getLevels = async (req:Request,res:Response) => {
-    
+export const getLevels = async (req: Request, res: Response) => {
+
     const listLevel = await level.findAll({
-    attributes:['id','name','priceRegistration','priceFee','periodsToEvaluate'],
-        order: [['id', 'ASC']]});
+        attributes: ['id', 'name', 'priceRegistration', 'priceFee', 'periodsToEvaluate'],
+        order: [['id', 'ASC']]
+    });
 
     res.json(listLevel);
-} 
- 
+}
+
 export const getLevelById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const oneLevel = await level.findByPk(id);
- 
+
     //validacion de existencia
     try {
         if (oneLevel) {
@@ -23,7 +26,7 @@ export const getLevelById = async (req: Request, res: Response) => {
             return res.status(404).json({
                 msg: `No existe el nivel academico`
             });
-        } 
+        }
     } catch (error) {
         return res.status(404).json({
             msg: `Ocurrio un error al buscar el nivel academico`
@@ -33,12 +36,12 @@ export const getLevelById = async (req: Request, res: Response) => {
 
 };
 
-export const newLevel = async (req:Request, res:Response) => {
-    
-    const {name,priceRegistration,priceFee} = req.body;
+export const newLevel = async (req: Request, res: Response) => {
+
+    const { name, priceRegistration, priceFee } = req.body;
 
     //Validar nombre unico de nivel
-    const namevalid = await level.findOne({where:{name:name}});
+    const namevalid = await level.findOne({ where: { name: name } });
 
     if (namevalid) {
         return res.status(400).json({
@@ -51,13 +54,13 @@ export const newLevel = async (req:Request, res:Response) => {
         await level.create({
             name,
             priceRegistration,
-            priceFee  
+            priceFee
         });
 
         res.json({
-            msg:`El nivel ${name} creado exitosamente`
+            msg: `El nivel ${name} creado exitosamente`
         });
-        
+
     } catch (error) {
         res.status(400).json({
             msg: "Ocurrio un error, al crear el nivel",
@@ -68,11 +71,11 @@ export const newLevel = async (req:Request, res:Response) => {
 
 export const deleteLevel = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const oneLevel = await level.findOne({where:{id:id}});
+    const oneLevel = await level.findOne({ where: { id: id } });
 
     try {
         if (oneLevel) {
-            await level.destroy({where:{id:id}});
+            await level.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });
@@ -83,7 +86,7 @@ export const deleteLevel = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(404).json({
-            msg: `Ocurrio un error al eliminar el nivel academico`,
+            msg: `El nivel esta asignado no es posible eliminarlo`,
             error
         });
     }
@@ -91,13 +94,13 @@ export const deleteLevel = async (req: Request, res: Response) => {
 
 export const updateLevel = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name,priceRegistration,priceFee} = req.body;
+    const { name, priceRegistration, priceFee } = req.body;
 
     const oneLevel = await level.findOne({ where: { id: id } });
 
     try {
         if (oneLevel) {
-            await level.update({ name,priceRegistration,priceFee}, { where: { id: id } });
+            await level.update({ name, priceRegistration, priceFee }, { where: { id: id } });
             res.json({
                 msg: `Nivel academico, actualizado con exito`
             });
@@ -109,6 +112,27 @@ export const updateLevel = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(404).json({
             msg: `Ocurrio un error al editar el nivel academico,`,
+            error
+        });
+    }
+};
+
+export const getDegree = async (req: Request, res: Response) => {
+
+    try {
+        const { idLevel } = req.params;
+        //Generamos la lista
+        const list = await degree.findAll({
+            attributes: ['id', 'name'],
+            include: [{ model: seccion, attributes: ['name'] }],
+            where: { id_level: idLevel }
+        });
+
+        //Devolvemos la respuesta via JSON
+        res.json(list);
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Grados no encontrados`,
             error
         });
     }

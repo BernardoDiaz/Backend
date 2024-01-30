@@ -9,4 +9,5 @@ router.get('/:id', level_1.getLevelById);
 router.post('/', level_1.newLevel);
 router.put('/:id', level_1.updateLevel);
 router.delete('/:id', level_1.deleteLevel);
+router.get('/degree/:idLevel', level_1.getDegree);
 exports.default = router;

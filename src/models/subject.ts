@@ -15,11 +15,6 @@ export const subject =  sequelize.define('subject',{
     id_degree:{
         type:DataTypes.INTEGER,
         allowNull:true
-    },
-    cantPeriods:{
-        type:DataTypes.INTEGER,
-        allowNull:false,
-        defaultValue: 3
     }
 });
 
@@ -31,7 +26,7 @@ degree.hasMany(subject,{
 
 subject.belongsTo(degree,{
     foreignKey:'id_degree',
-    targetKey: 'id',
+    targetKey: 'id', 
     onDelete: 'RESTRICT'
     
 }); 

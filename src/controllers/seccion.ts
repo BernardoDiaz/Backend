@@ -75,7 +75,7 @@ export const deleteSeccion = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(404).json({
-            msg: `Ocurrio un error al eliminar la seccion`,
+            msg: `La seccion esta asignada no es posible eliminarla`,
             error
         });
     }

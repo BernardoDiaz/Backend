@@ -9,8 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateLevel = exports.deleteLevel = exports.newLevel = exports.getLevelById = exports.getLevels = void 0;
+exports.getDegree = exports.updateLevel = exports.deleteLevel = exports.newLevel = exports.getLevelById = exports.getLevels = void 0;
 const level_1 = require("../models/level");
+const degree_1 = require("../models/degree");
+const seccion_1 = require("../models/seccion");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listLevel = yield level_1.level.findAll({
         attributes: ['id', 'name', 'priceRegistration', 'priceFee', 'periodsToEvaluate'],
@@ -87,7 +89,7 @@ const deleteLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         res.status(404).json({
-            msg: `Ocurrio un error al eliminar el nivel academico`,
+            msg: `El nivel esta asignado no es posible eliminarlo`,
             error
         });
     }
@@ -118,3 +120,23 @@ const updateLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateLevel = updateLevel;
+const getDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idLevel } = req.params;
+        //Generamos la lista
+        const list = yield degree_1.degree.findAll({
+            attributes: ['id', 'name'],
+            include: [{ model: seccion_1.seccion, attributes: ['name'] }],
+            where: { id_level: idLevel }
+        });
+        //Devolvemos la respuesta via JSON
+        res.json(list);
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Grados no encontrados`,
+            error
+        });
+    }
+});
+exports.getDegree = getDegree;

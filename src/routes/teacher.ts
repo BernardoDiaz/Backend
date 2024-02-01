@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { getDegreeTeacher, getTeacher, newTeacher } from "../controllers/teacher";
-//import validateToken from "./validate-token";
+import validateToken from "./UserRoute/validate-token";
 
 const router = Router();
 
-router.get('/', getTeacher);
-router.get('/ag/:id_levelSearch', getDegreeTeacher);
-router.post('/',newTeacher);
+router.get('/', validateToken,getTeacher);
+router.get('/ag/:id_levelSearch', validateToken,getDegreeTeacher);
+router.post('/',validateToken,newTeacher);
 
 export default router;  

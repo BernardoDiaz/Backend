@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { deleteSeccion, getSeccionById, getSeccions, newSeccion, updateSeccion } from "../controllers/seccion";
-//import validateToken from "./validate-token";
+import validateToken from "./UserRoute/validate-token";
+
 
 const router = Router();
 
-router.get('/', getSeccions);
-router.get('/:id', getSeccionById);
-router.post('/', newSeccion);
-router.put('/:id', updateSeccion);
-router.delete('/:id', deleteSeccion);
+router.get('/', validateToken,getSeccions);
+router.get('/:id', validateToken,getSeccionById);
+router.post('/', validateToken,newSeccion);
+router.put('/:id', validateToken,updateSeccion);
+router.delete('/:id', validateToken,deleteSeccion);
  
 export default router;

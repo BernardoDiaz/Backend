@@ -1,14 +1,15 @@
 import { Router } from 'express';
 import { getStudentDatas,getStudentDataById,newStudentData,updateStudentData,deleteStudentData } from '../../controllers/StudentControllers/studentdata';
+import validateToken from '../UserRoute/validate-token';
 //import validateToken from './validate-token';
 
 const router = Router();
 
-router.get('/', getStudentDatas);
-router.get('/:id', getStudentDataById);
-router.post('/', newStudentData);
-router.put('/:id', updateStudentData);
-router.delete('/:id', deleteStudentData);
+router.get('/', validateToken,getStudentDatas);
+router.get('/:id', validateToken,getStudentDataById);
+router.post('/', validateToken,newStudentData);
+router.put('/:id', validateToken,updateStudentData);
+router.delete('/:id', validateToken,deleteStudentData);
 
 
 export default router;  

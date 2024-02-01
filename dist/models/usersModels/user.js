@@ -25,5 +25,10 @@ exports.user = connection_1.default.define('user', {
     rol: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
+    },
+    state: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
     }
 });

@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { deleteLevel, getDegree, getLevelById, getLevels, newLevel, updateLevel } from "../controllers/level";
-//import validateToken from "./validate-token";
+import validateToken from "./UserRoute/validate-token";
 
 const router = Router();
 
-router.get('/', getLevels);
-router.get('/:id', getLevelById);
-router.post('/', newLevel);
-router.put('/:id', updateLevel);
-router.delete('/:id', deleteLevel);
-router.get('/degree/:idLevel',getDegree)
+router.get('/', validateToken,getLevels);
+router.get('/:id', validateToken,getLevelById);
+router.post('/', validateToken,newLevel);
+router.put('/:id', validateToken,updateLevel);
+router.delete('/:id', validateToken,deleteLevel);
+router.get('/degree/:idLevel',validateToken,getDegree)
 
 export default router;  

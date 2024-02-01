@@ -1,12 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const aspirant_1 = require("../../controllers/AspirantControllers/aspirant");
-//import validateToken from './validate-token';
+const validate_token_1 = __importDefault(require("../UserRoute/validate-token"));
 const router = (0, express_1.Router)();
-router.get('/', aspirant_1.getAspirants);
-router.get('/:id', aspirant_1.getAspirantById);
-router.post('/', aspirant_1.newAspirant);
-router.put('/:id', aspirant_1.updateAspirant);
-router.delete('/:id', aspirant_1.deleteAspirant);
+router.get('/', validate_token_1.default, aspirant_1.getAspirants);
+router.get('/:id', validate_token_1.default, aspirant_1.getAspirantById);
+router.post('/', validate_token_1.default, aspirant_1.newAspirant);
+router.put('/:id', validate_token_1.default, aspirant_1.updateAspirant);
+router.delete('/:id', validate_token_1.default, aspirant_1.deleteAspirant);
 exports.default = router;

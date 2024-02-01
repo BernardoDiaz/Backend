@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 import { user } from "../../models/usersModels/user";
 import Jwt from "jsonwebtoken";
- 
+
 //Metodo para crear nuevo usuario
 export const newUser = async (req: Request, res: Response) => {
 
@@ -47,14 +47,22 @@ export const loginUser = async (req: Request, res: Response) => {
 
     //validar si el usuario existe en bd
     const uservalidlog: any = await user.findOne({ where: { username: username } });
+    //Verificar si el usuario está activado
+    const userActivate: any = await user.findOne({ where: { state: 1 } });
 
     //Si el user no existe
     if (!uservalidlog) {
         return res.status(400).json({
             msg: `No existe un usuario con el nombre ${username} registrado`
-        })
+        });
     }
 
+    if (!userActivate) {
+        return res.status(400).json({
+            msg: `Cuenta Inactiva. Comunicate con soporte IT`
+        });
+    }
+    
     //Validamos password
     const passwordvalid = await bcrypt.compare(password, uservalidlog.password);
     if (!passwordvalid) {
@@ -65,31 +73,36 @@ export const loginUser = async (req: Request, res: Response) => {
     //Si todo se cumplio vamos a la Generacion de token jwt 
     const token = Jwt.sign({
         username: username,
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F');
+        tdo:'hfgdbverig'
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
+
 };
 
-export const getUsers =async (req:Request,res:Response) => {
-        //Generamos la lista
-        const listU = await user.findAll({attributes: ['id', 'username', 'rol']});
-    
-        //Devolvemos la respuesta via JSON
-        res.json(listU);
+
+export const getUsers = async (req: Request, res: Response) => {
+    //Generamos la lista
+    const listU = await user.findAll({ attributes: ['id', 'username', 'rol'] });
+
+    //Devolvemos la respuesta via JSON
+    res.json(listU);
 }
 
 export const getUserById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const one = await user.findAll({attributes: ['id', 'username','rol'], where:{id:id}});
+    const { username } = req.params;
+    const one = await user.findOne({ attributes: ['rol'], where: { username: username,state:1 } });
 
     //validacion de existencia
     try {
         if (one) {
-            res.json(one);
+            const myString = JSON.stringify(one).slice(8, -2);
+            res.json(myString);
+
         } else {
 
             return res.status(404).json({
-                msg: `No existe el usuario`
+                msg: `No existe el usuario`  
             });
         }
     } catch (error) {
@@ -103,11 +116,11 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const one = await user.findOne({where:{id:id}});
+    const one = await user.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await user.destroy({where:{id:id}});
+            await user.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });

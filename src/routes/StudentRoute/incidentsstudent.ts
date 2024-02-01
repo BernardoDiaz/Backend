@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { getIncidents,getIncidentById,newIncident,updateIncident,deleteIncident } from '../../controllers/StudentControllers/incidentsstudent';
-//import validateToken from './validate-token';
+import validateToken from '../UserRoute/validate-token';
 
 const router = Router();
 
-router.get('/', getIncidents);
-router.get('/:id', getIncidentById);
-router.post('/', newIncident);
-router.put('/:id', updateIncident);
-router.delete('/:id', deleteIncident);
+router.get('/', validateToken,getIncidents);
+router.get('/:id', validateToken,getIncidentById);
+router.post('/', validateToken,newIncident);
+router.put('/:id', validateToken,updateIncident);
+router.delete('/:id', validateToken,deleteIncident);
 
  
 export default router;  

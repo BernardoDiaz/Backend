@@ -52,10 +52,17 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, rol } = req.body;
     //validar si el usuario existe en bd
     const uservalidlog = yield user_1.user.findOne({ where: { username: username } });
+    //Verificar si el usuario está activado
+    const userActivate = yield user_1.user.findOne({ where: { state: 1 } });
     //Si el user no existe
     if (!uservalidlog) {
         return res.status(400).json({
             msg: `No existe un usuario con el nombre ${username} registrado`
+        });
+    }
+    if (!userActivate) {
+        return res.status(400).json({
+            msg: `Cuenta Inactiva. Comunicate con soporte IT`
         });
     }
     //Validamos password
@@ -68,7 +75,8 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Si todo se cumplio vamos a la Generacion de token jwt 
     const token = jsonwebtoken_1.default.sign({
         username: username,
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F');
+        tdo: 'hfgdbverig'
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
 });
@@ -81,12 +89,13 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUsers = getUsers;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const one = yield user_1.user.findAll({ attributes: ['id', 'username', 'rol'], where: { id: id } });
+    const { username } = req.params;
+    const one = yield user_1.user.findOne({ attributes: ['rol'], where: { username: username, state: 1 } });
     //validacion de existencia
     try {
         if (one) {
-            res.json(one);
+            const myString = JSON.stringify(one).slice(8, -2);
+            res.json(myString);
         }
         else {
             return res.status(404).json({

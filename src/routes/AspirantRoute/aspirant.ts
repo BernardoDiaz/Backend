@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { deleteAspirant, getAspirantById, getAspirants, newAspirant, updateAspirant } from '../../controllers/AspirantControllers/aspirant';
-//import validateToken from './validate-token';
+import validateToken from '../UserRoute/validate-token';
 
 const router = Router();
 
-router.get('/', getAspirants);
-router.get('/:id', getAspirantById);
-router.post('/', newAspirant);
-router.put('/:id', updateAspirant);
-router.delete('/:id', deleteAspirant);
+router.get('/', validateToken,getAspirants);
+router.get('/:id', validateToken,getAspirantById);
+router.post('/', validateToken,newAspirant);
+router.put('/:id', validateToken,updateAspirant);
+router.delete('/:id', validateToken,deleteAspirant);
 
  
 export default router;  

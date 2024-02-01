@@ -20,5 +20,10 @@ import sequelize from "../../db/connection";
     rol:{
         type: DataTypes.STRING,
         allowNull: false
+    },
+    state:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false,
+        defaultValue:true
     }
 });

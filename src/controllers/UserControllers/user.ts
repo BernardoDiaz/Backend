@@ -102,7 +102,7 @@ export const getUserById = async (req: Request, res: Response) => {
         } else {
 
             return res.status(404).json({
-                msg: `No existe el usuario`  
+                msg: `No existe el usuario`
             });
         }
     } catch (error) {

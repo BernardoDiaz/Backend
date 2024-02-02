@@ -1,9 +1,11 @@
 import { Response, Request } from "express";
 import { subject } from "../models/subject";
+import { degree } from "../models/degree";
+import { seccion } from "../models/seccion";
 
 export const getSubjects = async (req: Request, res: Response) => {
 
-    const list = await subject.findAll({ attributes: ['id', 'name'] });
+    const list = await subject.findAll({ attributes: ['id', 'nameSubject'], include:[{model:degree,attributes:['id','name'],include:[{model:seccion,attributes:['name']}]}]});
 
     res.json(list);
 }
@@ -99,4 +101,4 @@ export const newSubject = async (req: Request, res: Response) => {
             error
         });
     }
-}; 
+};

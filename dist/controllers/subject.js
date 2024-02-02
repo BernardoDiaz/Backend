@@ -11,8 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newSubject = exports.updateSubject = exports.deleteSubject = exports.getSubjectById = exports.getSubjects = void 0;
 const subject_1 = require("../models/subject");
+const degree_1 = require("../models/degree");
+const seccion_1 = require("../models/seccion");
 const getSubjects = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const list = yield subject_1.subject.findAll({ attributes: ['id', 'name'] });
+    const list = yield subject_1.subject.findAll({ attributes: ['id', 'nameSubject'], include: [{ model: degree_1.degree, attributes: ['id', 'name'], include: [{ model: seccion_1.seccion, attributes: ['name'] }] }] });
     res.json(list);
 });
 exports.getSubjects = getSubjects;

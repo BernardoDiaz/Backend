@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.deleteUser = exports.getUserById = exports.getUsers = exports.loginUser = exports.newUser = void 0;
+exports.updateUser = exports.deleteUser = exports.getUserById = exports.getUsers = exports.loginTeacher = exports.loginUser = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../../models/usersModels/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const teacher_1 = require("../../models/teacher");
 //Metodo para crear nuevo usuario
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, rol } = req.body;
@@ -49,11 +50,11 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.newUser = newUser;
 //Metodo de loggin para usuarios y generacion de token
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password, rol } = req.body;
+    const { username, password } = req.body;
     //validar si el usuario existe en bd
     const uservalidlog = yield user_1.user.findOne({ where: { username: username } });
     //Verificar si el usuario está activado
-    const userActivate = yield user_1.user.findOne({ where: { state: 1 } });
+    const userActivate = yield user_1.user.findOne({ where: { username: username, state: 1 } });
     //Si el user no existe
     if (!uservalidlog) {
         return res.status(400).json({
@@ -81,6 +82,40 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(token);
 });
 exports.loginUser = loginUser;
+//Metodo de loggin para usuarios y generacion de token
+const loginTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, password } = req.body;
+    //validar si el usuario existe en bd
+    const uservalidlog = yield teacher_1.teacher.findOne({ where: { name: name } });
+    //Verificar si el usuario está activado
+    const userActivate = yield teacher_1.teacher.findOne({ where: { name: name, state: 1 } });
+    //Si el user no existe
+    if (!uservalidlog) {
+        return res.status(400).json({
+            msg: `No existe un maestro con el nombre ${name} registrado`
+        });
+    }
+    if (!userActivate) {
+        return res.status(400).json({
+            msg: `Cuenta Inactiva. Comunicate con soporte IT`
+        });
+    }
+    //Validamos password
+    const passwordvalid = yield bcrypt_1.default.compare(password, uservalidlog.password);
+    if (!passwordvalid) {
+        return res.status(400).json({
+            msg: `Tu contraseña no es correcta, intenta nuevamente`
+        });
+    }
+    //Si todo se cumplio vamos a la Generacion de token jwt 
+    const token = jsonwebtoken_1.default.sign({
+        name: name,
+        tdo: 'hfgdbverig'
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    //Devolvemos el token como respuesta via JSON
+    res.json(token);
+});
+exports.loginTeacher = loginTeacher;
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listU = yield user_1.user.findAll({ attributes: ['id', 'username', 'rol'] });

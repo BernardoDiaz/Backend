@@ -43,7 +43,7 @@ const getLevelById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getLevelById = getLevelById;
 const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, priceRegistration, priceFee } = req.body;
+    const { name, priceRegistration, priceFee, periodsToEvaluate } = req.body;
     //Validar nombre unico de nivel
     const namevalid = yield level_1.level.findOne({ where: { name: name } });
     if (namevalid) {
@@ -57,7 +57,8 @@ const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield level_1.level.create({
             name,
             priceRegistration,
-            priceFee
+            priceFee,
+            periodsToEvaluate
         });
         res.json({
             msg: `El nivel ${name} creado exitosamente`
@@ -97,11 +98,11 @@ const deleteLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.deleteLevel = deleteLevel;
 const updateLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, priceRegistration, priceFee } = req.body;
+    const { name, priceRegistration, priceFee, periodsToEvaluate } = req.body;
     const oneLevel = yield level_1.level.findOne({ where: { id: id } });
     try {
         if (oneLevel) {
-            yield level_1.level.update({ name, priceRegistration, priceFee }, { where: { id: id } });
+            yield level_1.level.update({ name, priceRegistration, priceFee, periodsToEvaluate }, { where: { id: id } });
             res.json({
                 msg: `Nivel academico, actualizado con exito`
             });

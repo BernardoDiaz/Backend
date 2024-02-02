@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 import { user } from "../../models/usersModels/user";
 import Jwt from "jsonwebtoken";
+import { teacher } from "../../models/teacher";
 
 //Metodo para crear nuevo usuario
 export const newUser = async (req: Request, res: Response) => {
@@ -43,12 +44,12 @@ export const newUser = async (req: Request, res: Response) => {
 //Metodo de loggin para usuarios y generacion de token
 export const loginUser = async (req: Request, res: Response) => {
 
-    const { username, password, rol } = req.body;
+    const { username, password } = req.body;
 
     //validar si el usuario existe en bd
     const uservalidlog: any = await user.findOne({ where: { username: username } });
     //Verificar si el usuario está activado
-    const userActivate: any = await user.findOne({ where: { state: 1 } });
+    const userActivate: any = await user.findOne({ where: { username:username,state: 1 } });
 
     //Si el user no existe
     if (!uservalidlog) {
@@ -80,6 +81,45 @@ export const loginUser = async (req: Request, res: Response) => {
 
 };
 
+//Metodo de loggin para usuarios y generacion de token
+export const loginTeacher = async (req: Request, res: Response) => {
+
+    const { name, password } = req.body;
+
+    //validar si el usuario existe en bd
+    const uservalidlog: any = await teacher.findOne({ where: { name: name } });
+    //Verificar si el usuario está activado
+    const userActivate: any = await teacher.findOne({ where: { name:name,state: 1 } });
+
+    //Si el user no existe
+    if (!uservalidlog) {
+        return res.status(400).json({
+            msg: `No existe un maestro con el nombre ${name} registrado`
+        });
+    }
+
+    if (!userActivate) {
+        return res.status(400).json({
+            msg: `Cuenta Inactiva. Comunicate con soporte IT`
+        });
+    }
+    
+    //Validamos password
+    const passwordvalid = await bcrypt.compare(password, uservalidlog.password);
+    if (!passwordvalid) {
+        return res.status(400).json({
+            msg: `Tu contraseña no es correcta, intenta nuevamente`
+        })
+    }
+    //Si todo se cumplio vamos a la Generacion de token jwt 
+    const token = Jwt.sign({
+        name: name,
+        tdo:'hfgdbverig'
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    //Devolvemos el token como respuesta via JSON
+    res.json(token);
+
+};
 
 export const getUsers = async (req: Request, res: Response) => {
     //Generamos la lista

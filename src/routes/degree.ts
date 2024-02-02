@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', validateToken,getDegrees);
 router.get('/:id',validateToken,getDegreeById);
 router.put('/:id',validateToken,updateDegree);
-router.get('/:idLevel', validateToken,getDegreeByLevel);
+router.get('/lv/:idLevel', validateToken,getDegreeByLevel);
 router.post('/', validateToken,newDegree);
 router.delete('/:id',validateToken,deleteDegree);
 

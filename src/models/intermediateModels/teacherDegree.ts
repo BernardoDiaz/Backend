@@ -26,23 +26,23 @@ export const DegreeAssignment = sequelize.define('DegreeAssignment',{
 degree.hasOne(DegreeAssignment, {
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+     onDelete: 'NO ACTION'
 });
 
 DegreeAssignment.belongsTo(degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+     onDelete: 'NO ACTION'
 });
 
 teacher.hasOne(DegreeAssignment, {
     foreignKey: 'id_teacher',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+     onDelete: 'NO ACTION'
 });
 
 DegreeAssignment.belongsTo(teacher, {
     foreignKey: 'id_teacher',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
-});
+     onDelete: 'NO ACTION' 
+}); 

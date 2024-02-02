@@ -30,20 +30,20 @@ exports.DegreeAssignment = connection_1.default.define('DegreeAssignment', {
 degree_1.degree.hasOne(exports.DegreeAssignment, {
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'NO ACTION'
 });
 exports.DegreeAssignment.belongsTo(degree_1.degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'NO ACTION'
 });
 teacher_1.teacher.hasOne(exports.DegreeAssignment, {
     foreignKey: 'id_teacher',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'NO ACTION'
 });
 exports.DegreeAssignment.belongsTo(teacher_1.teacher, {
     foreignKey: 'id_teacher',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'NO ACTION'
 });

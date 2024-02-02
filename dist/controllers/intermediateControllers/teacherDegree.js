@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newTD = exports.getTD = exports.getTeachers = void 0;
+exports.deleteTD = exports.newTD = exports.getTD = exports.getTeachers = void 0;
 const teacherDegree_1 = require("../../models/intermediateModels/teacherDegree");
 const teacher_1 = require("../../models/teacher");
 const degree_1 = require("../../models/degree");
@@ -18,7 +18,7 @@ const level_1 = require("../../models/level");
 const getTeachers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const list = yield teacher_1.teacher.findAll({
-            attributes: ['name', 'lastname'],
+            attributes: ['id', 'name', 'lastname', 'state'],
             include: [{
                     model: level_1.level,
                     attributes: ['name']
@@ -80,3 +80,27 @@ const newTD = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.newTD = newTD;
+const deleteTD = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const one = yield teacherDegree_1.DegreeAssignment.findOne({ where: { id: id } });
+    try {
+        if (one) {
+            yield teacherDegree_1.DegreeAssignment.destroy({ where: { id: id } });
+            res.json({
+                msg: `Eliminado con exito`
+            });
+        }
+        else {
+            res.status(404).json({
+                msg: `El aspirante ya no existe`
+            });
+        }
+    }
+    catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error al eliminar`,
+            error
+        });
+    }
+});
+exports.deleteTD = deleteTD;

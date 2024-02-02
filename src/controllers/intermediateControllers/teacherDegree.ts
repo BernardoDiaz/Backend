@@ -10,7 +10,7 @@ export const getTeachers =async (req:Request,res:Response) => {
     
     try {
         const list = await teacher.findAll({
-            attributes:['name','lastname'],
+            attributes:['id','name','lastname','state'],
             include:[{
                 model:level,
                 attributes:['name']
@@ -67,6 +67,29 @@ export const newTD = async (req:Request,res:Response) => {
     } catch (error) {
         res.json({
             msg:'No se puedo asignar el grado',
+            error
+        });
+    }
+};
+
+export const deleteTD = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const one = await DegreeAssignment.findOne({ where: { id: id } });
+
+    try {
+        if (one) {
+            await DegreeAssignment.destroy({ where: { id: id } });
+            res.json({
+                msg: `Eliminado con exito`
+            });
+        } else {
+            res.status(404).json({
+                msg: `El aspirante ya no existe`
+            });
+        }
+    } catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error al eliminar`,
             error
         });
     }

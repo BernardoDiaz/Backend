@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newTeacher = exports.getDegreeTeacher = exports.getTeacher = void 0;
+exports.stateTeacher = exports.updateTeacher = exports.deleteTeacher = exports.newTeacher = exports.getDegreeTeacher = exports.getTeacher = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const level_1 = require("../models/level");
 const teacher_1 = require("../models/teacher");
@@ -24,7 +24,8 @@ const sequelize_1 = require("sequelize");
 const getTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const list = yield teacher_1.teacher.findAll({
-        attributes: ['id', 'name', 'lastname', 'id_level'],
+        attributes: ['id', 'name', 'lastname', 'id_level', 'state'],
+        where: { state: true }
     });
     //Devolvemos la respuesta via JSON
     res.json(list);
@@ -82,3 +83,73 @@ const newTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.newTeacher = newTeacher;
+const deleteTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const one = yield teacher_1.teacher.findOne({ where: { id: id } });
+    try {
+        if (one) {
+            yield teacher_1.teacher.destroy({ where: { id: id } });
+            res.json({
+                msg: `Eliminado con exito`
+            });
+        }
+        else {
+            res.status(404).json({
+                msg: `El aspirante ya no existe`
+            });
+        }
+    }
+    catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error al eliminar`,
+            error
+        });
+    }
+});
+exports.deleteTeacher = deleteTeacher;
+const updateTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name, lastname, id_level } = req.body;
+    const one = yield teacher_1.teacher.findOne({ where: { id: id } });
+    try {
+        if (one) {
+            yield teacher_1.teacher.update({ name, lastname, id_level }, { where: { id: id } });
+            res.json({
+                msg: `Informacion actualizada con exito`
+            });
+        }
+        else {
+            return res.status(404).json({
+                msg: `No existe un registro`,
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al editar`,
+            error
+        });
+    }
+});
+exports.updateTeacher = updateTeacher;
+const stateTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const one = yield teacher_1.teacher.findOne({ where: { id: id } });
+    try {
+        if (one) {
+            const currentState = one.get('state');
+            const newState = !currentState;
+            yield teacher_1.teacher.update({ state: newState }, { where: { id: id } });
+            res.json({
+                msg: `Cambio Realizado`
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+});
+exports.stateTeacher = stateTeacher;

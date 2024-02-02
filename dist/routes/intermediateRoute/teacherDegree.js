@@ -10,4 +10,5 @@ const router = (0, express_1.Router)();
 router.get('/teacher', validate_token_1.default, teacherDegree_1.getTeachers);
 router.get('/', validate_token_1.default, teacherDegree_1.getTD);
 router.post('/', validate_token_1.default, teacherDegree_1.newTD);
+router.delete('/dt/:id', validate_token_1.default, teacherDegree_1.deleteTD);
 exports.default = router;

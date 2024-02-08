@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTD = exports.newTD = exports.getTD = exports.getTeachers = void 0;
+exports.subjectByDegree = exports.deleteTD = exports.newTD = exports.getTD = exports.getTeachers = void 0;
 const teacherDegree_1 = require("../../models/intermediateModels/teacherDegree");
 const teacher_1 = require("../../models/teacher");
 const degree_1 = require("../../models/degree");
 const seccion_1 = require("../../models/seccion");
 const level_1 = require("../../models/level");
+const subject_1 = require("../../models/subject");
 const getTeachers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const list = yield teacher_1.teacher.findAll({
@@ -104,3 +105,25 @@ const deleteTD = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteTD = deleteTD;
+const subjectByDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idTeacher } = req.params;
+    try {
+        const list = yield teacherDegree_1.DegreeAssignment.findAll({
+            attributes: ['id_degree'],
+            where: { id_teacher: idTeacher },
+            include: [{
+                    model: degree_1.degree, attributes: ['name'],
+                    include: [{ model: seccion_1.seccion, attributes: ['name'] },
+                        { model: subject_1.subject, attributes: ['id', 'namesubject'] }]
+                }]
+        });
+        res.json(list);
+    }
+    catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+});
+exports.subjectByDegree = subjectByDegree;

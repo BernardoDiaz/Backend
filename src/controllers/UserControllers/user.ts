@@ -75,7 +75,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = Jwt.sign({
         username: username,
         tdo:'hfgdbverig'
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', );//{ expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
 
@@ -115,7 +115,7 @@ export const loginTeacher = async (req: Request, res: Response) => {
     const token = Jwt.sign({
         name: name,
         tdo:'hfgdbverig'
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', );//{ expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
 
@@ -137,6 +137,31 @@ export const getUserById = async (req: Request, res: Response) => {
     try {
         if (one) {
             const myString = JSON.stringify(one).slice(8, -2);
+            res.json(myString);
+
+        } else {
+
+            return res.status(404).json({
+                msg: `No existe el usuario`
+            });
+        }
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al buscar el usuario`
+        });
+    }
+
+
+};
+
+export const getTeacherById = async (req: Request, res: Response) => {
+    const { name } = req.params;
+    const one = await teacher.findOne({ attributes: ['id'], where: { name: name,state:1 } });
+
+    //validacion de existencia
+    try {
+        if (one) {
+            const myString = JSON.stringify(one).slice(6,-1);
             res.json(myString);
 
         } else {

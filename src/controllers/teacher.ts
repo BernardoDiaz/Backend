@@ -63,6 +63,15 @@ export const newTeacher = async (req: Request, res: Response) => {
 
     const { name, lastname, password, id_level } = req.body;
 
+      //Validacion de usuario
+      const uservalid = await teacher.findOne({ where: { name: name } });
+
+      if (uservalid) {
+          return res.status(400).json({
+              msg: `Ya existe un usuario con el nombre ${name}`
+          });
+      }
+
     const hastPassword = await bcrypt.hash(password, 10);
     try {
         await teacher.create({

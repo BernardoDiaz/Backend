@@ -1,23 +1,25 @@
-import { Response,Request } from "express";
+import { Response, Request } from "express";
 import { DegreeAssignment } from "../../models/intermediateModels/teacherDegree";
 import { teacher } from "../../models/teacher";
 import { degree } from "../../models/degree";
 import { seccion } from "../../models/seccion";
 import { level } from "../../models/level";
- 
+import { subject } from "../../models/subject";
+import { where } from "sequelize";
 
-export const getTeachers =async (req:Request,res:Response) => {
-    
+
+export const getTeachers = async (req: Request, res: Response) => {
+
     try {
         const list = await teacher.findAll({
-            attributes:['id','name','lastname','state'],
-            include:[{
-                model:level,
-                attributes:['name']
+            attributes: ['id', 'name', 'lastname', 'state'],
+            include: [{
+                model: level,
+                attributes: ['name']
             }]
         });
-            res.json(list);
-        
+        res.json(list);
+
     } catch (error) {
         res.json({
             msg: "Ocurrio un error al traer la informacion",
@@ -26,24 +28,24 @@ export const getTeachers =async (req:Request,res:Response) => {
     }
 };
 
-export const getTD = async (req:Request,res:Response) => {
+export const getTD = async (req: Request, res: Response) => {
     try {
         const list = await DegreeAssignment.findAll({
-            attributes:['id','year'],
-            include:[{
-                model:teacher,
-                attributes:['name','lastname']
-            },{
-                model:degree,
-                attributes:['name'],
-                include:[{
-                    model:seccion,
-                    attributes:['name']
+            attributes: ['id', 'year'],
+            include: [{
+                model: teacher,
+                attributes: ['name', 'lastname']
+            }, {
+                model: degree,
+                attributes: ['name'],
+                include: [{
+                    model: seccion,
+                    attributes: ['name']
                 }]
             }]
         });
-            res.json(list);
-        
+        res.json(list);
+
     } catch (error) {
         res.json({
             msg: "Ocurrio un error al traer la informacion",
@@ -52,9 +54,9 @@ export const getTD = async (req:Request,res:Response) => {
     }
 };
 
-export const newTD = async (req:Request,res:Response) => {
-    
-    const {id_teacher,id_degree,year} = req.body;
+export const newTD = async (req: Request, res: Response) => {
+
+    const { id_teacher, id_degree, year } = req.body;
     try {
         await DegreeAssignment.create({
             id_teacher,
@@ -62,11 +64,11 @@ export const newTD = async (req:Request,res:Response) => {
             year
         });
         res.json({
-            msg:` Grado asignado exitosamente`
+            msg: ` Grado asignado exitosamente`
         });
     } catch (error) {
         res.json({
-            msg:'No se puedo asignar el grado',
+            msg: 'No se puedo asignar el grado',
             error
         });
     }
@@ -94,3 +96,29 @@ export const deleteTD = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const subjectByDegree = async (req: Request, res: Response) => {
+
+    const { idTeacher } = req.params;
+
+    try {
+
+        const list = await DegreeAssignment.findAll({
+            attributes: ['id_degree'],
+            where: { id_teacher: idTeacher },
+            include: [{
+                model: degree, attributes: ['name'],
+                include: [{ model: seccion, attributes: ['name'] },
+                {model:subject,attributes:['id','namesubject']}]
+            }]
+        });
+
+        res.json(list);
+
+    } catch (error) {
+        res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        })
+    }
+}

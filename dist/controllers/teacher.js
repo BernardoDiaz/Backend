@@ -63,6 +63,13 @@ const getDegreeTeacher = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.getDegreeTeacher = getDegreeTeacher;
 const newTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, lastname, password, id_level } = req.body;
+    //Validacion de usuario
+    const uservalid = yield teacher_1.teacher.findOne({ where: { name: name } });
+    if (uservalid) {
+        return res.status(400).json({
+            msg: `Ya existe un usuario con el nombre ${name}`
+        });
+    }
     const hastPassword = yield bcrypt_1.default.hash(password, 10);
     try {
         yield teacher_1.teacher.create({

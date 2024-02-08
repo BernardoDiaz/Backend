@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.deleteUser = exports.getUserById = exports.getUsers = exports.loginTeacher = exports.loginUser = exports.newUser = void 0;
+exports.updateUser = exports.deleteUser = exports.getTeacherById = exports.getUserById = exports.getUsers = exports.loginTeacher = exports.loginUser = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../../models/usersModels/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -77,7 +77,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({
         username: username,
         tdo: 'hfgdbverig'
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F'); //{ expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
 });
@@ -111,7 +111,7 @@ const loginTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const token = jsonwebtoken_1.default.sign({
         name: name,
         tdo: 'hfgdbverig'
-    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F', { expiresIn: 1800 });
+    }, process.env.SECRET_KEY || '6KgpWr@TtNW4LKMKC5J8o6b6F'); //{ expiresIn: 1800 });
     //Devolvemos el token como respuesta via JSON
     res.json(token);
 });
@@ -145,6 +145,28 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getUserById = getUserById;
+const getTeacherById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name } = req.params;
+    const one = yield teacher_1.teacher.findOne({ attributes: ['id'], where: { name: name, state: 1 } });
+    //validacion de existencia
+    try {
+        if (one) {
+            const myString = JSON.stringify(one).slice(6, -1);
+            res.json(myString);
+        }
+        else {
+            return res.status(404).json({
+                msg: `No existe el usuario`
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al buscar el usuario`
+        });
+    }
+});
+exports.getTeacherById = getTeacherById;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const one = yield user_1.user.findOne({ where: { id: id } });

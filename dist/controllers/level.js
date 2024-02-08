@@ -13,6 +13,8 @@ exports.getDegree = exports.updateLevel = exports.deleteLevel = exports.newLevel
 const level_1 = require("../models/level");
 const degree_1 = require("../models/degree");
 const seccion_1 = require("../models/seccion");
+const sequelize_1 = require("sequelize");
+const subject_1 = require("../models/subject");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listLevel = yield level_1.level.findAll({
         attributes: ['id', 'name', 'priceRegistration', 'priceFee', 'periodsToEvaluate'],
@@ -122,13 +124,19 @@ const updateLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.updateLevel = updateLevel;
 const getDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idDegrees = yield subject_1.subject.findAll({ attributes: ['id_degree'] });
+    // Extraemos solo los valores de id_degree
+    const idDegreeValues = idDegrees.map((subject) => {
+        const SubjectDegreeValue = subject.get({ plain: true });
+        return SubjectDegreeValue.id_degree;
+    });
     try {
         const { idLevel } = req.params;
         //Generamos la lista
         const list = yield degree_1.degree.findAll({
             attributes: ['id', 'name'],
             include: [{ model: seccion_1.seccion, attributes: ['name'] }],
-            where: { id_level: idLevel }
+            where: { id_level: idLevel, id: { [sequelize_1.Op.notIn]: idDegreeValues } }
         });
         //Devolvemos la respuesta via JSON
         res.json(list);

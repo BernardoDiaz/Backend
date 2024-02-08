@@ -8,6 +8,7 @@ const teacherDegree_1 = require("../../controllers/intermediateControllers/teach
 const validate_token_1 = __importDefault(require("../UserRoute/validate-token"));
 const router = (0, express_1.Router)();
 router.get('/teacher', validate_token_1.default, teacherDegree_1.getTeachers);
+router.get('/subject/:idTeacher', validate_token_1.default, teacherDegree_1.subjectByDegree);
 router.get('/', validate_token_1.default, teacherDegree_1.getTD);
 router.post('/', validate_token_1.default, teacherDegree_1.newTD);
 router.delete('/dt/:id', validate_token_1.default, teacherDegree_1.deleteTD);

@@ -2,6 +2,8 @@ import { Response, Request } from "express";
 import { level } from "../models/level";
 import { degree } from "../models/degree";
 import { seccion } from "../models/seccion";
+import { Model, Op } from "sequelize";
+import { subject } from "../models/subject";
 
 export const getLevels = async (req: Request, res: Response) => {
 
@@ -118,7 +120,21 @@ export const updateLevel = async (req: Request, res: Response) => {
     }
 };
 
+
+interface IDSubjectDegree {
+    id_degree: number;
+    // Agrega aquí cualquier otro campo que necesites
+}
+
 export const getDegree = async (req: Request, res: Response) => {
+
+    const idDegrees = await subject.findAll({ attributes: ['id_degree'] });
+
+    // Extraemos solo los valores de id_degree
+    const idDegreeValues = idDegrees.map((subject: Model) => {
+        const SubjectDegreeValue: IDSubjectDegree = subject.get({ plain: true });
+        return SubjectDegreeValue.id_degree;
+    });
 
     try {
         const { idLevel } = req.params;
@@ -126,7 +142,7 @@ export const getDegree = async (req: Request, res: Response) => {
         const list = await degree.findAll({
             attributes: ['id', 'name'],
             include: [{ model: seccion, attributes: ['name'] }],
-            where: { id_level: idLevel }
+            where: { id_level: idLevel, id:{[Op.notIn]:idDegreeValues} }
         });
 
         //Devolvemos la respuesta via JSON

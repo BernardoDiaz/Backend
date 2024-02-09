@@ -34,6 +34,7 @@ const pago_1 = __importDefault(require("../routes/PaymentsRoute/pago"));
 const seatchs_1 = __importDefault(require("../routes/searchRoute/seatchs"));
 const generatePDF_1 = __importDefault(require("../routes/ReportsRoute/generatePDF"));
 const teacherDegree_1 = __importDefault(require("../routes/intermediateRoute/teacherDegree"));
+const qualifications_1 = __importDefault(require("../routes/qualifications"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -54,6 +55,7 @@ const pago_2 = require("./pago");
 const generatePDF_2 = require("./ReportsModel/generatePDF");
 const teacher_2 = require("./teacher");
 const teacherDegree_2 = require("./intermediateModels/teacherDegree");
+const qualifications_2 = require("./qualifications");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -98,6 +100,7 @@ class Server {
         this.app.use('/api/gpdf', generatePDF_1.default);
         this.app.use('/api/teacher', teacher_1.default);
         this.app.use('/api/assig', teacherDegree_1.default);
+        this.app.use('/api/qualification', qualifications_1.default);
     }
     ;
     midlewares() {
@@ -124,7 +127,7 @@ class Server {
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();
                 yield studentdata_2.studentdata.sync();
-                //await ratingstudent.sync(); 
+                yield qualifications_2.qualifications.sync();
                 yield pago_2.payment.sync();
                 yield categorias_2.category.sync();
                 yield productos_2.product.sync();

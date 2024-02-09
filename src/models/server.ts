@@ -19,6 +19,7 @@ import routesPayment  from '../routes/PaymentsRoute/pago';
 import routesSearch from '../routes/searchRoute/seatchs';
 import routesPDF from '../routes/ReportsRoute/generatePDF';
 import routesAssigment from '../routes/intermediateRoute/teacherDegree';
+import routesQualification from '../routes/qualifications';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -39,6 +40,7 @@ import { payment } from './pago';
 import { generatePDF } from './ReportsModel/generatePDF';
 import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';
+import { qualifications } from './qualifications';
 
 class Server {
     private app: express.Application;
@@ -91,6 +93,7 @@ class Server {
         this.app.use('/api/teacher',routesTeacher);
 
         this.app.use('/api/assig', routesAssigment);
+        this.app.use('/api/qualification', routesQualification);
 
 
     };
@@ -120,14 +123,14 @@ class Server {
             await student.sync();
             await registration.sync();
             await studentdata.sync();
-            //await ratingstudent.sync(); 
+            await qualifications.sync(); 
             
             await payment.sync();
             await category.sync();
             await product.sync();
             await detailsPayment.sync();
             await planPayment.sync(); 
-            await generatePDF.sync();
+            await generatePDF.sync(); 
 
 
 

@@ -113,6 +113,7 @@ const subjectByDegree = (req, res) => __awaiter(void 0, void 0, void 0, function
             where: { id_teacher: idTeacher },
             include: [{
                     model: degree_1.degree, attributes: ['name'],
+                    order: [['name', 'ASC']],
                     include: [{ model: seccion_1.seccion, attributes: ['name'] },
                         { model: subject_1.subject, attributes: ['id', 'namesubject'] }]
                 }]

@@ -8,13 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyQualification = exports.GenerateQualification = void 0;
+exports.searchSubject = exports.periodToDegree = exports.verifyQualification = exports.GenerateQualification = void 0;
 const qualifications_1 = require("../models/qualifications");
 const level_1 = require("../models/level");
 const degree_1 = require("../models/degree");
 const subject_1 = require("../models/subject");
 const matricula_1 = require("../models/paymentsModels/matricula");
+const sequelize_1 = require("sequelize");
+const connection_1 = __importDefault(require("../db/connection"));
 const GenerateQualification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { IdDegree } = req.params;
     const year = new Date().getFullYear();
@@ -88,3 +93,49 @@ const verifyQualification = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.verifyQualification = verifyQualification;
+const periodToDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { IdDegree } = req.params;
+    try {
+        const list = yield qualifications_1.qualifications.findAll({
+            attributes: ['period'],
+            where: { id_degree: IdDegree },
+            group: ['period'],
+        });
+        res.json(list);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al traer los periodos',
+            error,
+        });
+    }
+});
+exports.periodToDegree = periodToDegree;
+const searchSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { IdDegree, IdSubject, period } = req.params;
+    try {
+        const query = `
+          SELECT  q.id AS Id, CONCAT(s.lastname, ' ', s.name) AS studentFullName,
+                 ss.nameSubject AS subjectName,
+                 q.rating
+          FROM proyectlrd.qualifications AS q
+          INNER JOIN registrations AS r ON q.id_registration = r.id
+          INNER JOIN students AS s ON r.id_student = s.id
+          INNER JOIN subjects AS ss ON q.id_subject = ss.id
+          WHERE q.id_degree = ${IdDegree}
+            AND q.period = '${period}'
+            AND ss.id = ${IdSubject}
+          ORDER BY s.lastname ASC
+        `;
+        const results = yield connection_1.default.query(query, { type: sequelize_1.QueryTypes.SELECT });
+        // Aquí puedes hacer lo que necesites con los resultados obtenidos
+        res.json(results);
+    }
+    catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al traer los registros',
+            error,
+        });
+    }
+});
+exports.searchSubject = searchSubject;

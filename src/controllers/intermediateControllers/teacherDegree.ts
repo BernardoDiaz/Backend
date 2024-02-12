@@ -108,6 +108,7 @@ export const subjectByDegree = async (req: Request, res: Response) => {
             where: { id_teacher: idTeacher },
             include: [{
                 model: degree, attributes: ['name'],
+                order: [['name', 'ASC']],
                 include: [{ model: seccion, attributes: ['name'] },
                 {model:subject,attributes:['id','namesubject']}]
             }]

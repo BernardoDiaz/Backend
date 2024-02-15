@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchSubject = exports.periodToDegree = exports.verifyQualification = exports.GenerateQualification = void 0;
+exports.updateQualification = exports.searchSubject = exports.periodToDegree = exports.verifyQualification = exports.GenerateQualification = void 0;
 const qualifications_1 = require("../models/qualifications");
 const level_1 = require("../models/level");
 const degree_1 = require("../models/degree");
@@ -139,3 +139,20 @@ const searchSubject = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.searchSubject = searchSubject;
+const updateQualification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { Qualifications } = req.body;
+        // Itera sobre cada calificación y actualiza el registro correspondiente
+        for (const registros of Qualifications) {
+            const { id, rating } = registros;
+            // Actualiza la calificación en la base de datos
+            yield qualifications_1.qualifications.update({ rating }, { where: { id: id } });
+        }
+        res.status(200).json({ message: 'Calificaciones ingresadas' });
+    }
+    catch (error) {
+        console.error('Error al actualizar las calificaciones:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.updateQualification = updateQualification;

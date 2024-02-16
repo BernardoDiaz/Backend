@@ -44,11 +44,13 @@ import { qualifications } from './qualifications';
 
 class Server {
     private app: express.Application;
-    private port: string;
+    private port: number;
+    private host:string;
 
     constructor() {
         this.app = express();
-        this.port = process.env.PORT || '3001';
+        this.port = parseInt(process.env.PORT as string, 10) || 3000;
+        this.host = '0.0.0.0';
         this.listen();
         this.midlewares();
         this.routes();
@@ -56,7 +58,7 @@ class Server {
     };
 
     listen() {
-        this.app.listen(this.port, () => {
+        this.app.listen(this.port,this.host, () => {
             console.log('port ' + this.port);
         });
     };

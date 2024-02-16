@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateQualification = exports.searchSubject = exports.periodToDegree = exports.verifyQualification = exports.GenerateQualification = void 0;
+exports.QualificationsByPeriod = exports.updateQualification = exports.searchSubject = exports.periodToDegree = exports.verifyQualification = exports.GenerateQualification = void 0;
 const qualifications_1 = require("../models/qualifications");
 const level_1 = require("../models/level");
 const degree_1 = require("../models/degree");
 const subject_1 = require("../models/subject");
 const matricula_1 = require("../models/paymentsModels/matricula");
-const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
+const sequelize_1 = require("sequelize");
 const GenerateQualification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { IdDegree } = req.params;
     const year = new Date().getFullYear();
@@ -156,3 +156,71 @@ const updateQualification = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.updateQualification = updateQualification;
+const QualificationsByPeriod = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_degree, id_subject } = req.params;
+    try {
+        const subQuery = `
+            SELECT
+                CONCAT(s.lastname, ' ', s.name) AS alumno,
+                q.rating,
+                q.period
+            FROM
+                proyectlrd.qualifications AS q
+            INNER JOIN
+                registrations AS r ON q.id_registration = r.id
+            INNER JOIN
+                students AS s ON r.id_student = s.id
+            INNER JOIN
+                degrees AS d ON d.id = q.id_degree
+            INNER JOIN
+                seccions AS ss ON ss.id = d.id_seccion
+            INNER JOIN
+                subjects AS sb ON q.id_subject = sb.id
+            WHERE
+                q.id_degree = ${id_degree}
+                AND q.id_subject = ${id_subject}
+        `;
+        const dynamicColumnsQuery = `
+            SELECT
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'MAX(CASE WHEN period = ''',
+                        period,
+                        ''' THEN rating END) AS ',
+                        QUOTE(period)
+                    )
+                ) AS dynamicColumns
+            FROM (${subQuery}) AS SourceTable
+        `;
+        const [dynamicColumnsResult] = yield connection_1.default.query(dynamicColumnsQuery, { type: sequelize_1.QueryTypes.SELECT });
+        const dynamicColumns = dynamicColumnsResult.dynamicColumns;
+        const finalQuery = `
+            SELECT
+                alumno, ${dynamicColumns}
+            FROM
+                (${subQuery}) AS SourceTable
+            GROUP BY alumno ORDER BY alumno ASC;
+        `;
+        const [results] = yield connection_1.default.query(finalQuery);
+        // Mapeamos los resultados para transformar la estructura
+        const mappedResults = results.map((item) => {
+            const periods = {};
+            // Iteramos sobre las claves del objeto y omitimos la clave "alumno"
+            Object.keys(item).forEach(key => {
+                if (key !== 'alumno') {
+                    periods[key] = item[key];
+                }
+            });
+            return {
+                alumno: item.alumno,
+                periods: periods,
+                size: Object.keys(periods).length
+            };
+        });
+        res.json(mappedResults);
+    }
+    catch (error) {
+        console.error('Error executing query:', error);
+    }
+});
+exports.QualificationsByPeriod = QualificationsByPeriod;

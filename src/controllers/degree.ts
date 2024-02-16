@@ -25,20 +25,26 @@ export const getDegrees = async (req: Request, res: Response) => {
 };
 
 export const getDegreeByLevel = async (req: Request, res: Response) => {
-    const {idLevel} = req.params;
+    const {id} = req.params;
     //Generamos la lista
-    const listDegree = await level.findAll({
-        attributes: ['id','PriceRegistration', 'priceFee'],
-        include: [
-            {
-                attributes:[],
-                model: degree, 
-                where:{id_level:idLevel}
-            }],
+
+    const list = await degree.findOne({
+        attributes:[],
+        include:[{
+            model:level,
+            attributes: ['id','priceRegistration', 'priceFee']
+        }],
+        where:{id:id}
     });
 
+    const data = {
+        id: list?.level?.id,
+        priceRegistration: list?.level?.priceRegistration,
+        priceFee: list?.level?.priceFee
+    };
+
     //Devolvemos la respuesta via JSON
-    res.json(listDegree);
+    res.json(data);
 };
 
 export const getDegreeById = async (req: Request, res: Response) => {

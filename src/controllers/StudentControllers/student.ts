@@ -220,3 +220,28 @@ export const updateStudent = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getStudentByDegree = async (req:Request,res:Response) => {
+    
+    const {IdDegree} = req.params
+
+    try {
+        const list = await registration.findAll({
+            attributes:[],
+            where:{id_degree:IdDegree},
+            include:[{
+                model: student,
+                attributes:['id','name','lastname'],
+                order:['lastname','ASC']
+            }]
+        });
+
+        res.status(200).json(list);
+        
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+}

@@ -35,20 +35,24 @@ const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getDegrees = getDegrees;
 const getDegreeByLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { idLevel } = req.params;
+    var _a, _b, _c;
+    const { id } = req.params;
     //Generamos la lista
-    const listDegree = yield level_1.level.findAll({
-        attributes: ['id', 'PriceRegistration', 'priceFee'],
-        include: [
-            {
-                attributes: [],
-                model: degree_1.degree,
-                where: { id_level: idLevel }
-            }
-        ],
+    const list = yield degree_1.degree.findOne({
+        attributes: [],
+        include: [{
+                model: level_1.level,
+                attributes: ['id', 'priceRegistration', 'priceFee']
+            }],
+        where: { id: id }
     });
+    const data = {
+        id: (_a = list === null || list === void 0 ? void 0 : list.level) === null || _a === void 0 ? void 0 : _a.id,
+        priceRegistration: (_b = list === null || list === void 0 ? void 0 : list.level) === null || _b === void 0 ? void 0 : _b.priceRegistration,
+        priceFee: (_c = list === null || list === void 0 ? void 0 : list.level) === null || _c === void 0 ? void 0 : _c.priceFee
+    };
     //Devolvemos la respuesta via JSON
-    res.json(listDegree);
+    res.json(data);
 });
 exports.getDegreeByLevel = getDegreeByLevel;
 const getDegreeById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

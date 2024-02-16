@@ -12,4 +12,5 @@ router.get('/ptd/:IdDegree', validate_token_1.default, qualifications_1.periodTo
 router.get('/registro/:IdDegree/:IdSubject/:period', validate_token_1.default, qualifications_1.searchSubject);
 router.get('/vf/:IdDegree', validate_token_1.default, qualifications_1.verifyQualification);
 router.put('/', validate_token_1.default, qualifications_1.updateQualification);
+router.get('/notas/:id_degree/:id_subject', validate_token_1.default, qualifications_1.QualificationsByPeriod);
 exports.default = router;

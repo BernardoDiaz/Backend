@@ -9,6 +9,7 @@ const validate_token_1 = __importDefault(require("../UserRoute/validate-token"))
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, student_1.getStudents);
 router.get('/:id', validate_token_1.default, student_1.getStudentById);
+router.get('/sbd/:IdDegree', validate_token_1.default, student_1.getStudentByDegree);
 router.post('/', validate_token_1.default, student_1.newStudent);
 router.post('/newR', validate_token_1.default, student_1.newRegistration);
 router.put('/:id', validate_token_1.default, student_1.updateStudent);

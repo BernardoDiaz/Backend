@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudent = exports.deleteStudent = exports.newRegistration = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
+exports.getStudentByDegree = exports.updateStudent = exports.deleteStudent = exports.newRegistration = exports.newStudent = exports.getStudentById = exports.getStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const shortid = __importStar(require("shortid"));
@@ -237,3 +237,25 @@ const updateStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateStudent = updateStudent;
+const getStudentByDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { IdDegree } = req.params;
+    try {
+        const list = yield matricula_1.registration.findAll({
+            attributes: [],
+            where: { id_degree: IdDegree },
+            include: [{
+                    model: student_1.student,
+                    attributes: ['id', 'name', 'lastname'],
+                    order: ['lastname', 'ASC']
+                }]
+        });
+        res.status(200).json(list);
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error`,
+            error
+        });
+    }
+});
+exports.getStudentByDegree = getStudentByDegree;

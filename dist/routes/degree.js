@@ -10,7 +10,7 @@ const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, degree_1.getDegrees);
 router.get('/:id', validate_token_1.default, degree_1.getDegreeById);
 router.put('/:id', validate_token_1.default, degree_1.updateDegree);
-router.get('/lv/:idLevel', validate_token_1.default, degree_1.getDegreeByLevel);
+router.get('/lv/:id', validate_token_1.default, degree_1.getDegreeByLevel);
 router.post('/', validate_token_1.default, degree_1.newDegree);
 router.delete('/:id', validate_token_1.default, degree_1.deleteDegree);
 exports.default = router;

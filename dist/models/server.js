@@ -59,7 +59,7 @@ const qualifications_2 = require("./qualifications");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = process.env.PORT || '3001';
+        this.port = process.env.PORT || '8080';
         this.listen();
         this.midlewares();
         this.routes();

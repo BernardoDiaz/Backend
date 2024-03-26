@@ -51,7 +51,7 @@ class Server {
 
     constructor() {
         this.app = express();
-        this.port = parseInt(process.env.PORT as string, 10) || 3000;
+        this.port = parseInt(process.env.PORT as string, 10) || 8080;
         this.host = '0.0.0.0';
         this.listen();
         this.midlewares();

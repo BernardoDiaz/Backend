@@ -11,17 +11,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateIncident = exports.deleteIncident = exports.newIncident = exports.getIncidentById = exports.getIncidents = void 0;
 const incidentsstudent_1 = require("../../models/studentsModels/incidentsstudent");
+const student_1 = require("../../models/studentsModels/student");
 //Metodo Listar
 const getIncidents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listIncidents = yield incidentsstudent_1.incidentsstudent.findAll();
+    const listIncidents = yield incidentsstudent_1.incidentsstudent.findAll({
+        attributes: ['description', 'severity'],
+        include: [{
+                model: student_1.student,
+                attributes: ['name', 'lastname']
+            }]
+    });
     //Devolvemos la respuesta via JSON
     res.json(listIncidents);
 });
 exports.getIncidents = getIncidents;
 const getIncidentById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const one = yield incidentsstudent_1.incidentsstudent.findByPk(id);
+    const { idStudent } = req.params;
+    const one = yield incidentsstudent_1.incidentsstudent.findAll({
+        attributes: ['description', 'severity'],
+        where: { id_student: idStudent }
+    });
     //validacion de existencia
     try {
         if (one) {
@@ -41,13 +51,12 @@ const getIncidentById = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getIncidentById = getIncidentById;
 const newIncident = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_student, description, severity, date } = req.body;
+    const { id_student, description, severity } = req.body;
     try {
         incidentsstudent_1.incidentsstudent.create({
             id_student,
             description,
-            severity,
-            date
+            severity
         });
         res.json({
             msg: `El incidente del alumno fue ingresado`

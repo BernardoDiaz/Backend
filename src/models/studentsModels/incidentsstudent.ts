@@ -10,7 +10,7 @@ export const incidentsstudent = sequelize.define('incidents',{
         autoIncrement:true
     },
     id_student:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:true
     },
     description:{

@@ -5,7 +5,7 @@ import validateToken from '../UserRoute/validate-token';
 const router = Router();
 
 router.get('/', validateToken,getIncidents);
-router.get('/:id', validateToken,getIncidentById);
+router.get('/:idStudent',getIncidentById);
 router.post('/', validateToken,newIncident);
 router.put('/:id', validateToken,updateIncident);
 router.delete('/:id', validateToken,deleteIncident);

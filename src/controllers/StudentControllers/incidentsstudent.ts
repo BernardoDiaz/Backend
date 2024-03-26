@@ -1,19 +1,28 @@
 import { Request, Response } from 'express';
 import { incidentsstudent } from '../../models/studentsModels/incidentsstudent';
+import { student } from '../../models/studentsModels/student';
  
 //Metodo Listar
 export const getIncidents = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listIncidents = await incidentsstudent.findAll();
+    const listIncidents = await incidentsstudent.findAll({
+        attributes:['description','severity'],
+        include:[{
+            model:student,
+            attributes:['name','lastname']
+        }]
+    });
 
     //Devolvemos la respuesta via JSON
     res.json(listIncidents);
 };
 
 export const getIncidentById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const one = await incidentsstudent.findByPk(id);
+    const { idStudent } = req.params;
+    const one = await incidentsstudent.findAll({
+        attributes:['description','severity'],
+        where:{id_student:idStudent}});
 
     //validacion de existencia
     try {
@@ -35,14 +44,13 @@ export const getIncidentById = async (req: Request, res: Response) => {
 };
 
 export const newIncident = async (req: Request, res: Response) => {
-    const { id_student,description,severity,date} = req.body;
+    const { id_student,description,severity} = req.body;
 
     try {
         incidentsstudent.create({
             id_student,
             description,
-            severity,
-            date
+            severity
         });
         res.json({
             msg: `El incidente del alumno fue ingresado`

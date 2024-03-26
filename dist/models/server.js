@@ -35,6 +35,7 @@ const seatchs_1 = __importDefault(require("../routes/searchRoute/seatchs"));
 const generatePDF_1 = __importDefault(require("../routes/ReportsRoute/generatePDF"));
 const teacherDegree_1 = __importDefault(require("../routes/intermediateRoute/teacherDegree"));
 const qualifications_1 = __importDefault(require("../routes/qualifications"));
+const stadistics_1 = __importDefault(require("../routes/chartsRoute/stadistics"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -56,10 +57,12 @@ const generatePDF_2 = require("./ReportsModel/generatePDF");
 const teacher_2 = require("./teacher");
 const teacherDegree_2 = require("./intermediateModels/teacherDegree");
 const qualifications_2 = require("./qualifications");
+const incidentsstudent_2 = require("./studentsModels/incidentsstudent");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = process.env.PORT || '3001';
+        this.port = parseInt(process.env.PORT, 10) || 3000;
+        this.host = '0.0.0.0';
         this.listen();
         this.midlewares();
         this.routes();
@@ -67,7 +70,7 @@ class Server {
     }
     ;
     listen() {
-        this.app.listen(this.port, () => {
+        this.app.listen(this.port, this.host, () => {
             console.log('port ' + this.port);
         });
     }
@@ -101,6 +104,7 @@ class Server {
         this.app.use('/api/teacher', teacher_1.default);
         this.app.use('/api/assig', teacherDegree_1.default);
         this.app.use('/api/qualification', qualifications_1.default);
+        this.app.use('/api/details', stadistics_1.default);
     }
     ;
     midlewares() {
@@ -127,6 +131,7 @@ class Server {
                 yield student_2.student.sync();
                 yield matricula_1.registration.sync();
                 yield studentdata_2.studentdata.sync();
+                yield incidentsstudent_2.incidentsstudent.sync();
                 yield qualifications_2.qualifications.sync();
                 yield pago_2.payment.sync();
                 yield categorias_2.category.sync();

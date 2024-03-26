@@ -14,7 +14,7 @@ exports.incidentsstudent = connection_1.default.define('incidents', {
         autoIncrement: true
     },
     id_student: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
     description: {

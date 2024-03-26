@@ -20,6 +20,7 @@ import routesSearch from '../routes/searchRoute/seatchs';
 import routesPDF from '../routes/ReportsRoute/generatePDF';
 import routesAssigment from '../routes/intermediateRoute/teacherDegree';
 import routesQualification from '../routes/qualifications';
+import routesStatistics from '../routes/chartsRoute/stadistics';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -41,11 +42,12 @@ import { generatePDF } from './ReportsModel/generatePDF';
 import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';
 import { qualifications } from './qualifications';
+import { incidentsstudent } from './studentsModels/incidentsstudent';
 
 class Server {
     private app: express.Application;
     private port: number;
-    private host:string;
+    private host:string; 
 
     constructor() {
         this.app = express();
@@ -96,6 +98,7 @@ class Server {
 
         this.app.use('/api/assig', routesAssigment);
         this.app.use('/api/qualification', routesQualification);
+        this.app.use('/api/details', routesStatistics);
 
 
     };
@@ -125,6 +128,7 @@ class Server {
             await student.sync();
             await registration.sync();
             await studentdata.sync();
+            await incidentsstudent.sync();
             await qualifications.sync(); 
             
             await payment.sync();

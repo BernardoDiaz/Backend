@@ -61,7 +61,7 @@ const incidentsstudent_2 = require("./studentsModels/incidentsstudent");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = parseInt(process.env.PORT, 10) || 3000;
+        this.port = parseInt(process.env.PORT, 10) || 8080;
         this.host = '0.0.0.0';
         this.listen();
         this.midlewares();

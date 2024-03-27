@@ -5,8 +5,8 @@ const sequelize_1 = require("sequelize");
 //     host: 'localhost',
 //     dialect: 'mysql'
 // });
-const sequelize = new sequelize_1.Sequelize('proyectlrd', 'vmtest', 'Takuache09%', {
-    host: '10.128.0.3',
+const sequelize = new sequelize_1.Sequelize('proyectlrd', 'root', 'ed|6vB{4Yn}F5gA4', {
+    host: '34.125.91.26',
     dialect: 'mysql'
 });
 exports.default = sequelize;

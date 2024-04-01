@@ -7,7 +7,7 @@ export const getIncidents = async (req: Request, res: Response) => {
 
     //Generamos la lista
     const listIncidents = await incidentsstudent.findAll({
-        attributes:['description','severity'],
+        attributes:['id','description','severity'],
         include:[{
             model:student,
             attributes:['name','lastname']
@@ -23,6 +23,32 @@ export const getIncidentById = async (req: Request, res: Response) => {
     const one = await incidentsstudent.findAll({
         attributes:['description','severity'],
         where:{id_student:idStudent}});
+
+    //validacion de existencia
+    try {
+        if (one) {
+            res.json(one);
+        } else {
+
+            return res.status(404).json({
+                msg: `No existe un incidente que concuerde con la busqueda`
+            });
+        }
+    } catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al buscar`
+        });
+    }
+
+
+};
+
+export const getById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const one = await incidentsstudent.findAll({
+        attributes:['description','severity'],
+        include:[{model:student, attributes:['name','lastname']}],
+        where:{id:id}});
 
     //validacion de existencia
     try {
@@ -90,13 +116,13 @@ export const deleteIncident = async (req: Request, res: Response) => {
 
 export const updateIncident = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { id_student,description,severity } = req.body;
+    const { description,severity } = req.body;
 
     const one = await incidentsstudent.findOne({ where: { id: id } });
 
     try {
         if (one) {
-            await incidentsstudent.update({ id_student,description,severity }, { where: { id: id } });
+            await incidentsstudent.update({ description,severity }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });

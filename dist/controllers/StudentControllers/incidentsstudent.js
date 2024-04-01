@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateIncident = exports.deleteIncident = exports.newIncident = exports.getIncidentById = exports.getIncidents = void 0;
+exports.updateIncident = exports.deleteIncident = exports.newIncident = exports.getById = exports.getIncidentById = exports.getIncidents = void 0;
 const incidentsstudent_1 = require("../../models/studentsModels/incidentsstudent");
 const student_1 = require("../../models/studentsModels/student");
 //Metodo Listar
 const getIncidents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listIncidents = yield incidentsstudent_1.incidentsstudent.findAll({
-        attributes: ['description', 'severity'],
+        attributes: ['id', 'description', 'severity'],
         include: [{
                 model: student_1.student,
                 attributes: ['name', 'lastname']
@@ -50,6 +50,31 @@ const getIncidentById = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getIncidentById = getIncidentById;
+const getById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const one = yield incidentsstudent_1.incidentsstudent.findAll({
+        attributes: ['description', 'severity'],
+        include: [{ model: student_1.student, attributes: ['name', 'lastname'] }],
+        where: { id: id }
+    });
+    //validacion de existencia
+    try {
+        if (one) {
+            res.json(one);
+        }
+        else {
+            return res.status(404).json({
+                msg: `No existe un incidente que concuerde con la busqueda`
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            msg: `Ocurrio un error al buscar`
+        });
+    }
+});
+exports.getById = getById;
 const newIncident = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_student, description, severity } = req.body;
     try {
@@ -96,11 +121,11 @@ const deleteIncident = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.deleteIncident = deleteIncident;
 const updateIncident = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { id_student, description, severity } = req.body;
+    const { description, severity } = req.body;
     const one = yield incidentsstudent_1.incidentsstudent.findOne({ where: { id: id } });
     try {
         if (one) {
-            yield incidentsstudent_1.incidentsstudent.update({ id_student, description, severity }, { where: { id: id } });
+            yield incidentsstudent_1.incidentsstudent.update({ description, severity }, { where: { id: id } });
             res.json({
                 msg: `Informacion actualizada con exito`
             });

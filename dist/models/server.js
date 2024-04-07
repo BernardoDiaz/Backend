@@ -36,6 +36,7 @@ const generatePDF_1 = __importDefault(require("../routes/ReportsRoute/generatePD
 const teacherDegree_1 = __importDefault(require("../routes/intermediateRoute/teacherDegree"));
 const qualifications_1 = __importDefault(require("../routes/qualifications"));
 const stadistics_1 = __importDefault(require("../routes/chartsRoute/stadistics"));
+const stadisticsDashboard_1 = __importDefault(require("../routes/chartsRoute/stadisticsDashboard"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -105,6 +106,7 @@ class Server {
         this.app.use('/api/assig', teacherDegree_1.default);
         this.app.use('/api/qualification', qualifications_1.default);
         this.app.use('/api/details', stadistics_1.default);
+        this.app.use('/api/dash/', stadisticsDashboard_1.default);
     }
     ;
     midlewares() {

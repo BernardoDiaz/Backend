@@ -21,6 +21,7 @@ import routesPDF from '../routes/ReportsRoute/generatePDF';
 import routesAssigment from '../routes/intermediateRoute/teacherDegree';
 import routesQualification from '../routes/qualifications';
 import routesStatistics from '../routes/chartsRoute/stadistics';
+import routesDashboard from '../routes/chartsRoute/stadisticsDashboard';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -99,7 +100,7 @@ class Server {
         this.app.use('/api/assig', routesAssigment);
         this.app.use('/api/qualification', routesQualification);
         this.app.use('/api/details', routesStatistics);
-
+        this.app.use('/api/dash/',routesDashboard);
 
     };
 
@@ -137,9 +138,6 @@ class Server {
             await detailsPayment.sync();
             await planPayment.sync(); 
             await generatePDF.sync(); 
-
-
-
             await user.sync();
         } catch (error) {
             console.error('Connection not valid', error);

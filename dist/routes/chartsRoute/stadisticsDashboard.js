@@ -14,6 +14,6 @@ router.get('/moraAlumn/:idLevel', validate_token_1.default, stadisticsDashboard_
 router.get('/dayPayments', validate_token_1.default, stadisticsDashboard_1.PagosDelDia);
 router.get('/cuotas', validate_token_1.default, stadisticsDashboard_1.PagosCuotas);
 router.get('/productos', validate_token_1.default, stadisticsDashboard_1.PagosProductos);
-router.get('//:idLevel', validate_token_1.default);
-router.get('//:idLevel', validate_token_1.default);
+router.get('/masvendidos', validate_token_1.default, stadisticsDashboard_1.MasVendidosP);
+router.get('/cantidadvendida', validate_token_1.default, stadisticsDashboard_1.categoriasVentas);
 exports.default = router;

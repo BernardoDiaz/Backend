@@ -228,7 +228,7 @@ const categoriasVentas = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         console.error('Error fetching data:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error });
     }
 });
 exports.categoriasVentas = categoriasVentas;

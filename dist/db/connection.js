@@ -6,7 +6,7 @@ const sequelize_1 = require("sequelize");
 //     dialect: 'mysql'
 // });
 const sequelize = new sequelize_1.Sequelize('proyectlrd', 'root', 'ed|6vB{4Yn}F5gA4', {
-    host: '34.125.91.26',
+    host: 'localhost',
     dialect: 'mysql'
 });
 exports.default = sequelize;

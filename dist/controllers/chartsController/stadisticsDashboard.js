@@ -209,18 +209,21 @@ const MasVendidosP = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         console.error('Error al consultar datos:', error);
-        res.status(500).json({ error: 'Error al consultar datos' });
+        res.status(500).json({ error });
     }
 });
 exports.MasVendidosP = MasVendidosP;
 const categoriasVentas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield connection_1.default.query(`
-      SELECT c.nameCategory as categoria, count(d.id_product) as cantidad
-      FROM detailspayments d
-      INNER JOIN products p ON d.id_product = p.id
-      INNER JOIN categories c ON c.id = p.id_category
-      GROUP BY p.nameProduct, d.id_product;
+      SELECT c.nameCategory AS categoria, SUM(d.cantidad) AS cantidad_total
+      FROM (SELECT p.id_category, d.id_product, COUNT(d.id_product) AS cantidad
+        FROM detailspayments d
+        INNER JOIN products p ON d.id_product = p.id
+        GROUP BY p.id_category, d.id_product
+      ) AS d
+      INNER JOIN categories c ON c.id = d.id_category
+      GROUP BY c.nameCategory;
     `, {
             type: sequelize_1.QueryTypes.SELECT,
         });

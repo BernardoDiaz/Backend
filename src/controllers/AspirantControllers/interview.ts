@@ -28,7 +28,7 @@ export const getInterviewsPendient = async (req: Request, res: Response) => {
           attributes: ['aspirant_fullname'],
           where: { id: sequelize.col('interview.id') }
         },
-        where: { state: 'Pendiente' }
+        // where: { state: 'Pendiente' }
     });
 
     //Devolvemos la respuesta via JSON

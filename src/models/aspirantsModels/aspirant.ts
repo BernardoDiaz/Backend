@@ -6,9 +6,9 @@ import { interview } from "./interview";
 
  export const aspirant = sequelize.define('aspirant', {
     id:{
-        type: DataTypes.INTEGER, 
+        type: DataTypes.STRING,  
         primaryKey:true,
-        autoIncrement: true
+        unique:true
     },
     manager:{
         type: DataTypes.STRING,
@@ -33,8 +33,8 @@ import { interview } from "./interview";
     id_degree:{
         type:DataTypes.INTEGER,
         allowNull:true
-    }
-});
+    } 
+}); 
 
 degree.hasMany(aspirant,{
     foreignKey:'id_degree',

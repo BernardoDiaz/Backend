@@ -38,7 +38,7 @@ const getInterviewsPendient = (req, res) => __awaiter(void 0, void 0, void 0, fu
             attributes: ['aspirant_fullname'],
             where: { id: connection_1.default.col('interview.id') }
         },
-        where: { state: 'Pendiente' }
+        // where: { state: 'Pendiente' }
     });
     //Devolvemos la respuesta via JSON
     res.json(listInterviews);

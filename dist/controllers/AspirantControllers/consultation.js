@@ -39,7 +39,7 @@ const getConsultationsPendient = (req, res) => __awaiter(void 0, void 0, void 0,
             attributes: ['aspirant_fullname'],
             where: { id: connection_1.default.col('consultation.id') }
         },
-        where: { state: 'Pendiente' }
+        // where: { state: 'Pendiente' }
     });
     //Devolvemos la respuesta via JSON
     res.json(listInterviews);

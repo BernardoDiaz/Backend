@@ -11,9 +11,9 @@ const consultation_1 = require("./consultation");
 const interview_1 = require("./interview");
 exports.aspirant = connection_1.default.define('aspirant', {
     id: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true
+        unique: true
     },
     manager: {
         type: sequelize_1.DataTypes.STRING,

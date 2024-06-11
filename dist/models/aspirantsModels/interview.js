@@ -13,12 +13,13 @@ exports.interview = connection_1.default.define('interview', {
         autoIncrement: true
     },
     id_aspirant: {
-        type: sequelize_1.DataTypes.INTEGER,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
     comments: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: "Sin Evaluar"
     },
     state: {
         type: sequelize_1.DataTypes.STRING,

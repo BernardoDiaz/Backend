@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { aspirant } from '../../models/aspirantsModels/aspirant';
 import sequelize from '../../db/connection';
 import { degree } from '../../models/degree';
+import shortid from 'shortid';
+import { interview } from '../../models/aspirantsModels/interview';
+import { consultation } from '../../models/aspirantsModels/consultation';
  
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
@@ -41,9 +44,10 @@ export const getAspirantById = async (req: Request, res: Response) => {
 
 export const newAspirant = async (req: Request, res: Response) => {
     const { manager, manager_phone, manager_email, adress, aspirant_fullname, id_degree } = req.body;
-
+    const id = shortid.generate();
     try {
         aspirant.create({
+            id:id,
             manager: manager,
             manager_phone: manager_phone,
             manager_email: manager_email,
@@ -51,6 +55,13 @@ export const newAspirant = async (req: Request, res: Response) => {
             aspirant_fullname: aspirant_fullname,
             id_degree: id_degree
         });
+        interview.create({
+            id_aspirant:id
+        });
+        consultation.create({
+            id_aspirant:id
+        }); 
+
         res.json({
             msg: `El aspirante ${aspirant_fullname} fue inscrito en el proceso de seleccion`
         });

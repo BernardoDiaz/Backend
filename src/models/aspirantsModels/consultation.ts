@@ -8,12 +8,13 @@ export const consultation = sequelize.define('consultation', {
         autoIncrement:true
     },
     id_aspirant:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:true
     }, 
     comments:{
         type:DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
+        defaultValue:"Sin Evaluar"
     },
     state:{
         type:DataTypes.STRING,

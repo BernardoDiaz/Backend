@@ -16,6 +16,9 @@ exports.updateAspirant = exports.deleteAspirant = exports.newAspirant = exports.
 const aspirant_1 = require("../../models/aspirantsModels/aspirant");
 const connection_1 = __importDefault(require("../../db/connection"));
 const degree_1 = require("../../models/degree");
+const shortid_1 = __importDefault(require("shortid"));
+const interview_1 = require("../../models/aspirantsModels/interview");
+const consultation_1 = require("../../models/aspirantsModels/consultation");
 //Metodo Listar
 const getAspirants = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
@@ -50,14 +53,22 @@ const getAspirantById = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.getAspirantById = getAspirantById;
 const newAspirant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { manager, manager_phone, manager_email, adress, aspirant_fullname, id_degree } = req.body;
+    const id = shortid_1.default.generate();
     try {
         aspirant_1.aspirant.create({
+            id: id,
             manager: manager,
             manager_phone: manager_phone,
             manager_email: manager_email,
             adress: adress,
             aspirant_fullname: aspirant_fullname,
             id_degree: id_degree
+        });
+        interview_1.interview.create({
+            id_aspirant: id
+        });
+        consultation_1.consultation.create({
+            id_aspirant: id
         });
         res.json({
             msg: `El aspirante ${aspirant_fullname} fue inscrito en el proceso de seleccion`

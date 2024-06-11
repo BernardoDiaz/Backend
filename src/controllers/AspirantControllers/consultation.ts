@@ -29,7 +29,7 @@ export const getConsultationsPendient = async (req: Request, res: Response) => {
           attributes: ['aspirant_fullname'],
           where: { id: sequelize.col('consultation.id') }
         },
-        where: { state: 'Pendiente' }
+        // where: { state: 'Pendiente' }
     });
 
     //Devolvemos la respuesta via JSON

@@ -5,6 +5,10 @@ import { degree } from '../../models/degree';
 import shortid from 'shortid';
 import { interview } from '../../models/aspirantsModels/interview';
 import { consultation } from '../../models/aspirantsModels/consultation';
+import { student } from '../../models/studentsModels/student';
+import { registration } from '../../models/paymentsModels/matricula';
+import { level } from '../../models/level';
+import { planPayment } from '../../models/paymentsModels/planPagos';
  
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
@@ -122,3 +126,112 @@ export const updateAspirant = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const viewCaseAspirant = async (req:Request,res:Response) => {
+        //Generamos la lista
+        const listAspirants = await aspirant.findAll({
+            attributes: ['id','aspirant_fullname','is_visible'],
+            include: [
+              {
+                model: consultation,
+                attributes: ['state'],
+                required: true // Esto asegura que se haga un INNER JOIN
+              },
+              {
+                model: interview,
+                attributes: ['state'],
+                required: true // Esto asegura que se haga un INNER JOIN
+              },
+              {
+                model: degree,
+                attributes: ['id','name'], include:[{model:level,attributes:['id','priceRegistration','priceFee']}],
+                where: { id: sequelize.col('degree.id')} 
+              }
+            ]});
+    
+        //Devolvemos la respuesta via JSON
+        res.json(listAspirants);
+}
+
+export const newStudents_Asp = async (req: Request, res: Response) => {
+    const students = req.body.students; // Suponiendo que envías un arreglo de estudiantes
+
+    try {
+        for (const studentData of students) {
+            const { id,name, lastname, id_degree, id_level, priceFee, priceRegistration } = studentData;
+            const idGenerete = shortid.generate();
+            const year = new Date().getFullYear();
+
+            // Crear el registro de estudiante
+            await student.create({
+                id: idGenerete,
+                name: name,
+                lastname: lastname,
+                year: year,
+                state: true
+            });
+
+            // Ocultar el registro de aspirante 
+            await aspirant.update(
+                { is_visible: false }, // Campo para ocultar
+                { where: { id:id} } // Condiciones para identificar al aspirante
+            );
+
+            // Generación de matrícula
+            await registration.create({
+                id_student: idGenerete,
+                id_degree,
+                id_level,
+                year 
+            });
+ 
+            // Generación de plan de pago
+            const planPayments = [];
+
+            for (let i = 1; i <= 11; i++) {
+                const date = new Date(year, i - 1, 18);
+
+                planPayments.push({
+                    id_student: idGenerete,
+                    id_payment: null,
+                    id_level,
+                    nameFee: 'Cuota ' + i + ' - ' + year,
+                    year,
+                    datePayment: null,
+                    dateExpiration: date,
+                    price: priceFee,
+                    state: false,
+                });
+            }
+
+            const studentInfo = {
+                id_student: idGenerete,
+                id_payment: null,
+                id_level,
+                nameFee: 'Matrícula - ' + year,
+                year,
+                datePayment: null,
+                dateExpiration: new Date(year, 0, 18),
+                price: priceRegistration,
+                state: false,
+            };
+
+            planPayments.unshift(studentInfo);
+
+            await planPayment.bulkCreate(planPayments);
+        }
+
+        res.json({
+            msg: "Todos los alumnos fueron ingresados correctamente"
+        });
+
+    } catch (error) {
+        console.error('Error al registrar los alumnos:', error);
+        res.status(500).json({
+            msg: "Ocurrió un error al registrar los alumnos",
+            error: error
+        });
+    }
+};
+
+

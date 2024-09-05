@@ -33,41 +33,46 @@ import { interview } from "./interview";
     id_degree:{
         type:DataTypes.INTEGER,
         allowNull:true
-    } 
+    },
+        is_visible:{
+            type:DataTypes.BOOLEAN,
+            defaultValue:true
+        }
+     
 }); 
 
 degree.hasMany(aspirant,{
     foreignKey:'id_degree',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 aspirant.belongsTo(degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE' 
 });
 
 aspirant.hasMany(consultation,{
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 
 consultation.belongsTo(aspirant,{
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 aspirant.hasMany(interview,{
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 
 interview.belongsTo(aspirant,{
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'CASCADE'
 });
 
 

@@ -38,37 +38,41 @@ exports.aspirant = connection_1.default.define('aspirant', {
     id_degree: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true
+    },
+    is_visible: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: true
     }
 });
 degree_1.degree.hasMany(exports.aspirant, {
     foreignKey: 'id_degree',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 exports.aspirant.belongsTo(degree_1.degree, {
     foreignKey: 'id_degree',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 exports.aspirant.hasMany(consultation_1.consultation, {
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 consultation_1.consultation.belongsTo(exports.aspirant, {
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 exports.aspirant.hasMany(interview_1.interview, {
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
 });
 interview_1.interview.belongsTo(exports.aspirant, {
     foreignKey: 'id_aspirant',
     targetKey: 'id',
-    onDelete: 'set null'
+    onDelete: 'CASCADE'
 });
 //  aspirant.sync({alter:true});
 // degree.sync({alter:true});

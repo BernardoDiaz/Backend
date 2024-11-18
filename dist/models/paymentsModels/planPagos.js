@@ -47,6 +47,11 @@ exports.planPayment = connection_1.default.define('planPayment', {
         type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
     },
+    discount: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: 0
+    },
     state: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false,

@@ -9,7 +9,7 @@ export const getStudents = async (req: Request, res: Response) => {
     try {
         // Generamos la lista de estudiantes
         const listaEstudiantes = await student.findAll({
-            attributes: ['id', 'name', 'lastname', 'state']
+            attributes: ['id', 'name', 'lastname','phone','email', 'state']
         });
 
         // Devolvemos la respuesta en formato JSON
@@ -44,7 +44,7 @@ export const getStudentById = async (req: Request, res: Response) => {
 };
 
 export const newStudent = async (req: Request, res: Response) => {
-    const { name, lastname, year, id_degree, id_level } = req.body;
+    const { name, lastname,phone,email, year, id_degree, id_level } = req.body;
 
     try {
         const idGenerete = shortid.generate();
@@ -52,8 +52,10 @@ export const newStudent = async (req: Request, res: Response) => {
             id: idGenerete,
             name: name,
             lastname: lastname,
+            phone:phone,
+            email:email,
             year: year,
-            state: true
+            state: "Activo"
         });
         //generacion de matricula
         await registration.create({
@@ -79,7 +81,7 @@ export const newStudent = async (req: Request, res: Response) => {
             datePayment: null,
             dateExpiration: date,
             price:priceFee,
-            state: false,
+            state: false, 
           });
         }
         const { priceRegistration } = req.body;

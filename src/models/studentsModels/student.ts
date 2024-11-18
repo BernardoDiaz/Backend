@@ -15,6 +15,14 @@ export const student = sequelize.define('student', {
         type: DataTypes.STRING,
         allowNull: false 
     },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: true  
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true 
+    },
     year: {
         type: DataTypes.INTEGER,
         allowNull: false, 

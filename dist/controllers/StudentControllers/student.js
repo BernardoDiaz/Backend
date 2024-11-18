@@ -42,7 +42,7 @@ const getStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         // Generamos la lista de estudiantes
         const listaEstudiantes = yield student_1.student.findAll({
-            attributes: ['id', 'name', 'lastname', 'state']
+            attributes: ['id', 'name', 'lastname', 'phone', 'email', 'state']
         });
         // Devolvemos la respuesta en formato JSON
         res.json(listaEstudiantes);
@@ -75,15 +75,17 @@ const getStudentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getStudentById = getStudentById;
 const newStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastname, year, id_degree, id_level } = req.body;
+    const { name, lastname, phone, email, year, id_degree, id_level } = req.body;
     try {
         const idGenerete = shortid.generate();
         yield student_1.student.create({
             id: idGenerete,
             name: name,
             lastname: lastname,
+            phone: phone,
+            email: email,
             year: year,
-            state: true
+            state: "Activo"
         });
         //generacion de matricula
         yield matricula_1.registration.create({

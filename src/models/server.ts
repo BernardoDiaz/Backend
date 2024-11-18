@@ -22,6 +22,7 @@ import routesAssigment from '../routes/intermediateRoute/teacherDegree';
 import routesQualification from '../routes/qualifications';
 import routesStatistics from '../routes/chartsRoute/stadistics';
 import routesDashboard from '../routes/chartsRoute/stadisticsDashboard';
+import routesSendEmail from '../routes/SendEmailRoutes/SendEmail';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -38,8 +39,10 @@ import { category } from './paymentsModels/categorias';
 import { detailsPayment } from './paymentsModels/detallePago';
 import { planPayment } from './paymentsModels/planPagos';
 import { product } from './paymentsModels/productos';
-import { payment } from './pago';  
+import { payment } from './pago'; 
+import { otherPayment } from './otrosPagos';  
 import { generatePDF } from './ReportsModel/generatePDF';
+import { other_generatePDF } from './ReportsModel/othergeneratePDF';
 import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';
 import { qualifications } from './qualifications';
@@ -101,6 +104,7 @@ class Server {
         this.app.use('/api/qualification', routesQualification);
         this.app.use('/api/details', routesStatistics);
         this.app.use('/api/dash/',routesDashboard);
+        this.app.use('/api/SendEmails/',routesSendEmail);
 
     };
 
@@ -133,11 +137,13 @@ class Server {
             await qualifications.sync(); 
             
             await payment.sync();
+            await otherPayment.sync();
             await category.sync();
             await product.sync();
             await detailsPayment.sync();
             await planPayment.sync(); 
-            await generatePDF.sync(); 
+            await generatePDF.sync();
+            await other_generatePDF.sync();
             await user.sync();
         } catch (error) {
             console.error('Connection not valid', error);
@@ -145,4 +151,4 @@ class Server {
     };
 };
 
-export default Server; 
+export default Server;

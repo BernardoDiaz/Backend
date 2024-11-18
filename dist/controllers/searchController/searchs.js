@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchPlanPayment = exports.searchRegistration = exports.searchStudents = void 0;
+exports.searchPlanPayment = exports.searchRegistration = exports.searchStudents_Full = exports.searchStudents = void 0;
 const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const degree_1 = require("../../models/degree");
@@ -19,16 +19,17 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const actualYear = new Date().getFullYear();
     try {
         const list = yield student_1.student.findAll({
-            attributes: ['id', 'name', 'lastname'],
+            attributes: ['id', 'name', 'lastname', 'state'],
+            where: {
+                state: 'Activo'
+            },
             include: [{
                     model: matricula_1.registration,
                     attributes: ['id_degree', 'id_level', 'year'],
                     where: { year: actualYear },
-                    //incluir grado
                     include: [{
                             model: degree_1.degree,
                             attributes: ['name'],
-                            //incluir seccion
                             include: [{
                                     model: seccion_1.seccion,
                                     attributes: ['name']
@@ -44,6 +45,33 @@ const searchStudents = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.searchStudents = searchStudents;
+const searchStudents_Full = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const actualYear = new Date().getFullYear();
+    try {
+        const list = yield student_1.student.findAll({
+            attributes: ['id', 'name', 'lastname', 'state'],
+            include: [{
+                    model: matricula_1.registration,
+                    attributes: ['id_degree', 'id_level', 'year'],
+                    where: { year: actualYear },
+                    include: [{
+                            model: degree_1.degree,
+                            attributes: ['name'],
+                            include: [{
+                                    model: seccion_1.seccion,
+                                    attributes: ['name']
+                                }]
+                        }]
+                }]
+        });
+        res.json(list);
+    }
+    catch (error) {
+        // Manejamos cualquier error aquí
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.searchStudents_Full = searchStudents_Full;
 const searchRegistration = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const actualYear = new Date().getFullYear();
     try {

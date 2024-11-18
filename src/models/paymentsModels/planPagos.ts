@@ -43,6 +43,11 @@ export const planPayment = sequelize.define('planPayment', {
         type:DataTypes.DOUBLE,
         allowNull:false
     },
+    discount:{
+        type:DataTypes.DOUBLE,
+        allowNull:true,
+        defaultValue:0
+    },
     state:{
         type:DataTypes.BOOLEAN,
         allowNull:false,

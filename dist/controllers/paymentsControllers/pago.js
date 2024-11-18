@@ -8,12 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
+exports.getotherPayment = exports.otherPayments = exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
 const pago_1 = require("../../models/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
 const student_1 = require("../../models/studentsModels/student");
+const otrosPagos_1 = require("../../models/otrosPagos");
+const connection_1 = __importDefault(require("../../db/connection"));
 //Metodo Listar
 const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -64,7 +69,7 @@ const getPaymentById = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPaymentById = getPaymentById;
 const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //constantes de pago
-    const { id_payment, id_student, totalAmount, year, detalle, cuotas } = req.body;
+    const { id_payment, id_student, totalAmount, totalDiscount, year, detalle, cuotas } = req.body;
     const fechaActual = new Date();
     try {
         // Verificar si el arreglo del detalle está vacío 
@@ -73,6 +78,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id: id_payment,
                 id_student,
                 totalAmount,
+                discount: totalDiscount,
                 year,
                 datePayment: fechaActual
             });
@@ -90,6 +96,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     id: cuotas.id,
                     id_payment: id_payment,
                     datePayment: fechaActual,
+                    discount: cuotas.discount,
                     state: true
                 }));
                 for (let i = 0; i < cuotas.length; i++) {
@@ -97,6 +104,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     yield planPagos_1.planPayment.update({
                         id_payment: id_payment,
                         datePayment: fechaActual,
+                        discount: cuotas.discount,
                         state: state
                     }, {
                         where: {
@@ -114,6 +122,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id: id_payment,
                 id_student,
                 totalAmount,
+                discount: totalDiscount,
                 year,
                 datePayment: fechaActual
             });
@@ -135,6 +144,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 id: id_payment,
                 id_student,
                 totalAmount,
+                discount: totalDiscount,
                 year,
                 datePayment: fechaActual
             });
@@ -150,6 +160,7 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     yield planPagos_1.planPayment.update({
                         id_payment: id_payment,
                         datePayment: fechaActual,
+                        discount: cuotas.discount,
                         state: state
                     }, {
                         where: {
@@ -174,3 +185,57 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.newPayment = newPayment;
+const otherPayments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_payment, year, detalle } = req.body;
+    const fechaActual = new Date();
+    try {
+        // Verificar si el arreglo del detalle está vacío 
+        if (detalle.length > 0) {
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const detalle = req.body.detalle.map((detalle) => ({
+                    id_other_payment: id_payment,
+                    id_product: detalle.id_product,
+                    nameProduct: detalle.nameProduct,
+                    unit_price: detalle.price,
+                    discount: detalle.discount,
+                    year,
+                    datePayment: fechaActual
+                }));
+                yield otrosPagos_1.otherPayment.bulkCreate(detalle);
+                res.json({
+                    msg: `Pago Registrado con exito`
+                });
+            }), 1000); // delay of 1 seconds
+        }
+        else {
+            res.json({ msg: `No hay productos seleccionados` });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: `Error al registrar una compra`,
+            error: error
+        });
+    }
+});
+exports.otherPayments = otherPayments;
+const getotherPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const list = yield otrosPagos_1.otherPayment.findAll({
+            attributes: [
+                'id_other_payment',
+                [connection_1.default.fn('SUM', connection_1.default.col('unit_price')), 'total_unit_price'],
+                'year',
+                'datePayment'
+            ],
+            group: ['id_other_payment', 'year', 'datePayment'],
+            order: [['datePayment', 'DESC']]
+        });
+        res.json(list);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.getotherPayment = getotherPayment;

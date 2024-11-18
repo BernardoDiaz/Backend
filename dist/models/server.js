@@ -37,6 +37,7 @@ const teacherDegree_1 = __importDefault(require("../routes/intermediateRoute/tea
 const qualifications_1 = __importDefault(require("../routes/qualifications"));
 const stadistics_1 = __importDefault(require("../routes/chartsRoute/stadistics"));
 const stadisticsDashboard_1 = __importDefault(require("../routes/chartsRoute/stadisticsDashboard"));
+const SendEmail_1 = __importDefault(require("../routes/SendEmailRoutes/SendEmail"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -54,7 +55,9 @@ const detallePago_1 = require("./paymentsModels/detallePago");
 const planPagos_1 = require("./paymentsModels/planPagos");
 const productos_2 = require("./paymentsModels/productos");
 const pago_2 = require("./pago");
+const otrosPagos_1 = require("./otrosPagos");
 const generatePDF_2 = require("./ReportsModel/generatePDF");
+const othergeneratePDF_1 = require("./ReportsModel/othergeneratePDF");
 const teacher_2 = require("./teacher");
 const teacherDegree_2 = require("./intermediateModels/teacherDegree");
 const qualifications_2 = require("./qualifications");
@@ -107,6 +110,7 @@ class Server {
         this.app.use('/api/qualification', qualifications_1.default);
         this.app.use('/api/details', stadistics_1.default);
         this.app.use('/api/dash/', stadisticsDashboard_1.default);
+        this.app.use('/api/SendEmails/', SendEmail_1.default);
     }
     ;
     midlewares() {
@@ -136,11 +140,13 @@ class Server {
                 yield incidentsstudent_2.incidentsstudent.sync();
                 yield qualifications_2.qualifications.sync();
                 yield pago_2.payment.sync();
+                yield otrosPagos_1.otherPayment.sync();
                 yield categorias_2.category.sync();
                 yield productos_2.product.sync();
                 yield detallePago_1.detailsPayment.sync();
                 yield planPagos_1.planPayment.sync();
                 yield generatePDF_2.generatePDF.sync();
+                yield othergeneratePDF_1.other_generatePDF.sync();
                 yield user_2.user.sync();
             }
             catch (error) {

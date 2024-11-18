@@ -19,6 +19,14 @@ exports.student = connection_1.default.define('student', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    phone: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
+    },
+    email: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
+    },
     year: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,

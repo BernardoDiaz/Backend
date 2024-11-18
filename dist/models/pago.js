@@ -20,6 +20,11 @@ exports.payment = connection_1.default.define('payment', {
         type: sequelize_1.DataTypes.DOUBLE,
         allowNull: false
     },
+    discount: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: 0
+    },
     year: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false

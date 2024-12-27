@@ -10,6 +10,7 @@ const validate_token_1 = __importDefault(require("../UserRoute/validate-token"))
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, pago_1.getPayment);
 router.post('/', validate_token_1.default, pago_1.newPayment);
+router.post('/payAsp', validate_token_1.default, pago_1.newPaymentAsp);
 router.post('/other', validate_token_1.default, pago_1.otherPayments);
 router.get('/v-other', validate_token_1.default, pago_1.getotherPayment);
 exports.default = router;

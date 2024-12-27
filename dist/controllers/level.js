@@ -17,7 +17,7 @@ const sequelize_1 = require("sequelize");
 const subject_1 = require("../models/subject");
 const getLevels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listLevel = yield level_1.level.findAll({
-        attributes: ['id', 'name', 'priceRegistration', 'priceFee', 'periodsToEvaluate'],
+        attributes: ['id', 'name', 'priceRegistration', 'periodsToEvaluate'],
         order: [['id', 'ASC']]
     });
     res.json(listLevel);
@@ -45,7 +45,7 @@ const getLevelById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getLevelById = getLevelById;
 const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, priceRegistration, priceFee, periodsToEvaluate } = req.body;
+    const { name, priceRegistration, periodsToEvaluate } = req.body;
     //Validar nombre unico de nivel
     const namevalid = yield level_1.level.findOne({ where: { name: name } });
     if (namevalid) {
@@ -59,7 +59,6 @@ const newLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield level_1.level.create({
             name,
             priceRegistration,
-            priceFee,
             periodsToEvaluate
         });
         res.json({
@@ -100,11 +99,11 @@ const deleteLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.deleteLevel = deleteLevel;
 const updateLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, priceRegistration, priceFee, periodsToEvaluate } = req.body;
+    const { name, priceRegistration, periodsToEvaluate } = req.body;
     const oneLevel = yield level_1.level.findOne({ where: { id: id } });
     try {
         if (oneLevel) {
-            yield level_1.level.update({ name, priceRegistration, priceFee, periodsToEvaluate }, { where: { id: id } });
+            yield level_1.level.update({ name, priceRegistration, periodsToEvaluate }, { where: { id: id } });
             res.json({
                 msg: `Nivel academico, actualizado con exito`
             });

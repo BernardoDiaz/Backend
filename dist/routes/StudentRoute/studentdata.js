@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const studentdata_1 = require("../../controllers/StudentControllers/studentdata");
 const validate_token_1 = __importDefault(require("../UserRoute/validate-token"));
-//import validateToken from './validate-token';
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, studentdata_1.getStudentDatas);
 router.get('/:id', validate_token_1.default, studentdata_1.getStudentDataById);

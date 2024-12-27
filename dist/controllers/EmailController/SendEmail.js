@@ -26,19 +26,12 @@ const transporter = nodemailer_1.default.createTransport({
     }
 });
 const SendEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { to, subject, text, attachmentBase64, filename } = req.body;
+    const { to, subject, htmlContent } = req.body;
     const mailOptions = {
         from: process.env.GMAIL_USER,
         to,
         subject,
-        text,
-        attachments: [
-            {
-                filename: filename || 'factura.pdf',
-                content: attachmentBase64,
-                encoding: 'base64'
-            }
-        ]
+        html: htmlContent, // contenido del correo en HTML
     };
     try {
         const info = yield transporter.sendMail(mailOptions);

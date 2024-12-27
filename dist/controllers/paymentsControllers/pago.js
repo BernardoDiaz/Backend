@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getotherPayment = exports.otherPayments = exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
+exports.getotherPayment = exports.otherPayments = exports.newPaymentAsp = exports.newPayment = exports.getPaymentById = exports.getPayment = void 0;
 const pago_1 = require("../../models/pago");
 const detallePago_1 = require("../../models/paymentsModels/detallePago");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
 const student_1 = require("../../models/studentsModels/student");
 const otrosPagos_1 = require("../../models/otrosPagos");
 const connection_1 = __importDefault(require("../../db/connection"));
+const pagosAspirante_1 = require("../../models/paymentsModels/pagosAspirante");
 //Metodo Listar
 const getPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -185,6 +186,124 @@ const newPayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.newPayment = newPayment;
+const newPaymentAsp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //constantes de pago
+    const { id_payment, id_aspirant, totalAmount, totalDiscount, year, detalle, cuotas } = req.body;
+    const fechaActual = new Date();
+    try {
+        // Verificar si el arreglo del detalle está vacío 
+        if (detalle.length > 0 && cuotas.length > 0) {
+            pago_1.payment.create({
+                id: id_payment,
+                id_aspirant,
+                totalAmount,
+                discount: totalDiscount,
+                year,
+                datePayment: fechaActual
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const detalle = req.body.detalle.map((detalle) => ({
+                    id_payment: id_payment,
+                    id_product: detalle.id_product,
+                    nameProduct: detalle.nameProduct,
+                    price: detalle.price
+                }));
+                yield detallePago_1.detailsPayment.bulkCreate(detalle);
+            }), 1000); // delay of 2 seconds
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const cuotas = req.body.cuotas.map((cuotas) => ({
+                    id: cuotas.id,
+                    id_payment: id_payment,
+                    datePayment: fechaActual,
+                    discount: cuotas.discount,
+                    state: true
+                }));
+                for (let i = 0; i < cuotas.length; i++) {
+                    const { id, id_payment, state } = cuotas[i];
+                    yield pagosAspirante_1.paymentAspirant.update({
+                        id_payment: id_payment,
+                        datePayment: fechaActual,
+                        discount: cuotas.discount,
+                        state: state
+                    }, {
+                        where: {
+                            id: id
+                        }
+                    });
+                }
+                res.json({
+                    msg: `Pago Registrado con éxito`
+                });
+            }), 2000);
+        }
+        else if (detalle.length > 0) {
+            pago_1.payment.create({
+                id: id_payment,
+                id_aspirant,
+                totalAmount,
+                discount: totalDiscount,
+                year,
+                datePayment: fechaActual
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const detalle = req.body.detalle.map((detalle) => ({
+                    id_payment: id_payment,
+                    id_product: detalle.id_product,
+                    nameProduct: detalle.nameProduct,
+                    price: detalle.price
+                }));
+                yield detallePago_1.detailsPayment.bulkCreate(detalle);
+                res.json({
+                    msg: `Pago Registrado con exito`
+                });
+            }), 1000); // delay of 1 seconds
+        }
+        else if (cuotas.length > 0) {
+            pago_1.payment.create({
+                id: id_payment,
+                id_aspirant,
+                totalAmount,
+                discount: totalDiscount,
+                year,
+                datePayment: fechaActual
+            });
+            setTimeout(() => __awaiter(void 0, void 0, void 0, function* () {
+                const cuotas = req.body.cuotas.map((cuotas) => ({
+                    id: cuotas.id,
+                    id_payment: id_payment,
+                    datePayment: fechaActual,
+                    state: true
+                }));
+                for (let i = 0; i < cuotas.length; i++) {
+                    const { id, id_payment, state } = cuotas[i];
+                    yield pagosAspirante_1.paymentAspirant.update({
+                        id_payment: id_payment,
+                        datePayment: fechaActual,
+                        discount: cuotas.discount,
+                        state: state
+                    }, {
+                        where: {
+                            id: id
+                        }
+                    });
+                }
+                res.json({
+                    msg: `Pago Registrado con éxito`
+                });
+            }), 2000);
+        }
+        else {
+            res.json({ msg: `No hay productos seleccionados` });
+        }
+    }
+    catch (error) {
+        res.json({
+            msg: `Error al registrar una compra`,
+            error
+        });
+    }
+});
+exports.newPaymentAsp = newPaymentAsp;
 const otherPayments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_payment, year, detalle } = req.body;
     const fechaActual = new Date();

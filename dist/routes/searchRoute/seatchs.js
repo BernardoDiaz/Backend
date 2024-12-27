@@ -9,6 +9,8 @@ const validate_token_1 = __importDefault(require("../UserRoute/validate-token"))
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, searchs_1.searchStudents);
 router.get('/full', validate_token_1.default, searchs_1.searchStudents_Full);
+router.get('/aspirant', validate_token_1.default, searchs_1.searchStudents_Asp);
 router.get('/registration', validate_token_1.default, searchs_1.searchRegistration);
 router.get('/:id_student', validate_token_1.default, searchs_1.searchPlanPayment);
+router.get('/aspirant/fees/:id_aspirant', validate_token_1.default, searchs_1.searchPlanPayment_Asp);
 exports.default = router;

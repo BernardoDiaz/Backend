@@ -16,10 +16,10 @@ export const level = sequelize.define('level',{
         type:DataTypes.DOUBLE,
         allowNull:false 
     },
-    priceFee:{
-        type:DataTypes.DOUBLE,
-        allowNull:false
-    },
+    // priceFee:{
+    //     type:DataTypes.DOUBLE,
+    //     allowNull:false
+    // },
     periodsToEvaluate:{
         type:DataTypes.INTEGER,
         allowNull:false,

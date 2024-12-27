@@ -38,6 +38,7 @@ const qualifications_1 = __importDefault(require("../routes/qualifications"));
 const stadistics_1 = __importDefault(require("../routes/chartsRoute/stadistics"));
 const stadisticsDashboard_1 = __importDefault(require("../routes/chartsRoute/stadisticsDashboard"));
 const SendEmail_1 = __importDefault(require("../routes/SendEmailRoutes/SendEmail"));
+const feeAspirant_1 = __importDefault(require("../routes/AspirantRoute/feeAspirant"));
 //MODELOS DE BD
 const aspirant_2 = require("./aspirantsModels/aspirant");
 const user_2 = require("./usersModels/user");
@@ -62,6 +63,8 @@ const teacher_2 = require("./teacher");
 const teacherDegree_2 = require("./intermediateModels/teacherDegree");
 const qualifications_2 = require("./qualifications");
 const incidentsstudent_2 = require("./studentsModels/incidentsstudent");
+const pagosAspirante_1 = require("./paymentsModels/pagosAspirante");
+const arancelesIngreso_1 = require("./arancelesIngreso");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -109,6 +112,7 @@ class Server {
         this.app.use('/api/assig', teacherDegree_1.default);
         this.app.use('/api/qualification', qualifications_1.default);
         this.app.use('/api/details', stadistics_1.default);
+        this.app.use('/api/feesAsp', feeAspirant_1.default);
         this.app.use('/api/dash/', stadisticsDashboard_1.default);
         this.app.use('/api/SendEmails/', SendEmail_1.default);
     }
@@ -116,6 +120,8 @@ class Server {
     midlewares() {
         //parceo body
         this.app.use(express_1.default.json());
+        this.app.use(express_1.default.json({ limit: '100mb' })); // Cambia '10mb' según tus necesidades
+        this.app.use(express_1.default.urlencoded({ limit: '100mb', extended: true })); // También aplica para datos codificados en URL
         //cors
         this.app.use((0, cors_1.default)());
     }
@@ -128,8 +134,8 @@ class Server {
                 yield seccion_2.seccion.sync();
                 yield degree_2.degree.sync();
                 yield aspirant_2.aspirant.sync();
-                yield consultation_2.consultation.sync();
                 yield interview_2.interview.sync();
+                yield consultation_2.consultation.sync();
                 //Fin Modulo 01 BD 
                 yield teacher_2.teacher.sync();
                 yield teacherDegree_2.DegreeAssignment.sync();
@@ -142,9 +148,11 @@ class Server {
                 yield pago_2.payment.sync();
                 yield otrosPagos_1.otherPayment.sync();
                 yield categorias_2.category.sync();
+                yield arancelesIngreso_1.admissionFees.sync();
                 yield productos_2.product.sync();
                 yield detallePago_1.detailsPayment.sync();
                 yield planPagos_1.planPayment.sync();
+                yield pagosAspirante_1.paymentAspirant.sync();
                 yield generatePDF_2.generatePDF.sync();
                 yield othergeneratePDF_1.other_generatePDF.sync();
                 yield user_2.user.sync();

@@ -75,4 +75,4 @@ interview_1.interview.belongsTo(exports.aspirant, {
     onDelete: 'CASCADE'
 });
 //  aspirant.sync({alter:true});
-// degree.sync({alter:true});
+// degree.sync({alter:true}); 

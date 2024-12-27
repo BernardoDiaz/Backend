@@ -14,6 +14,10 @@ export const degree = sequelize.define('degree', {
         type:DataTypes.STRING,
         allowNull:false 
     },
+    priceFee:{
+        type:DataTypes.DOUBLE,
+        allowNull:false 
+    },
     id_seccion:{
         type:DataTypes.INTEGER,
         allowNull:true 

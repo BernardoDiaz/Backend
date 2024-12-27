@@ -21,12 +21,12 @@ const level_1 = require("../models/level");
 const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listDegree = yield degree_1.degree.findAll({
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'priceFee'],
         include: [{
                 model: seccion_1.seccion, attributes: ['name'],
                 where: { id: connection_1.default.col('seccion.id') },
             }, {
-                model: level_1.level, attributes: ['name', 'PriceRegistration', 'priceFee'],
+                model: level_1.level, attributes: ['name', 'PriceRegistration'],
                 where: { id: connection_1.default.col('level.id') }
             }]
     });
@@ -35,24 +35,29 @@ const getDegrees = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getDegrees = getDegrees;
 const getDegreeByLevel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
     const { id } = req.params;
-    //Generamos la lista
+    // Generamos la lista
     const list = yield degree_1.degree.findOne({
-        attributes: [],
+        attributes: ['priceFee'],
         include: [{
                 model: level_1.level,
-                attributes: ['id', 'priceRegistration', 'priceFee']
+                attributes: ['id', 'priceRegistration']
             }],
         where: { id: id }
     });
-    const data = {
-        id: (_a = list === null || list === void 0 ? void 0 : list.level) === null || _a === void 0 ? void 0 : _a.id,
-        priceRegistration: (_b = list === null || list === void 0 ? void 0 : list.level) === null || _b === void 0 ? void 0 : _b.priceRegistration,
-        priceFee: (_c = list === null || list === void 0 ? void 0 : list.level) === null || _c === void 0 ? void 0 : _c.priceFee
-    };
-    //Devolvemos la respuesta via JSON
-    res.json(data);
+    // Verificamos que list y list.level existan
+    if (list && list.level) {
+        const data = {
+            id: list.level.id,
+            priceRegistration: list.level.priceRegistration,
+            priceFee: list.priceFee // Aquí agregamos priceFee a data
+        };
+        // Devolvemos la respuesta via JSON
+        res.json(data);
+    }
+    else {
+        res.status(404).json({ message: 'Degree not found' });
+    }
 });
 exports.getDegreeByLevel = getDegreeByLevel;
 const getDegreeById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -77,10 +82,11 @@ const getDegreeById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getDegreeById = getDegreeById;
 const newDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, id_seccion, id_level } = req.body;
+    const { name, priceFee, id_seccion, id_level } = req.body;
     try {
         yield degree_1.degree.create({
             name: name,
+            priceFee: priceFee,
             id_seccion: id_seccion,
             id_level: id_level
         });
@@ -122,11 +128,11 @@ const deleteDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.deleteDegree = deleteDegree;
 const updateDegree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, id_seccion, id_level } = req.body;
+    const { name, priceFee, id_seccion, id_level } = req.body;
     const oneDegree = yield degree_1.degree.findOne({ where: { id: id } });
     try {
         if (oneDegree) {
-            yield degree_1.degree.update({ name, id_seccion, id_level }, { where: { id: id } });
+            yield degree_1.degree.update({ name, priceFee, id_seccion, id_level }, { where: { id: id } });
             res.json({
                 msg: `Grado actualizado con exito`
             });

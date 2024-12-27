@@ -23,13 +23,17 @@ const student_1 = require("../../models/studentsModels/student");
 const matricula_1 = require("../../models/paymentsModels/matricula");
 const level_1 = require("../../models/level");
 const planPagos_1 = require("../../models/paymentsModels/planPagos");
+const arancelesIngreso_1 = require("../../models/arancelesIngreso");
+const pagosAspirante_1 = require("../../models/paymentsModels/pagosAspirante");
 //Metodo Listar
 const getAspirants = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
-    const listAspirants = yield aspirant_1.aspirant.findAll({ include: {
-            model: degree_1.degree, attributes: ['name'],
+    const listAspirants = yield aspirant_1.aspirant.findAll({
+        include: {
+            model: degree_1.degree, attributes: ['name', 'priceFee'],
             where: { id: connection_1.default.col('degree.id') }
-        } });
+        }
+    });
     //Devolvemos la respuesta via JSON
     res.json(listAspirants);
 });
@@ -74,6 +78,22 @@ const newAspirant = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         consultation_1.consultation.create({
             id_aspirant: id
         });
+        // Obtención de los fees de la tabla "admissionFees"
+        let actual = new Date().getFullYear();
+        const FeesAdmin = yield arancelesIngreso_1.admissionFees.findAll({ where: { year: actual } });
+        // Generación de plan de pago basado en "admissionFees"
+        const planPaymentsAspirant = FeesAdmin.map((fee) => ({
+            id_payment: null,
+            id_aspirant: id,
+            nameFee: fee.name,
+            year: fee.year,
+            dataPayment: null,
+            price: fee.price,
+            discount: 0,
+            state: false
+        }));
+        // Inserción de plan de pagos en la base de datos
+        yield pagosAspirante_1.paymentAspirant.bulkCreate(planPaymentsAspirant);
         res.json({
             msg: `El aspirante ${aspirant_fullname} fue inscrito en el proceso de seleccion`
         });
@@ -152,7 +172,7 @@ const viewCaseAspirant = (req, res) => __awaiter(void 0, void 0, void 0, functio
             },
             {
                 model: degree_1.degree,
-                attributes: ['id', 'name'], include: [{ model: level_1.level, attributes: ['id', 'priceRegistration', 'priceFee'] }],
+                attributes: ['id', 'name', 'priceFee'], include: [{ model: level_1.level, attributes: ['id', 'priceRegistration'] }],
                 where: { id: connection_1.default.col('degree.id') }
             }
         ]

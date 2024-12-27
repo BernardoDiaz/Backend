@@ -14,7 +14,13 @@ exports.payment = connection_1.default.define('payment', {
     },
     id_student: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false
+        allowNull: true,
+        defaultValue: null
+    },
+    id_aspirant: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
     },
     totalAmount: {
         type: sequelize_1.DataTypes.DOUBLE,

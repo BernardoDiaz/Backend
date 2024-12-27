@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db/connection";
+import { aspirant } from "./aspirant";
 
 export const consultation = sequelize.define('consultation', {
     id:{

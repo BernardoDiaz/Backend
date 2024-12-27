@@ -9,30 +9,34 @@ import { student } from '../../models/studentsModels/student';
 import { registration } from '../../models/paymentsModels/matricula';
 import { level } from '../../models/level';
 import { planPayment } from '../../models/paymentsModels/planPagos';
- 
+import { admissionFees } from '../../models/arancelesIngreso';
+import { paymentAspirant } from '../../models/paymentsModels/pagosAspirante';
+
 //Metodo Listar
 export const getAspirants = async (req: Request, res: Response) => {
 
     //Generamos la lista
-    const listAspirants = await aspirant.findAll({include: {
-        model: degree, attributes: ['name'],
-        where: { id: sequelize.col('degree.id') }
-    }});
+    const listAspirants = await aspirant.findAll({
+        include: {
+            model: degree, attributes: ['name','priceFee'],
+            where: { id: sequelize.col('degree.id') }
+        }
+    });
 
     //Devolvemos la respuesta via JSON
     res.json(listAspirants);
-};
+}; 
 
 export const getAspirantById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const oneaspirant = await aspirant.findByPk(id);
 
     //validacion de existencia
-    try { 
+    try {
         if (oneaspirant) {
             res.json(oneaspirant);
         } else {
-
+ 
             return res.status(404).json({
                 msg: `No existe un aspirante`
             });
@@ -51,7 +55,7 @@ export const newAspirant = async (req: Request, res: Response) => {
     const id = shortid.generate();
     try {
         aspirant.create({
-            id:id,
+            id: id,
             manager: manager,
             manager_phone: manager_phone,
             manager_email: manager_email,
@@ -60,11 +64,31 @@ export const newAspirant = async (req: Request, res: Response) => {
             id_degree: id_degree
         });
         interview.create({
-            id_aspirant:id
+            id_aspirant: id
         });
         consultation.create({
-            id_aspirant:id
-        }); 
+            id_aspirant: id
+        });
+ 
+        // Obtención de los fees de la tabla "admissionFees"
+        let actual = new Date().getFullYear();
+        const FeesAdmin = await admissionFees.findAll({ where: { year: actual}});
+        
+        // Generación de plan de pago basado en "admissionFees"
+        const planPaymentsAspirant = FeesAdmin.map((fee:any) => ({
+            id_payment: null,
+            id_aspirant: id,
+            nameFee: fee.name,
+            year: fee.year,
+            dataPayment: null,
+            price: fee.price,
+            discount: 0,
+            state: false
+
+        })); 
+
+        // Inserción de plan de pagos en la base de datos
+        await paymentAspirant.bulkCreate(planPaymentsAspirant);
 
         res.json({
             msg: `El aspirante ${aspirant_fullname} fue inscrito en el proceso de seleccion`
@@ -81,11 +105,11 @@ export const newAspirant = async (req: Request, res: Response) => {
 
 export const deleteAspirant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const oneaspirant = await aspirant.findOne({where:{id:id}});
+    const oneaspirant = await aspirant.findOne({ where: { id: id } });
 
     try {
         if (oneaspirant) {
-            await aspirant.destroy({where:{id:id}});
+            await aspirant.destroy({ where: { id: id } });
             res.json({
                 msg: `Eliminado con exito`
             });
@@ -127,38 +151,39 @@ export const updateAspirant = async (req: Request, res: Response) => {
     }
 };
 
-export const viewCaseAspirant = async (req:Request,res:Response) => {
-        //Generamos la lista
-        const listAspirants = await aspirant.findAll({
-            attributes: ['id','aspirant_fullname','is_visible'],
-            include: [
-              {
+export const viewCaseAspirant = async (req: Request, res: Response) => {
+    //Generamos la lista
+    const listAspirants = await aspirant.findAll({
+        attributes: ['id', 'aspirant_fullname', 'is_visible'],
+        include: [
+            {
                 model: consultation,
                 attributes: ['state'],
                 required: true // Esto asegura que se haga un INNER JOIN
-              },
-              {
+            },
+            {
                 model: interview,
                 attributes: ['state'],
                 required: true // Esto asegura que se haga un INNER JOIN
-              },
-              {
+            },
+            {
                 model: degree,
-                attributes: ['id','name'], include:[{model:level,attributes:['id','priceRegistration','priceFee']}],
-                where: { id: sequelize.col('degree.id')} 
-              }
-            ]});
-    
-        //Devolvemos la respuesta via JSON
-        res.json(listAspirants);
+                attributes: ['id', 'name', 'priceFee'], include: [{ model: level, attributes: ['id', 'priceRegistration'] }],
+                where: { id: sequelize.col('degree.id') }
+            }
+        ]
+    });
+
+    //Devolvemos la respuesta via JSON
+    res.json(listAspirants);
 }
 
 export const newStudents_Asp = async (req: Request, res: Response) => {
     const students = req.body.students; // Suponiendo que envías un arreglo de estudiantes
 
-    try {
+    try { 
         for (const studentData of students) {
-            const { id,name, lastname, id_degree, id_level, priceFee, priceRegistration } = studentData;
+            const { id, name, lastname, id_degree, id_level, priceFee, priceRegistration } = studentData;
             const idGenerete = shortid.generate();
             const year = new Date().getFullYear();
 
@@ -174,7 +199,7 @@ export const newStudents_Asp = async (req: Request, res: Response) => {
             // Ocultar el registro de aspirante 
             await aspirant.update(
                 { is_visible: false }, // Campo para ocultar
-                { where: { id:id} } // Condiciones para identificar al aspirante
+                { where: { id: id } } // Condiciones para identificar al aspirante
             );
 
             // Generación de matrícula
@@ -182,9 +207,9 @@ export const newStudents_Asp = async (req: Request, res: Response) => {
                 id_student: idGenerete,
                 id_degree,
                 id_level,
-                year 
+                year
             });
- 
+
             // Generación de plan de pago
             const planPayments = [];
 

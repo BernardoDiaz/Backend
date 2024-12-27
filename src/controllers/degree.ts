@@ -9,13 +9,13 @@ export const getDegrees = async (req: Request, res: Response) => {
 
     //Generamos la lista
     const listDegree = await degree.findAll({
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name','priceFee'],
         include: [{
             model: seccion, attributes: ['name'],
             where: { id: sequelize.col('seccion.id') },
 
         }, {
-            model: level, attributes: ['name', 'PriceRegistration', 'priceFee'],
+            model: level, attributes: ['name', 'PriceRegistration'],
             where: { id: sequelize.col('level.id') }
         }]
     });
@@ -26,26 +26,31 @@ export const getDegrees = async (req: Request, res: Response) => {
 
 export const getDegreeByLevel = async (req: Request, res: Response) => {
     const {id} = req.params;
-    //Generamos la lista
+    // Generamos la lista
 
     const list = await degree.findOne({
-        attributes:[],
+        attributes:['priceFee'], // Aquí estamos incluyendo priceFee
         include:[{
-            model:level,
-            attributes: ['id','priceRegistration', 'priceFee']
+            model: level,
+            attributes: ['id','priceRegistration']
         }],
-        where:{id:id}
+        where: {id: id}
     });
 
-    const data = {
-        id: list?.level?.id,
-        priceRegistration: list?.level?.priceRegistration,
-        priceFee: list?.level?.priceFee
-    };
-
-    //Devolvemos la respuesta via JSON
-    res.json(data);
+    // Verificamos que list y list.level existan
+    if (list && list.level) {
+        const data = {
+            id: list.level.id,
+            priceRegistration: list.level.priceRegistration,
+            priceFee: list.priceFee // Aquí agregamos priceFee a data
+        };
+        // Devolvemos la respuesta via JSON
+        res.json(data);
+    } else {
+        res.status(404).json({ message: 'Degree not found' });
+    }
 };
+
 
 export const getDegreeById = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -72,11 +77,12 @@ export const getDegreeById = async (req: Request, res: Response) => {
 
 export const newDegree = async (req: Request, res: Response) => {
 
-    const { name, id_seccion, id_level } = req.body;
+    const { name, priceFee,id_seccion, id_level } = req.body;
 
     try {
         await degree.create({
             name: name,
+            priceFee:priceFee,
             id_seccion: id_seccion,
             id_level: id_level
         });
@@ -117,13 +123,13 @@ export const deleteDegree = async (req: Request, res: Response) => {
 
 export const updateDegree = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, id_seccion, id_level } = req.body;
+    const { name, priceFee,id_seccion, id_level } = req.body;
 
     const oneDegree = await degree.findOne({ where: { id: id } });
 
     try {
         if (oneDegree) {
-            await degree.update({ name, id_seccion, id_level }, { where: { id: id } });
+            await degree.update({ name, priceFee, id_seccion, id_level }, { where: { id: id } });
             res.json({
                 msg: `Grado actualizado con exito`
             });

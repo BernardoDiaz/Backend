@@ -18,6 +18,10 @@ exports.degree = connection_1.default.define('degree', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    priceFee: {
+        type: sequelize_1.DataTypes.DOUBLE,
+        allowNull: false
+    },
     id_seccion: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true

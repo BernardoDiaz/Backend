@@ -9,7 +9,7 @@ import { interview } from "./interview";
         type: DataTypes.STRING,  
         primaryKey:true,
         unique:true
-    },
+    },  
     manager:{
         type: DataTypes.STRING,
         allowNull:false
@@ -38,9 +38,9 @@ import { interview } from "./interview";
             type:DataTypes.BOOLEAN,
             defaultValue:true
         }
-     
+       
 }); 
-
+ 
 degree.hasMany(aspirant,{
     foreignKey:'id_degree',
     sourceKey: 'id',
@@ -56,7 +56,7 @@ aspirant.hasMany(consultation,{
     foreignKey: 'id_aspirant',
     sourceKey: 'id',
     onDelete: 'CASCADE'
-});
+}); 
 
 consultation.belongsTo(aspirant,{
     foreignKey: 'id_aspirant',
@@ -77,4 +77,4 @@ interview.belongsTo(aspirant,{
 
 
 //  aspirant.sync({alter:true});
-// degree.sync({alter:true});
+// degree.sync({alter:true}); 

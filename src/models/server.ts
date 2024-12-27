@@ -23,6 +23,7 @@ import routesQualification from '../routes/qualifications';
 import routesStatistics from '../routes/chartsRoute/stadistics';
 import routesDashboard from '../routes/chartsRoute/stadisticsDashboard';
 import routesSendEmail from '../routes/SendEmailRoutes/SendEmail';
+import routesFeesAspi from '../routes/AspirantRoute/feeAspirant';
 //MODELOS DE BD
 import { aspirant } from './aspirantsModels/aspirant';
 import { user } from './usersModels/user';
@@ -47,6 +48,8 @@ import { teacher } from './teacher';
 import { DegreeAssignment } from './intermediateModels/teacherDegree';
 import { qualifications } from './qualifications';
 import { incidentsstudent } from './studentsModels/incidentsstudent';
+import { paymentAspirant } from './paymentsModels/pagosAspirante';
+import { admissionFees } from './arancelesIngreso';
 
 class Server {
     private app: express.Application;
@@ -103,6 +106,7 @@ class Server {
         this.app.use('/api/assig', routesAssigment);
         this.app.use('/api/qualification', routesQualification);
         this.app.use('/api/details', routesStatistics);
+        this.app.use('/api/feesAsp', routesFeesAspi);
         this.app.use('/api/dash/',routesDashboard);
         this.app.use('/api/SendEmails/',routesSendEmail);
 
@@ -111,6 +115,8 @@ class Server {
     midlewares() {
         //parceo body
         this.app.use(express.json());
+        this.app.use(express.json({ limit: '100mb' })); // Cambia '10mb' según tus necesidades
+        this.app.use(express.urlencoded({ limit: '100mb', extended: true })); // También aplica para datos codificados en URL
 
         //cors
         this.app.use(cors());
@@ -123,8 +129,8 @@ class Server {
             await seccion.sync();
             await degree.sync();
             await aspirant.sync();
-            await consultation.sync();
             await interview.sync();
+            await consultation.sync();
             //Fin Modulo 01 BD 
             
             await teacher.sync();
@@ -139,9 +145,11 @@ class Server {
             await payment.sync();
             await otherPayment.sync();
             await category.sync();
+            await admissionFees.sync();
             await product.sync();
             await detailsPayment.sync();
             await planPayment.sync(); 
+            await paymentAspirant.sync();
             await generatePDF.sync();
             await other_generatePDF.sync();
             await user.sync();

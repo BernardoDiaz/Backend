@@ -83,7 +83,7 @@ export const newAspirant = async (req: Request, res: Response) => {
             dataPayment: null,
             price: fee.price,
             discount: 0,
-            state: false
+            state: false  
 
         })); 
 
@@ -154,7 +154,7 @@ export const updateAspirant = async (req: Request, res: Response) => {
 export const viewCaseAspirant = async (req: Request, res: Response) => {
     //Generamos la lista
     const listAspirants = await aspirant.findAll({
-        attributes: ['id', 'aspirant_fullname', 'is_visible'],
+        attributes: ['id', 'aspirant_fullname', 'manager_phone','manager_email','is_visible'],
         include: [
             {
                 model: consultation,
@@ -183,7 +183,7 @@ export const newStudents_Asp = async (req: Request, res: Response) => {
 
     try { 
         for (const studentData of students) {
-            const { id, name, lastname, id_degree, id_level, priceFee, priceRegistration } = studentData;
+            const { id, name, lastname, phone, email, id_degree, id_level, priceFee, priceRegistration } = studentData;
             const idGenerete = shortid.generate();
             const year = new Date().getFullYear();
 
@@ -192,8 +192,10 @@ export const newStudents_Asp = async (req: Request, res: Response) => {
                 id: idGenerete,
                 name: name,
                 lastname: lastname,
+                phone: phone,
+                email: email,
                 year: year,
-                state: true
+                state: 'Activo'
             });
 
             // Ocultar el registro de aspirante 

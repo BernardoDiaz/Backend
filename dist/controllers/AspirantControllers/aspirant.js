@@ -158,7 +158,7 @@ exports.updateAspirant = updateAspirant;
 const viewCaseAspirant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Generamos la lista
     const listAspirants = yield aspirant_1.aspirant.findAll({
-        attributes: ['id', 'aspirant_fullname', 'is_visible'],
+        attributes: ['id', 'aspirant_fullname', 'manager_phone', 'manager_email', 'is_visible'],
         include: [
             {
                 model: consultation_1.consultation,
@@ -185,7 +185,7 @@ const newStudents_Asp = (req, res) => __awaiter(void 0, void 0, void 0, function
     const students = req.body.students; // Suponiendo que envías un arreglo de estudiantes
     try {
         for (const studentData of students) {
-            const { id, name, lastname, id_degree, id_level, priceFee, priceRegistration } = studentData;
+            const { id, name, lastname, phone, email, id_degree, id_level, priceFee, priceRegistration } = studentData;
             const idGenerete = shortid_1.default.generate();
             const year = new Date().getFullYear();
             // Crear el registro de estudiante
@@ -193,8 +193,10 @@ const newStudents_Asp = (req, res) => __awaiter(void 0, void 0, void 0, function
                 id: idGenerete,
                 name: name,
                 lastname: lastname,
+                phone: phone,
+                email: email,
                 year: year,
-                state: true
+                state: 'Activo'
             });
             // Ocultar el registro de aspirante 
             yield aspirant_1.aspirant.update({ is_visible: false }, // Campo para ocultar

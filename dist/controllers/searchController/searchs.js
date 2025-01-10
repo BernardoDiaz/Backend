@@ -77,7 +77,7 @@ exports.searchStudents_Full = searchStudents_Full;
 const searchStudents_Asp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const list = yield aspirant_1.aspirant.findAll({
-            attributes: ['id', 'aspirant_fullname', 'manager_email'],
+            attributes: ['id', 'aspirant_fullname', 'manager_email'], where: { is_visible: true },
             include: [{
                     model: degree_1.degree,
                     attributes: ['name'],

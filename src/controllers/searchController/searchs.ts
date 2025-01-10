@@ -67,7 +67,7 @@ export const searchStudents_Full = async (req: Request, res: Response) => {
 export const searchStudents_Asp = async (req: Request, res: Response) => {
   try {
     const list = await aspirant.findAll({
-      attributes: ['id', 'aspirant_fullname', 'manager_email'],
+      attributes: ['id', 'aspirant_fullname', 'manager_email'], where: { is_visible: true },
         include: [{
           model: degree,
           attributes: ['name'],

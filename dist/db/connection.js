@@ -8,5 +8,5 @@ const sequelize = new sequelize_1.Sequelize('proyectlrd', 'root', 'root123456', 
 // const sequelize = new Sequelize('proyectlrd','vmtest','ed|6vB{4Yn}F5gA4',{
 //     host: 'localhost', 
 //     dialect: 'mysql'
-// });
+// }); 
 exports.default = sequelize;
